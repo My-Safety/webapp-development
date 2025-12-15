@@ -4,34 +4,54 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mysafety_web/route/route_name.dart';
+import 'package:mysafety_web/src/features/splash/presentation/provider.dart';
 import 'package:mysafety_web/util/assets/assets.dart';
 import 'package:mysafety_web/util/auth/auth_manager.dart';
 import 'package:mysafety_web/util/extension/extension.dart';
 import 'package:mysafety_design_system/design_system/design_system.dart';
+import 'dart:html' as html;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
-  // Future<void> gotoLanguageSelection() async {
-  //   Future.delayed(const Duration(seconds: 2), () {
-  //     if (mounted) {
-  //       context.go(RouteName.selectLanguageScreen);
-  //     }
-  //   });
-  // }
-
+class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    init();
+
+    // Read qrId from URL
+    final qrId = _getQrIdFromUrl();
+
+    // Store in provider
+    if (qrId != null && qrId.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        print('QR ID from URL: $qrId');
+        ref.read(qrIdProvider.notifier).setQrId(qrId);
+      });
+    }
+
+    // Continue initialization
+    _loadInit();
   }
 
-  Future<void> init() async {
+  void _loadInit() {
+    Future.delayed(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      _init();
+    });
+  }
+
+  String? _getQrIdFromUrl() {
+    final uri = Uri.parse(html.window.location.href);
+    return uri.queryParameters['qrId'];
+  }
+
+  Future<void> _init() async {
     await AuthManager().fetchToken();
 
     if (!mounted) return;
