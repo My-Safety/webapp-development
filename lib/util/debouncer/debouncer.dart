@@ -1,0 +1,21 @@
+// Copyright (c) 2025, Indo-Sakura Software Pvt Ltd. All rights reserved.
+// Created By Suresh M, 11/11/2025
+
+import 'dart:async';
+import 'dart:ui';
+
+class Debouncer {
+  final Duration delay;
+  Timer? _timer;
+
+  Debouncer({required this.delay});
+
+  void run(VoidCallback action) {
+    _timer?.cancel();
+    _timer = Timer(delay, action);
+  }
+
+  void cancel() {
+    _timer?.cancel();
+  }
+}
