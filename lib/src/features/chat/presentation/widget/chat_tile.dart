@@ -20,7 +20,7 @@ class ChatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bubbleColor = isIncoming ? AppColors.greyFD : AppColors.primary;
+    final bubbleColor = isIncoming ? AppColors.greyFD : AppColors.grey8B;
     final textColor = isIncoming ? AppColors.black : Colors.white;
 
     return Padding(

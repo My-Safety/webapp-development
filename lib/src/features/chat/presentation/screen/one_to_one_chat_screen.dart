@@ -2,18 +2,19 @@
 // Copyright (c) 2025, Indo-Sakura Software Pvt Ltd. All rights reserved.
 // Created By Adwaith c, 16/12/2025
 
-
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mysafety_design_system/design_system/design_system.dart';
 import 'package:mysafety_web/core/network/socket/web_socket.dart';
 import 'package:mysafety_web/src/features/chat/presentation/widget/chat_input_bar.dart';
 import 'package:mysafety_web/src/features/chat/presentation/widget/chat_screen_appbar.dart';
 import 'package:mysafety_web/src/features/chat/presentation/widget/chat_tile.dart';
+import 'package:mysafety_web/src/features/profile/presentation/provider/profile_provider.dart';
 import 'package:mysafety_web/util/formator/date_formator.dart';
 
-class OneToOneChatScreen extends StatefulWidget {
+class OneToOneChatScreen extends ConsumerStatefulWidget {
   final String? roomId;
   final String? userName;
   final String? avatarUrl;
@@ -26,10 +27,10 @@ class OneToOneChatScreen extends StatefulWidget {
   });
 
   @override
-  State<OneToOneChatScreen> createState() => _OneToOneChatScreenState();
+  ConsumerState<OneToOneChatScreen> createState() => _OneToOneChatScreenState();
 }
 
-class _OneToOneChatScreenState extends State<OneToOneChatScreen>
+class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen>
     with WidgetsBindingObserver {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -43,19 +44,29 @@ class _OneToOneChatScreenState extends State<OneToOneChatScreen>
   StreamSubscription? _newMessageSub;
   StreamSubscription? _typingSub;
   StreamSubscription? _roomClosedSub;
+  String? _roomId;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _chatFocusNode.requestFocus();
-    _connectWebSocket();
+
+    final profileState = ref.read(profileProvider);
+
+    _roomId = profileState.qrScanResponse?.chatRoom?.id;
+    // OR if backend uses roomId
+    // _roomId = profileState.qrScanResponse?.chatRoom?.roomId;
+
+    if (_roomId != null) {
+      _connectWebSocket();
+    }
   }
 
   Future<void> _connectWebSocket() async {
     await WebSocketService.connect();
 
-    WebSocketService.joinRoom(widget.roomId!);
+    WebSocketService.joinRoom(_roomId!);
 
     _newMessageSub = WebSocketService.newMessageStream.listen((message) {
       _messages.value = [..._messages.value, message];
@@ -81,7 +92,7 @@ class _OneToOneChatScreenState extends State<OneToOneChatScreen>
     if (text.isEmpty) return;
 
     final success = await WebSocketService.sendMessage(
-      roomId: widget.roomId!,
+      roomId: _roomId!,
       messageType: 'Text',
       content: text,
     );
@@ -99,7 +110,7 @@ class _OneToOneChatScreenState extends State<OneToOneChatScreen>
   }
 
   void _sendTyping(bool isTyping) {
-    WebSocketService.sendTyping(widget.roomId!, isTyping);
+    WebSocketService.sendTyping(_roomId!, isTyping);
   }
 
   Future<void> _scrollToBottom() async {
@@ -159,10 +170,9 @@ class _OneToOneChatScreenState extends State<OneToOneChatScreen>
                       itemCount: messages.length,
                       itemBuilder: (_, index) {
                         final msg = messages[index];
-                        // final isIncoming =
-                        //     msg.senderId != ChatManager().currentUserId;
+                        final isIncoming = msg.senderType != "Visitor";
                         return ChatTile(
-                          isIncoming: true,
+                          isIncoming: isIncoming,
                           imgUrl: widget.avatarUrl,
                           timeStamp: DateFormats.time12A.format(
                             msg.createdAt.toLocal(),

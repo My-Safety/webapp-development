@@ -1,8 +1,6 @@
 // Copyright (c) 2025, Indo-Sakura Software Pvt Ltd. All rights reserved.
 // Created By Adwaith c, 16/12/2025
 
-
-
 import 'dart:async';
 import 'package:mysafety_web/app_config.dart';
 import 'package:mysafety_web/util/auth/auth_manager.dart';
@@ -55,30 +53,42 @@ abstract class WebSocketService {
 
   static final StreamController<ChatMessageModel> _newMessageController =
       StreamController.broadcast();
+
   static final StreamController<Map<String, dynamic>> _roomJoinedController =
       StreamController.broadcast();
+
   static final StreamController<List<Map<String, dynamic>>>
   _participantsStatusController = StreamController.broadcast();
+
   static final StreamController<dynamic> _typingController =
       StreamController.broadcast();
+
   static final StreamController<Map<String, dynamic>> _statusUpdateController =
       StreamController.broadcast();
+
   static final StreamController<Map<String, dynamic>>
   _participantSwitchedController = StreamController.broadcast();
+
   static final StreamController<String> _roomClosedController =
       StreamController.broadcast();
 
   static Stream<ChatMessageModel> get newMessageStream =>
       _newMessageController.stream;
+
   static Stream<Map<String, dynamic>> get roomJoinedStream =>
       _roomJoinedController.stream;
+
   static Stream<List<Map<String, dynamic>>> get participantsStatusStream =>
       _participantsStatusController.stream;
+
   static Stream<dynamic> get typingStream => _typingController.stream;
+
   static Stream<Map<String, dynamic>> get statusUpdateStream =>
       _statusUpdateController.stream;
+
   static Stream<Map<String, dynamic>> get participantSwitchedStream =>
       _participantSwitchedController.stream;
+
   static Stream<String> get roomClosedStream => _roomClosedController.stream;
 
   static Future<void> connect() async {
@@ -140,6 +150,7 @@ abstract class WebSocketService {
 
   static void joinRoom(String roomId) {
     socket?.emit('join_room', {'roomId': roomId});
+    debugPrint('room joined : $roomId');
   }
 
   static Future<bool> sendMessage({

@@ -87,13 +87,14 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
 
     var result = await ref
         .read(profileRemoteRepoProvider)
-        .handleDoorbellScan(qrId: '023ab3df245f85bd116a6cea2d060ea6');
+        .handleDoorbellScan(qrId: state.qrId.toString());
 
     if (result.success == ActionStatus.success.code) {
       state = state.copyWith(
         isLanguageListLoading: false,
         qrScanResponse: result.data,
       );
+      print(state.qrScanResponse!.chatRoom!.qrId.toString());
     } else {
       state = state.copyWith(isHandleDoorBellLoading: false, languages: []);
     }
