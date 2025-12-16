@@ -115,35 +115,9 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
     state = state.copyWith(globalLanguages: gList, localLanguages: lList);
   }
 
-  void updatePhone(String? phone) {
-    User? u;
-    if (user == null) {
-      u = User(phone: phone);
-    } else {
-      u = user?.copyWith(phone: phone);
-    }
-    state = state.copyWith(user: u);
-  }
 
-  void updateName(String? name) {
-    User? u;
-    if (user == null) {
-      u = User(name: name);
-    } else {
-      u = user?.copyWith(name: name);
-    }
-    state = state.copyWith(user: u);
-  }
 
-  void updateEmail(String? email) {
-    User? u;
-    if (user == null) {
-      u = User(email: email);
-    } else {
-      u = user?.copyWith(email: email);
-    }
-    state = state.copyWith(user: u);
-  }
+
 
   void updateFullAddress(String? address) {
     var a = user?.address?.copyWith(fulladdress: address);
