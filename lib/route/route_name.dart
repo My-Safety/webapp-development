@@ -9,17 +9,6 @@ abstract class RouteName {
   static String home = '/home';
   static String otp = '/otp';
   static String email = '/email';
-  static String personalDetails = '/personal_details';
-  static String fetchLocation = '/fetch_location';
-  static String addAddress = '/add_address';
-  static String addLocationScreen = '/addLocationScreen';
-  static String doorBell = '/doorBell';
-  static String familyMembersScreen = '/familyMembersScreen';
+
   static String selectLanguageScreen = '/select_language_screen';
-  static String driversScreen = '/driversScreen';
-  static String manageAdress = '/manageAdress';
-  static String downloadQr = '/downloadQr';
-  static String addFamilyMember = '/addFamilyMember';
-  static String vehicleEmergencyContactScreen =
-      '/vehicleEmergencyContactScreen';
 }

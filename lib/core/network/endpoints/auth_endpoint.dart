@@ -6,7 +6,4 @@ abstract class AuthEndPoints {
   static const verifyOtp = 'user/scan/visitor/verify';
 }
 
-// In your FileUploadEndpoint class
-String getSearchSuggestions({required String query}) {
-  return '/search/suggestions?query=${Uri.encodeComponent(query)}'; // Adjust path as per your backend
-}
+

@@ -28,7 +28,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController nameController = TextEditingController();
 
-
   Future<void> sendOtp() async {
     // validate phone etc. if needed
     if (!(formKey.currentState?.validate() ?? false)) return;
@@ -46,6 +45,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     final authState = ref.read(authProvider);
     if (authState.loginResponse?.skipOTP == true) {
+      await ref.read(profileProvider.notifier).handleDoorBellScan();
+
       goToChatScreen();
     } else {
       goToOtpScreen();

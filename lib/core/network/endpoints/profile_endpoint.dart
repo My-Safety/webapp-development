@@ -3,9 +3,6 @@
 
 abstract class ProfileEndpoint {
   static const getLanguages = 'app/languages';
-  static const updateProfile = 'user/profile';
-  static const getProfile = 'user/profile';
-  static const addMember = 'user/member';
-  static const driver = 'user/driver';
-  static const fileUpload = 'user/files/upload';
+  static const handleDoorbellScan = 'user/scan/doorbell';
+
 }

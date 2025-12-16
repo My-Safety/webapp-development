@@ -4,12 +4,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mysafety_web/route/route_name.dart';
-import 'package:mysafety_web/src/features/splash/presentation/provider.dart';
+import 'package:mysafety_web/src/features/profile/presentation/provider/profile_provider.dart';
 import 'package:mysafety_web/util/assets/assets.dart';
 import 'package:mysafety_web/util/auth/auth_manager.dart';
 import 'package:mysafety_web/util/extension/extension.dart';
 import 'package:mysafety_design_system/design_system/design_system.dart';
-import 'dart:html' as html;
+// import 'dart:html' as html;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -24,18 +24,15 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   void initState() {
     super.initState();
 
-    // Read qrId from URL
-    final qrId = _getQrIdFromUrl();
+    // final qrId = _getQrIdFromUrl();
 
-    // Store in provider
-    if (qrId != null && qrId.isNotEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        print('QR ID from URL: $qrId');
-        ref.read(qrIdProvider.notifier).setQrId(qrId);
-      });
-    }
+    // if (qrId != null && qrId.isNotEmpty) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     ref.read(profileProvider.notifier).setQrId(qrId);
 
-    // Continue initialization
+    //     // ref.read(profileProvider.notifier).handleDoorBellScan();
+    //   });
+    // }
     _loadInit();
   }
 
@@ -46,10 +43,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     });
   }
 
-  String? _getQrIdFromUrl() {
-    final uri = Uri.parse(html.window.location.href);
-    return uri.queryParameters['qrId'];
-  }
+  // String? _getQrIdFromUrl() {
+  //   final uri = Uri.parse(html.window.location.href);
+  //   return uri.queryParameters['qrId'];
+  // }
 
   Future<void> _init() async {
     await AuthManager().fetchToken();
@@ -60,6 +57,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       gotoLanguageSelection();
       return;
     }
+    await ref.read(profileProvider.notifier).handleDoorBellScan();
 
     goToHome();
   }
@@ -69,7 +67,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   }
 
   void goToHome() {
-    context.go(RouteName.home);
+    context.go(RouteName.oneToOneChatScreen);
   }
 
   @override

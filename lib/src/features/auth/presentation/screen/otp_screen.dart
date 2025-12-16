@@ -1,5 +1,5 @@
 // Copyright (c) 2025, Indo-Sakura Software Pvt Ltd. All rights reserved.
-// Created By Suresh M, 14/11/2025
+// Created By Adwaith c, 15/12/2025
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,17 +23,26 @@ class OtpScreen extends ConsumerStatefulWidget {
 
 class _OtpScreenState extends ConsumerState<OtpScreen> {
   late AuthNotifierProvider provider;
+  late ProfileNotifierProvider profileprovider;
 
   GlobalKey<FormState> formKey = GlobalKey();
 
   TextEditingController otpController = TextEditingController();
 
   Future<void> verifyOtp() async {
-    var isVerify = await provider.verifyOtp(otp: otpController.text);
+    final authProviderNotifier = ref.read(authProvider.notifier);
+    final isVerify = await authProviderNotifier.verifyOtp(
+      otp: otpController.text,
+    );
 
     if (isVerify) {
+      await ref.read(profileProvider.notifier).handleDoorBellScan();
       gotoOneToOneChatScreen();
     }
+  }
+
+  Future<void> handleDoorBellScan() async {
+    await profileprovider.handleDoorBellScan();
   }
 
   void gotoOneToOneChatScreen() {

@@ -1,8 +1,6 @@
 // Copyright (c) 2025, Indo-Sakura Software Pvt Ltd. All rights reserved.
 // Created By Adwaith c, 12/12/2025
 
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mysafety_web/core/model/profile/languages/languages_response_model.dart';
@@ -19,68 +17,7 @@ final profileProvider =
     );
 
 class ProfileNotifierProvider extends StateNotifier<ProfileState> {
-  ProfileNotifierProvider(this.ref) : super(const ProfileState()) {
-    driverNameController.addListener(
-      () => state = state.copyWith(driverName: driverNameController.text),
-    );
-    driverPhoneController.addListener(
-      () => state = state.copyWith(driverPhone: driverPhoneController.text),
-    );
-    driverLicenseController.addListener(
-      () =>
-          state = state.copyWith(driverLicenseNo: driverLicenseController.text),
-    );
-  }
-  final TextEditingController driverNameController = TextEditingController();
-  final TextEditingController driverPhoneController = TextEditingController();
-  final TextEditingController driverLicenseController = TextEditingController();
-
-  // validation
-  String? validateDriverName() {
-    if (state.driverName.trim().isEmpty) return 'Name is required';
-    return null;
-  }
-
-  String? validateDriverPhone() {
-    final phone = state.driverPhone.trim();
-    if (phone.isEmpty) return 'Mobile no is required';
-    if (phone.length < 10) return 'Enter valid mobile no';
-    return null;
-  }
-
-  String? validateDriverLicense() {
-    if (state.driverLicenseNo.trim().isEmpty) {
-      return 'License no is required';
-    }
-    return null;
-  }
-
-  bool validateDriverForm() {
-    final n = validateDriverName();
-    final p = validateDriverPhone();
-    final l = validateDriverLicense();
-    final hasError = n != null || p != null || l != null;
-    state = state.copyWith(
-      driverFormError: hasError ? 'Please fix the errors above' : null,
-    );
-    return !hasError;
-  }
-
-  Future<void> submitDriver() async {
-    if (!validateDriverForm()) return;
-
-    state = state.copyWith(isDriverSubmitting: true);
-
-    state = state.copyWith(isDriverSubmitting: false);
-  }
-
-  @override
-  void dispose() {
-    driverNameController.dispose();
-    driverPhoneController.dispose();
-    driverLicenseController.dispose();
-    super.dispose();
-  }
+  ProfileNotifierProvider(this.ref) : super(const ProfileState());
 
   final Ref ref;
 
@@ -103,26 +40,12 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
   bool get isUserResponseLoading => state.isUserResponseLoading;
 
   bool get isUpdateProfileLoading => state.isUpdateProfileLoading;
+  bool get isHandleDoorBellLoading => state.isHandleDoorBellLoading;
+  String? get qrId => state.qrId;
 
-  bool get isAddMemberLoading => state.isAddMemberLoading;
-
-  bool get isFamilyMemberLoading => state.isFamilyMemberLoading;
-
-  bool get isDeleteMemberLoading => state.isDeleteMemberLoading;
-
-  bool get isDriverDetailsLoading => state.isDriverDetailsLoading;
-
-  PlatformFile? get drivingLicenseFile => state.drivingLicenseFile;
-
-  bool get isFileLoading => state.isFileLoading;
-
-  bool get isaddDriverLoading => state.isaddDriverLoading;
-
-  bool get isUpdateMemberLoading => state.isUpdateMemberLoading;
-
-  bool get isUpdateDriverLoading => state.isUpdateDriverLoading;
-
-  PlatformFile? get avatarFile => state.avatarFile;
+  void setQrId(String value) {
+    state = state.copyWith(qrId: value);
+  }
 
   Future<void> getAddressFromLatLng({required LatLng latlng}) async {
     state = state.copyWith(isAddressLoading: true);
@@ -156,6 +79,23 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
       }
     } else {
       state = state.copyWith(isLanguageListLoading: false, languages: []);
+    }
+  }
+
+  Future<void> handleDoorBellScan() async {
+    state = state.copyWith(isHandleDoorBellLoading: true);
+
+    var result = await ref
+        .read(profileRemoteRepoProvider)
+        .handleDoorbellScan(qrId: '023ab3df245f85bd116a6cea2d060ea6');
+
+    if (result.success == ActionStatus.success.code) {
+      state = state.copyWith(
+        isLanguageListLoading: false,
+        qrScanResponse: result.data,
+      );
+    } else {
+      state = state.copyWith(isHandleDoorBellLoading: false, languages: []);
     }
   }
 

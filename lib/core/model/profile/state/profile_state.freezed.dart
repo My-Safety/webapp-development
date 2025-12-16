@@ -20,6 +20,7 @@ mixin _$ProfileState {
   bool get isAddressLoading => throw _privateConstructorUsedError;
   bool get isLanguageListLoading => throw _privateConstructorUsedError;
   User? get user => throw _privateConstructorUsedError;
+  String? get qrId => throw _privateConstructorUsedError;
   bool get isUserResponseLoading => throw _privateConstructorUsedError;
   List<LanguagesResponseModel> get languages =>
       throw _privateConstructorUsedError;
@@ -29,23 +30,9 @@ mixin _$ProfileState {
       throw _privateConstructorUsedError;
   LanguagesResponseModel? get selectedLanguages =>
       throw _privateConstructorUsedError;
+  QrScanResponseModel? get qrScanResponse => throw _privateConstructorUsedError;
   bool get isUpdateProfileLoading => throw _privateConstructorUsedError;
-  bool get isAddMemberLoading => throw _privateConstructorUsedError;
-  bool get isFamilyMemberLoading => throw _privateConstructorUsedError;
-  bool get isDeleteMemberLoading => throw _privateConstructorUsedError;
-  bool get isDriverDetailsLoading => throw _privateConstructorUsedError;
-  PlatformFile? get drivingLicenseFile => throw _privateConstructorUsedError;
-  bool get isFileLoading => throw _privateConstructorUsedError;
-  bool get isaddDriverLoading => throw _privateConstructorUsedError;
-  bool get isUpdateMemberLoading => throw _privateConstructorUsedError;
-  bool get isUpdateDriverLoading => throw _privateConstructorUsedError;
-  PlatformFile? get avatarFile =>
-      throw _privateConstructorUsedError; // driver form
-  String get driverName => throw _privateConstructorUsedError;
-  String get driverPhone => throw _privateConstructorUsedError;
-  String get driverLicenseNo => throw _privateConstructorUsedError;
-  bool get isDriverSubmitting => throw _privateConstructorUsedError;
-  String? get driverFormError => throw _privateConstructorUsedError;
+  bool get isHandleDoorBellLoading => throw _privateConstructorUsedError;
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -65,31 +52,20 @@ abstract class $ProfileStateCopyWith<$Res> {
     bool isAddressLoading,
     bool isLanguageListLoading,
     User? user,
+    String? qrId,
     bool isUserResponseLoading,
     List<LanguagesResponseModel> languages,
     List<LanguagesResponseModel> globalLanguages,
     List<LanguagesResponseModel> localLanguages,
     LanguagesResponseModel? selectedLanguages,
+    QrScanResponseModel? qrScanResponse,
     bool isUpdateProfileLoading,
-    bool isAddMemberLoading,
-    bool isFamilyMemberLoading,
-    bool isDeleteMemberLoading,
-    bool isDriverDetailsLoading,
-    PlatformFile? drivingLicenseFile,
-    bool isFileLoading,
-    bool isaddDriverLoading,
-    bool isUpdateMemberLoading,
-    bool isUpdateDriverLoading,
-    PlatformFile? avatarFile,
-    String driverName,
-    String driverPhone,
-    String driverLicenseNo,
-    bool isDriverSubmitting,
-    String? driverFormError,
+    bool isHandleDoorBellLoading,
   });
 
   $UserCopyWith<$Res>? get user;
   $LanguagesResponseModelCopyWith<$Res>? get selectedLanguages;
+  $QrScanResponseModelCopyWith<$Res>? get qrScanResponse;
 }
 
 /// @nodoc
@@ -110,27 +86,15 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
     Object? isAddressLoading = null,
     Object? isLanguageListLoading = null,
     Object? user = freezed,
+    Object? qrId = freezed,
     Object? isUserResponseLoading = null,
     Object? languages = null,
     Object? globalLanguages = null,
     Object? localLanguages = null,
     Object? selectedLanguages = freezed,
+    Object? qrScanResponse = freezed,
     Object? isUpdateProfileLoading = null,
-    Object? isAddMemberLoading = null,
-    Object? isFamilyMemberLoading = null,
-    Object? isDeleteMemberLoading = null,
-    Object? isDriverDetailsLoading = null,
-    Object? drivingLicenseFile = freezed,
-    Object? isFileLoading = null,
-    Object? isaddDriverLoading = null,
-    Object? isUpdateMemberLoading = null,
-    Object? isUpdateDriverLoading = null,
-    Object? avatarFile = freezed,
-    Object? driverName = null,
-    Object? driverPhone = null,
-    Object? driverLicenseNo = null,
-    Object? isDriverSubmitting = null,
-    Object? driverFormError = freezed,
+    Object? isHandleDoorBellLoading = null,
   }) {
     return _then(
       _value.copyWith(
@@ -146,6 +110,10 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
                 ? _value.user
                 : user // ignore: cast_nullable_to_non_nullable
                       as User?,
+            qrId: freezed == qrId
+                ? _value.qrId
+                : qrId // ignore: cast_nullable_to_non_nullable
+                      as String?,
             isUserResponseLoading: null == isUserResponseLoading
                 ? _value.isUserResponseLoading
                 : isUserResponseLoading // ignore: cast_nullable_to_non_nullable
@@ -166,70 +134,18 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
                 ? _value.selectedLanguages
                 : selectedLanguages // ignore: cast_nullable_to_non_nullable
                       as LanguagesResponseModel?,
+            qrScanResponse: freezed == qrScanResponse
+                ? _value.qrScanResponse
+                : qrScanResponse // ignore: cast_nullable_to_non_nullable
+                      as QrScanResponseModel?,
             isUpdateProfileLoading: null == isUpdateProfileLoading
                 ? _value.isUpdateProfileLoading
                 : isUpdateProfileLoading // ignore: cast_nullable_to_non_nullable
                       as bool,
-            isAddMemberLoading: null == isAddMemberLoading
-                ? _value.isAddMemberLoading
-                : isAddMemberLoading // ignore: cast_nullable_to_non_nullable
+            isHandleDoorBellLoading: null == isHandleDoorBellLoading
+                ? _value.isHandleDoorBellLoading
+                : isHandleDoorBellLoading // ignore: cast_nullable_to_non_nullable
                       as bool,
-            isFamilyMemberLoading: null == isFamilyMemberLoading
-                ? _value.isFamilyMemberLoading
-                : isFamilyMemberLoading // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            isDeleteMemberLoading: null == isDeleteMemberLoading
-                ? _value.isDeleteMemberLoading
-                : isDeleteMemberLoading // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            isDriverDetailsLoading: null == isDriverDetailsLoading
-                ? _value.isDriverDetailsLoading
-                : isDriverDetailsLoading // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            drivingLicenseFile: freezed == drivingLicenseFile
-                ? _value.drivingLicenseFile
-                : drivingLicenseFile // ignore: cast_nullable_to_non_nullable
-                      as PlatformFile?,
-            isFileLoading: null == isFileLoading
-                ? _value.isFileLoading
-                : isFileLoading // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            isaddDriverLoading: null == isaddDriverLoading
-                ? _value.isaddDriverLoading
-                : isaddDriverLoading // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            isUpdateMemberLoading: null == isUpdateMemberLoading
-                ? _value.isUpdateMemberLoading
-                : isUpdateMemberLoading // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            isUpdateDriverLoading: null == isUpdateDriverLoading
-                ? _value.isUpdateDriverLoading
-                : isUpdateDriverLoading // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            avatarFile: freezed == avatarFile
-                ? _value.avatarFile
-                : avatarFile // ignore: cast_nullable_to_non_nullable
-                      as PlatformFile?,
-            driverName: null == driverName
-                ? _value.driverName
-                : driverName // ignore: cast_nullable_to_non_nullable
-                      as String,
-            driverPhone: null == driverPhone
-                ? _value.driverPhone
-                : driverPhone // ignore: cast_nullable_to_non_nullable
-                      as String,
-            driverLicenseNo: null == driverLicenseNo
-                ? _value.driverLicenseNo
-                : driverLicenseNo // ignore: cast_nullable_to_non_nullable
-                      as String,
-            isDriverSubmitting: null == isDriverSubmitting
-                ? _value.isDriverSubmitting
-                : isDriverSubmitting // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            driverFormError: freezed == driverFormError
-                ? _value.driverFormError
-                : driverFormError // ignore: cast_nullable_to_non_nullable
-                      as String?,
           )
           as $Val,
     );
@@ -264,6 +180,20 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
       return _then(_value.copyWith(selectedLanguages: value) as $Val);
     });
   }
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $QrScanResponseModelCopyWith<$Res>? get qrScanResponse {
+    if (_value.qrScanResponse == null) {
+      return null;
+    }
+
+    return $QrScanResponseModelCopyWith<$Res>(_value.qrScanResponse!, (value) {
+      return _then(_value.copyWith(qrScanResponse: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -279,33 +209,23 @@ abstract class _$$ProfileStateImplCopyWith<$Res>
     bool isAddressLoading,
     bool isLanguageListLoading,
     User? user,
+    String? qrId,
     bool isUserResponseLoading,
     List<LanguagesResponseModel> languages,
     List<LanguagesResponseModel> globalLanguages,
     List<LanguagesResponseModel> localLanguages,
     LanguagesResponseModel? selectedLanguages,
+    QrScanResponseModel? qrScanResponse,
     bool isUpdateProfileLoading,
-    bool isAddMemberLoading,
-    bool isFamilyMemberLoading,
-    bool isDeleteMemberLoading,
-    bool isDriverDetailsLoading,
-    PlatformFile? drivingLicenseFile,
-    bool isFileLoading,
-    bool isaddDriverLoading,
-    bool isUpdateMemberLoading,
-    bool isUpdateDriverLoading,
-    PlatformFile? avatarFile,
-    String driverName,
-    String driverPhone,
-    String driverLicenseNo,
-    bool isDriverSubmitting,
-    String? driverFormError,
+    bool isHandleDoorBellLoading,
   });
 
   @override
   $UserCopyWith<$Res>? get user;
   @override
   $LanguagesResponseModelCopyWith<$Res>? get selectedLanguages;
+  @override
+  $QrScanResponseModelCopyWith<$Res>? get qrScanResponse;
 }
 
 /// @nodoc
@@ -325,27 +245,15 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
     Object? isAddressLoading = null,
     Object? isLanguageListLoading = null,
     Object? user = freezed,
+    Object? qrId = freezed,
     Object? isUserResponseLoading = null,
     Object? languages = null,
     Object? globalLanguages = null,
     Object? localLanguages = null,
     Object? selectedLanguages = freezed,
+    Object? qrScanResponse = freezed,
     Object? isUpdateProfileLoading = null,
-    Object? isAddMemberLoading = null,
-    Object? isFamilyMemberLoading = null,
-    Object? isDeleteMemberLoading = null,
-    Object? isDriverDetailsLoading = null,
-    Object? drivingLicenseFile = freezed,
-    Object? isFileLoading = null,
-    Object? isaddDriverLoading = null,
-    Object? isUpdateMemberLoading = null,
-    Object? isUpdateDriverLoading = null,
-    Object? avatarFile = freezed,
-    Object? driverName = null,
-    Object? driverPhone = null,
-    Object? driverLicenseNo = null,
-    Object? isDriverSubmitting = null,
-    Object? driverFormError = freezed,
+    Object? isHandleDoorBellLoading = null,
   }) {
     return _then(
       _$ProfileStateImpl(
@@ -361,6 +269,10 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
             ? _value.user
             : user // ignore: cast_nullable_to_non_nullable
                   as User?,
+        qrId: freezed == qrId
+            ? _value.qrId
+            : qrId // ignore: cast_nullable_to_non_nullable
+                  as String?,
         isUserResponseLoading: null == isUserResponseLoading
             ? _value.isUserResponseLoading
             : isUserResponseLoading // ignore: cast_nullable_to_non_nullable
@@ -381,70 +293,18 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
             ? _value.selectedLanguages
             : selectedLanguages // ignore: cast_nullable_to_non_nullable
                   as LanguagesResponseModel?,
+        qrScanResponse: freezed == qrScanResponse
+            ? _value.qrScanResponse
+            : qrScanResponse // ignore: cast_nullable_to_non_nullable
+                  as QrScanResponseModel?,
         isUpdateProfileLoading: null == isUpdateProfileLoading
             ? _value.isUpdateProfileLoading
             : isUpdateProfileLoading // ignore: cast_nullable_to_non_nullable
                   as bool,
-        isAddMemberLoading: null == isAddMemberLoading
-            ? _value.isAddMemberLoading
-            : isAddMemberLoading // ignore: cast_nullable_to_non_nullable
+        isHandleDoorBellLoading: null == isHandleDoorBellLoading
+            ? _value.isHandleDoorBellLoading
+            : isHandleDoorBellLoading // ignore: cast_nullable_to_non_nullable
                   as bool,
-        isFamilyMemberLoading: null == isFamilyMemberLoading
-            ? _value.isFamilyMemberLoading
-            : isFamilyMemberLoading // ignore: cast_nullable_to_non_nullable
-                  as bool,
-        isDeleteMemberLoading: null == isDeleteMemberLoading
-            ? _value.isDeleteMemberLoading
-            : isDeleteMemberLoading // ignore: cast_nullable_to_non_nullable
-                  as bool,
-        isDriverDetailsLoading: null == isDriverDetailsLoading
-            ? _value.isDriverDetailsLoading
-            : isDriverDetailsLoading // ignore: cast_nullable_to_non_nullable
-                  as bool,
-        drivingLicenseFile: freezed == drivingLicenseFile
-            ? _value.drivingLicenseFile
-            : drivingLicenseFile // ignore: cast_nullable_to_non_nullable
-                  as PlatformFile?,
-        isFileLoading: null == isFileLoading
-            ? _value.isFileLoading
-            : isFileLoading // ignore: cast_nullable_to_non_nullable
-                  as bool,
-        isaddDriverLoading: null == isaddDriverLoading
-            ? _value.isaddDriverLoading
-            : isaddDriverLoading // ignore: cast_nullable_to_non_nullable
-                  as bool,
-        isUpdateMemberLoading: null == isUpdateMemberLoading
-            ? _value.isUpdateMemberLoading
-            : isUpdateMemberLoading // ignore: cast_nullable_to_non_nullable
-                  as bool,
-        isUpdateDriverLoading: null == isUpdateDriverLoading
-            ? _value.isUpdateDriverLoading
-            : isUpdateDriverLoading // ignore: cast_nullable_to_non_nullable
-                  as bool,
-        avatarFile: freezed == avatarFile
-            ? _value.avatarFile
-            : avatarFile // ignore: cast_nullable_to_non_nullable
-                  as PlatformFile?,
-        driverName: null == driverName
-            ? _value.driverName
-            : driverName // ignore: cast_nullable_to_non_nullable
-                  as String,
-        driverPhone: null == driverPhone
-            ? _value.driverPhone
-            : driverPhone // ignore: cast_nullable_to_non_nullable
-                  as String,
-        driverLicenseNo: null == driverLicenseNo
-            ? _value.driverLicenseNo
-            : driverLicenseNo // ignore: cast_nullable_to_non_nullable
-                  as String,
-        isDriverSubmitting: null == isDriverSubmitting
-            ? _value.isDriverSubmitting
-            : isDriverSubmitting // ignore: cast_nullable_to_non_nullable
-                  as bool,
-        driverFormError: freezed == driverFormError
-            ? _value.driverFormError
-            : driverFormError // ignore: cast_nullable_to_non_nullable
-                  as String?,
       ),
     );
   }
@@ -457,27 +317,15 @@ class _$ProfileStateImpl implements _ProfileState {
     this.isAddressLoading = false,
     this.isLanguageListLoading = false,
     this.user,
+    this.qrId,
     this.isUserResponseLoading = false,
     final List<LanguagesResponseModel> languages = const [],
     final List<LanguagesResponseModel> globalLanguages = const [],
     final List<LanguagesResponseModel> localLanguages = const [],
     this.selectedLanguages,
+    this.qrScanResponse,
     this.isUpdateProfileLoading = false,
-    this.isAddMemberLoading = false,
-    this.isFamilyMemberLoading = false,
-    this.isDeleteMemberLoading = false,
-    this.isDriverDetailsLoading = false,
-    this.drivingLicenseFile = null,
-    this.isFileLoading = false,
-    this.isaddDriverLoading = false,
-    this.isUpdateMemberLoading = false,
-    this.isUpdateDriverLoading = false,
-    this.avatarFile = null,
-    this.driverName = '',
-    this.driverPhone = '',
-    this.driverLicenseNo = '',
-    this.isDriverSubmitting = false,
-    this.driverFormError,
+    this.isHandleDoorBellLoading = false,
   }) : _languages = languages,
        _globalLanguages = globalLanguages,
        _localLanguages = localLanguages;
@@ -490,6 +338,8 @@ class _$ProfileStateImpl implements _ProfileState {
   final bool isLanguageListLoading;
   @override
   final User? user;
+  @override
+  final String? qrId;
   @override
   @JsonKey()
   final bool isUserResponseLoading;
@@ -523,57 +373,17 @@ class _$ProfileStateImpl implements _ProfileState {
   @override
   final LanguagesResponseModel? selectedLanguages;
   @override
+  final QrScanResponseModel? qrScanResponse;
+  @override
   @JsonKey()
   final bool isUpdateProfileLoading;
   @override
   @JsonKey()
-  final bool isAddMemberLoading;
-  @override
-  @JsonKey()
-  final bool isFamilyMemberLoading;
-  @override
-  @JsonKey()
-  final bool isDeleteMemberLoading;
-  @override
-  @JsonKey()
-  final bool isDriverDetailsLoading;
-  @override
-  @JsonKey()
-  final PlatformFile? drivingLicenseFile;
-  @override
-  @JsonKey()
-  final bool isFileLoading;
-  @override
-  @JsonKey()
-  final bool isaddDriverLoading;
-  @override
-  @JsonKey()
-  final bool isUpdateMemberLoading;
-  @override
-  @JsonKey()
-  final bool isUpdateDriverLoading;
-  @override
-  @JsonKey()
-  final PlatformFile? avatarFile;
-  // driver form
-  @override
-  @JsonKey()
-  final String driverName;
-  @override
-  @JsonKey()
-  final String driverPhone;
-  @override
-  @JsonKey()
-  final String driverLicenseNo;
-  @override
-  @JsonKey()
-  final bool isDriverSubmitting;
-  @override
-  final String? driverFormError;
+  final bool isHandleDoorBellLoading;
 
   @override
   String toString() {
-    return 'ProfileState(isAddressLoading: $isAddressLoading, isLanguageListLoading: $isLanguageListLoading, user: $user, isUserResponseLoading: $isUserResponseLoading, languages: $languages, globalLanguages: $globalLanguages, localLanguages: $localLanguages, selectedLanguages: $selectedLanguages, isUpdateProfileLoading: $isUpdateProfileLoading, isAddMemberLoading: $isAddMemberLoading, isFamilyMemberLoading: $isFamilyMemberLoading, isDeleteMemberLoading: $isDeleteMemberLoading, isDriverDetailsLoading: $isDriverDetailsLoading, drivingLicenseFile: $drivingLicenseFile, isFileLoading: $isFileLoading, isaddDriverLoading: $isaddDriverLoading, isUpdateMemberLoading: $isUpdateMemberLoading, isUpdateDriverLoading: $isUpdateDriverLoading, avatarFile: $avatarFile, driverName: $driverName, driverPhone: $driverPhone, driverLicenseNo: $driverLicenseNo, isDriverSubmitting: $isDriverSubmitting, driverFormError: $driverFormError)';
+    return 'ProfileState(isAddressLoading: $isAddressLoading, isLanguageListLoading: $isLanguageListLoading, user: $user, qrId: $qrId, isUserResponseLoading: $isUserResponseLoading, languages: $languages, globalLanguages: $globalLanguages, localLanguages: $localLanguages, selectedLanguages: $selectedLanguages, qrScanResponse: $qrScanResponse, isUpdateProfileLoading: $isUpdateProfileLoading, isHandleDoorBellLoading: $isHandleDoorBellLoading)';
   }
 
   @override
@@ -586,6 +396,7 @@ class _$ProfileStateImpl implements _ProfileState {
             (identical(other.isLanguageListLoading, isLanguageListLoading) ||
                 other.isLanguageListLoading == isLanguageListLoading) &&
             (identical(other.user, user) || other.user == user) &&
+            (identical(other.qrId, qrId) || other.qrId == qrId) &&
             (identical(other.isUserResponseLoading, isUserResponseLoading) ||
                 other.isUserResponseLoading == isUserResponseLoading) &&
             const DeepCollectionEquality().equals(
@@ -602,68 +413,33 @@ class _$ProfileStateImpl implements _ProfileState {
             ) &&
             (identical(other.selectedLanguages, selectedLanguages) ||
                 other.selectedLanguages == selectedLanguages) &&
+            (identical(other.qrScanResponse, qrScanResponse) ||
+                other.qrScanResponse == qrScanResponse) &&
             (identical(other.isUpdateProfileLoading, isUpdateProfileLoading) ||
                 other.isUpdateProfileLoading == isUpdateProfileLoading) &&
-            (identical(other.isAddMemberLoading, isAddMemberLoading) ||
-                other.isAddMemberLoading == isAddMemberLoading) &&
-            (identical(other.isFamilyMemberLoading, isFamilyMemberLoading) ||
-                other.isFamilyMemberLoading == isFamilyMemberLoading) &&
-            (identical(other.isDeleteMemberLoading, isDeleteMemberLoading) ||
-                other.isDeleteMemberLoading == isDeleteMemberLoading) &&
-            (identical(other.isDriverDetailsLoading, isDriverDetailsLoading) ||
-                other.isDriverDetailsLoading == isDriverDetailsLoading) &&
-            (identical(other.drivingLicenseFile, drivingLicenseFile) ||
-                other.drivingLicenseFile == drivingLicenseFile) &&
-            (identical(other.isFileLoading, isFileLoading) ||
-                other.isFileLoading == isFileLoading) &&
-            (identical(other.isaddDriverLoading, isaddDriverLoading) ||
-                other.isaddDriverLoading == isaddDriverLoading) &&
-            (identical(other.isUpdateMemberLoading, isUpdateMemberLoading) ||
-                other.isUpdateMemberLoading == isUpdateMemberLoading) &&
-            (identical(other.isUpdateDriverLoading, isUpdateDriverLoading) ||
-                other.isUpdateDriverLoading == isUpdateDriverLoading) &&
-            (identical(other.avatarFile, avatarFile) ||
-                other.avatarFile == avatarFile) &&
-            (identical(other.driverName, driverName) ||
-                other.driverName == driverName) &&
-            (identical(other.driverPhone, driverPhone) ||
-                other.driverPhone == driverPhone) &&
-            (identical(other.driverLicenseNo, driverLicenseNo) ||
-                other.driverLicenseNo == driverLicenseNo) &&
-            (identical(other.isDriverSubmitting, isDriverSubmitting) ||
-                other.isDriverSubmitting == isDriverSubmitting) &&
-            (identical(other.driverFormError, driverFormError) ||
-                other.driverFormError == driverFormError));
+            (identical(
+                  other.isHandleDoorBellLoading,
+                  isHandleDoorBellLoading,
+                ) ||
+                other.isHandleDoorBellLoading == isHandleDoorBellLoading));
   }
 
   @override
-  int get hashCode => Object.hashAll([
+  int get hashCode => Object.hash(
     runtimeType,
     isAddressLoading,
     isLanguageListLoading,
     user,
+    qrId,
     isUserResponseLoading,
     const DeepCollectionEquality().hash(_languages),
     const DeepCollectionEquality().hash(_globalLanguages),
     const DeepCollectionEquality().hash(_localLanguages),
     selectedLanguages,
+    qrScanResponse,
     isUpdateProfileLoading,
-    isAddMemberLoading,
-    isFamilyMemberLoading,
-    isDeleteMemberLoading,
-    isDriverDetailsLoading,
-    drivingLicenseFile,
-    isFileLoading,
-    isaddDriverLoading,
-    isUpdateMemberLoading,
-    isUpdateDriverLoading,
-    avatarFile,
-    driverName,
-    driverPhone,
-    driverLicenseNo,
-    isDriverSubmitting,
-    driverFormError,
-  ]);
+    isHandleDoorBellLoading,
+  );
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -679,27 +455,15 @@ abstract class _ProfileState implements ProfileState {
     final bool isAddressLoading,
     final bool isLanguageListLoading,
     final User? user,
+    final String? qrId,
     final bool isUserResponseLoading,
     final List<LanguagesResponseModel> languages,
     final List<LanguagesResponseModel> globalLanguages,
     final List<LanguagesResponseModel> localLanguages,
     final LanguagesResponseModel? selectedLanguages,
+    final QrScanResponseModel? qrScanResponse,
     final bool isUpdateProfileLoading,
-    final bool isAddMemberLoading,
-    final bool isFamilyMemberLoading,
-    final bool isDeleteMemberLoading,
-    final bool isDriverDetailsLoading,
-    final PlatformFile? drivingLicenseFile,
-    final bool isFileLoading,
-    final bool isaddDriverLoading,
-    final bool isUpdateMemberLoading,
-    final bool isUpdateDriverLoading,
-    final PlatformFile? avatarFile,
-    final String driverName,
-    final String driverPhone,
-    final String driverLicenseNo,
-    final bool isDriverSubmitting,
-    final String? driverFormError,
+    final bool isHandleDoorBellLoading,
   }) = _$ProfileStateImpl;
 
   @override
@@ -708,6 +472,8 @@ abstract class _ProfileState implements ProfileState {
   bool get isLanguageListLoading;
   @override
   User? get user;
+  @override
+  String? get qrId;
   @override
   bool get isUserResponseLoading;
   @override
@@ -719,37 +485,11 @@ abstract class _ProfileState implements ProfileState {
   @override
   LanguagesResponseModel? get selectedLanguages;
   @override
+  QrScanResponseModel? get qrScanResponse;
+  @override
   bool get isUpdateProfileLoading;
   @override
-  bool get isAddMemberLoading;
-  @override
-  bool get isFamilyMemberLoading;
-  @override
-  bool get isDeleteMemberLoading;
-  @override
-  bool get isDriverDetailsLoading;
-  @override
-  PlatformFile? get drivingLicenseFile;
-  @override
-  bool get isFileLoading;
-  @override
-  bool get isaddDriverLoading;
-  @override
-  bool get isUpdateMemberLoading;
-  @override
-  bool get isUpdateDriverLoading;
-  @override
-  PlatformFile? get avatarFile; // driver form
-  @override
-  String get driverName;
-  @override
-  String get driverPhone;
-  @override
-  String get driverLicenseNo;
-  @override
-  bool get isDriverSubmitting;
-  @override
-  String? get driverFormError;
+  bool get isHandleDoorBellLoading;
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
