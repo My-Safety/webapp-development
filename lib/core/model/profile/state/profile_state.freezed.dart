@@ -31,6 +31,8 @@ mixin _$ProfileState {
   LanguagesResponseModel? get selectedLanguages =>
       throw _privateConstructorUsedError;
   QrScanResponseModel? get qrScanResponse => throw _privateConstructorUsedError;
+  ResolveQrResponseModel? get resolveQrResponse =>
+      throw _privateConstructorUsedError;
   bool get isUpdateProfileLoading => throw _privateConstructorUsedError;
   bool get isHandleDoorBellLoading => throw _privateConstructorUsedError;
 
@@ -59,6 +61,7 @@ abstract class $ProfileStateCopyWith<$Res> {
     List<LanguagesResponseModel> localLanguages,
     LanguagesResponseModel? selectedLanguages,
     QrScanResponseModel? qrScanResponse,
+    ResolveQrResponseModel? resolveQrResponse,
     bool isUpdateProfileLoading,
     bool isHandleDoorBellLoading,
   });
@@ -66,6 +69,7 @@ abstract class $ProfileStateCopyWith<$Res> {
   $UserCopyWith<$Res>? get user;
   $LanguagesResponseModelCopyWith<$Res>? get selectedLanguages;
   $QrScanResponseModelCopyWith<$Res>? get qrScanResponse;
+  $ResolveQrResponseModelCopyWith<$Res>? get resolveQrResponse;
 }
 
 /// @nodoc
@@ -93,6 +97,7 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
     Object? localLanguages = null,
     Object? selectedLanguages = freezed,
     Object? qrScanResponse = freezed,
+    Object? resolveQrResponse = freezed,
     Object? isUpdateProfileLoading = null,
     Object? isHandleDoorBellLoading = null,
   }) {
@@ -138,6 +143,10 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
                 ? _value.qrScanResponse
                 : qrScanResponse // ignore: cast_nullable_to_non_nullable
                       as QrScanResponseModel?,
+            resolveQrResponse: freezed == resolveQrResponse
+                ? _value.resolveQrResponse
+                : resolveQrResponse // ignore: cast_nullable_to_non_nullable
+                      as ResolveQrResponseModel?,
             isUpdateProfileLoading: null == isUpdateProfileLoading
                 ? _value.isUpdateProfileLoading
                 : isUpdateProfileLoading // ignore: cast_nullable_to_non_nullable
@@ -194,6 +203,22 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
       return _then(_value.copyWith(qrScanResponse: value) as $Val);
     });
   }
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ResolveQrResponseModelCopyWith<$Res>? get resolveQrResponse {
+    if (_value.resolveQrResponse == null) {
+      return null;
+    }
+
+    return $ResolveQrResponseModelCopyWith<$Res>(_value.resolveQrResponse!, (
+      value,
+    ) {
+      return _then(_value.copyWith(resolveQrResponse: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -216,6 +241,7 @@ abstract class _$$ProfileStateImplCopyWith<$Res>
     List<LanguagesResponseModel> localLanguages,
     LanguagesResponseModel? selectedLanguages,
     QrScanResponseModel? qrScanResponse,
+    ResolveQrResponseModel? resolveQrResponse,
     bool isUpdateProfileLoading,
     bool isHandleDoorBellLoading,
   });
@@ -226,6 +252,8 @@ abstract class _$$ProfileStateImplCopyWith<$Res>
   $LanguagesResponseModelCopyWith<$Res>? get selectedLanguages;
   @override
   $QrScanResponseModelCopyWith<$Res>? get qrScanResponse;
+  @override
+  $ResolveQrResponseModelCopyWith<$Res>? get resolveQrResponse;
 }
 
 /// @nodoc
@@ -252,6 +280,7 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
     Object? localLanguages = null,
     Object? selectedLanguages = freezed,
     Object? qrScanResponse = freezed,
+    Object? resolveQrResponse = freezed,
     Object? isUpdateProfileLoading = null,
     Object? isHandleDoorBellLoading = null,
   }) {
@@ -297,6 +326,10 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
             ? _value.qrScanResponse
             : qrScanResponse // ignore: cast_nullable_to_non_nullable
                   as QrScanResponseModel?,
+        resolveQrResponse: freezed == resolveQrResponse
+            ? _value.resolveQrResponse
+            : resolveQrResponse // ignore: cast_nullable_to_non_nullable
+                  as ResolveQrResponseModel?,
         isUpdateProfileLoading: null == isUpdateProfileLoading
             ? _value.isUpdateProfileLoading
             : isUpdateProfileLoading // ignore: cast_nullable_to_non_nullable
@@ -324,6 +357,7 @@ class _$ProfileStateImpl implements _ProfileState {
     final List<LanguagesResponseModel> localLanguages = const [],
     this.selectedLanguages,
     this.qrScanResponse,
+    this.resolveQrResponse,
     this.isUpdateProfileLoading = false,
     this.isHandleDoorBellLoading = false,
   }) : _languages = languages,
@@ -375,6 +409,8 @@ class _$ProfileStateImpl implements _ProfileState {
   @override
   final QrScanResponseModel? qrScanResponse;
   @override
+  final ResolveQrResponseModel? resolveQrResponse;
+  @override
   @JsonKey()
   final bool isUpdateProfileLoading;
   @override
@@ -383,7 +419,7 @@ class _$ProfileStateImpl implements _ProfileState {
 
   @override
   String toString() {
-    return 'ProfileState(isAddressLoading: $isAddressLoading, isLanguageListLoading: $isLanguageListLoading, user: $user, qrId: $qrId, isUserResponseLoading: $isUserResponseLoading, languages: $languages, globalLanguages: $globalLanguages, localLanguages: $localLanguages, selectedLanguages: $selectedLanguages, qrScanResponse: $qrScanResponse, isUpdateProfileLoading: $isUpdateProfileLoading, isHandleDoorBellLoading: $isHandleDoorBellLoading)';
+    return 'ProfileState(isAddressLoading: $isAddressLoading, isLanguageListLoading: $isLanguageListLoading, user: $user, qrId: $qrId, isUserResponseLoading: $isUserResponseLoading, languages: $languages, globalLanguages: $globalLanguages, localLanguages: $localLanguages, selectedLanguages: $selectedLanguages, qrScanResponse: $qrScanResponse, resolveQrResponse: $resolveQrResponse, isUpdateProfileLoading: $isUpdateProfileLoading, isHandleDoorBellLoading: $isHandleDoorBellLoading)';
   }
 
   @override
@@ -415,6 +451,8 @@ class _$ProfileStateImpl implements _ProfileState {
                 other.selectedLanguages == selectedLanguages) &&
             (identical(other.qrScanResponse, qrScanResponse) ||
                 other.qrScanResponse == qrScanResponse) &&
+            (identical(other.resolveQrResponse, resolveQrResponse) ||
+                other.resolveQrResponse == resolveQrResponse) &&
             (identical(other.isUpdateProfileLoading, isUpdateProfileLoading) ||
                 other.isUpdateProfileLoading == isUpdateProfileLoading) &&
             (identical(
@@ -437,6 +475,7 @@ class _$ProfileStateImpl implements _ProfileState {
     const DeepCollectionEquality().hash(_localLanguages),
     selectedLanguages,
     qrScanResponse,
+    resolveQrResponse,
     isUpdateProfileLoading,
     isHandleDoorBellLoading,
   );
@@ -462,6 +501,7 @@ abstract class _ProfileState implements ProfileState {
     final List<LanguagesResponseModel> localLanguages,
     final LanguagesResponseModel? selectedLanguages,
     final QrScanResponseModel? qrScanResponse,
+    final ResolveQrResponseModel? resolveQrResponse,
     final bool isUpdateProfileLoading,
     final bool isHandleDoorBellLoading,
   }) = _$ProfileStateImpl;
@@ -486,6 +526,8 @@ abstract class _ProfileState implements ProfileState {
   LanguagesResponseModel? get selectedLanguages;
   @override
   QrScanResponseModel? get qrScanResponse;
+  @override
+  ResolveQrResponseModel? get resolveQrResponse;
   @override
   bool get isUpdateProfileLoading;
   @override

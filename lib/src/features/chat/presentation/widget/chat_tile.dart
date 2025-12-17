@@ -7,7 +7,9 @@ class ChatTile extends StatelessWidget {
   final String messages;
   final String? imgUrl;
   final String? timeStamp;
-  final String? fileUrl; // Add this param for image file URL
+  final String? fileUrl;
+  final String? status;
+  final String? name;
 
   const ChatTile({
     super.key,
@@ -16,6 +18,8 @@ class ChatTile extends StatelessWidget {
     this.imgUrl,
     this.timeStamp,
     this.fileUrl,
+    this.status,
+    this.name,
   });
 
   @override
@@ -25,105 +29,94 @@ class ChatTile extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.only(
-        left: isIncoming ? 12 : 40,
-        right: isIncoming ? 40 : 12,
+        left: isIncoming ? 12 : 48,
+        right: isIncoming ? 48 : 12,
         top: 6,
-        bottom: 0,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: isIncoming
             ? MainAxisAlignment.start
             : MainAxisAlignment.end,
         children: [
-          if (isIncoming && imgUrl != null)
+          if (isIncoming && imgUrl != null) ...[
             CircleAvatar(
-              radius: 15,
+              radius: 16,
               backgroundColor: AppColors.greyCF,
               child: ClipOval(
                 child: CachedNetworkImage(
                   imageUrl: imgUrl!,
-                  width: 30,
-                  height: 30,
+                  width: 32,
+                  height: 32,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => Container(
-                    color: AppColors.greyCF,
-                    child: const Center(
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => Container(
-                    color: AppColors.greyCF,
-                    width: 30,
-                    height: 30,
-                    child: Icon(
-                      Icons.person,
-                      color: AppColors.grey7D,
-                      size: 30,
-                    ),
-                  ),
+                  errorWidget: (_, __, ___) =>
+                      Icon(Icons.person, size: 20, color: AppColors.grey7D),
                 ),
               ),
             ),
-          const SizedBox(width: 8),
+            const SizedBox(width: 8),
+          ],
+
           Flexible(
             child: Column(
               crossAxisAlignment: isIncoming
                   ? CrossAxisAlignment.start
                   : CrossAxisAlignment.end,
               children: [
+                /// Bubble
                 Container(
+                  constraints: const BoxConstraints(maxWidth: 280),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: fileUrl != null ? 4 : 12,
+                    vertical: fileUrl != null ? 4 : 8,
+                  ),
                   decoration: BoxDecoration(
                     color: bubbleColor,
                     borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(13),
-                      topRight: const Radius.circular(13),
-                      bottomLeft: Radius.circular(isIncoming ? 2 : 13),
-                      bottomRight: Radius.circular(isIncoming ? 13 : 2),
+                      topLeft: const Radius.circular(14),
+                      topRight: const Radius.circular(14),
+                      bottomLeft: Radius.circular(isIncoming ? 4 : 14),
+                      bottomRight: Radius.circular(isIncoming ? 14 : 4),
                     ),
                   ),
-                  padding: fileUrl != null
-                      ? const EdgeInsets.symmetric(horizontal: 3, vertical: 3)
-                      : const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 10,
-                        ),
                   child: Column(
-                    crossAxisAlignment: isIncoming
-                        ? CrossAxisAlignment.start
-                        : CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (isIncoming && name != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 2),
+                          child: BrandText.primary(
+                            data: name!,
+                            fontSize: 12,
+                            fontColor: AppColors.blue,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+
                       if (messages.isNotEmpty)
                         BrandText.primary(
                           data: messages,
-                          textStyle: TextStyle(color: textColor),
-                          fontSize: 15,
+                          fontSize: 13,
+                          textStyle: TextStyle(color: textColor, height: 1.3),
                         ),
+
                       if (fileUrl != null) ...[
-                        // const BrandHSpace.gap10(),
+                        const SizedBox(height: 6),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: CachedNetworkImage(
                             imageUrl: fileUrl!,
-                            width: 200,
-                            height: 300,
+                            width: 220,
+                            height: 260,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => Container(
+                            errorWidget: (_, __, ___) => Container(
+                              width: 220,
+                              height: 260,
                               color: AppColors.greyCF,
-                              child: const Center(
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              ),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              color: AppColors.greyCF,
-                              width: 200,
-                              height: 300,
                               child: Icon(
                                 Icons.broken_image,
+                                size: 40,
                                 color: AppColors.grey8B,
-                                size: 50,
                               ),
                             ),
                           ),
@@ -132,19 +125,37 @@ class ChatTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                BrandVSpace.gap4(),
-                if (timeStamp != null)
-                  BrandText.grey(
-                    data: timeStamp!,
-                    maxLines: 1,
-                    fontSize: 9,
-                    fontWeight: FontWeight.bold,
-                    fontColor: AppColors.greyCF,
-                  ),
+
+                const SizedBox(height: 4),
+
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    BrandText.grey(
+                      data: timeStamp ?? '',
+                      fontSize: 9,
+                      fontColor: AppColors.greyCF,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    if (!isIncoming) ...[
+                      const SizedBox(width: 4),
+                      Icon(
+                        status == 'seen'
+                            ? Icons.done_all
+                            : status == 'delivered'
+                            ? Icons.done_all
+                            : Icons.done,
+                        size: 12,
+                        color: status == 'seen'
+                            ? Colors.blue
+                            : AppColors.greyCF,
+                      ),
+                    ],
+                  ],
+                ),
               ],
             ),
           ),
-          if (!isIncoming) const SizedBox(width: 12),
         ],
       ),
     );

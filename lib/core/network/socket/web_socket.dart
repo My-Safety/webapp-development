@@ -3,55 +3,15 @@
 
 import 'dart:async';
 import 'package:mysafety_web/app_config.dart';
+import 'package:mysafety_web/core/model/chat/response/chat_history_response_model/chat_history_response_model.dart';
 import 'package:mysafety_web/util/auth/auth_manager.dart';
 import 'package:mysafety_web/util/utils.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
-class ChatMessageModel {
-  final String id;
-  final String roomId;
-  final String senderId;
-  final String senderType;
-  final String messageType;
-  final String? content;
-  final String? mediaUrl;
-  final int? mediaDuration;
-  final String status;
-  final DateTime createdAt;
-
-  ChatMessageModel({
-    required this.id,
-    required this.roomId,
-    required this.senderId,
-    required this.senderType,
-    required this.messageType,
-    this.content,
-    this.mediaUrl,
-    this.mediaDuration,
-    required this.status,
-    required this.createdAt,
-  });
-
-  factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
-    return ChatMessageModel(
-      id: json['_id'] ?? '',
-      roomId: json['roomId'] ?? '',
-      senderId: json['senderId'] ?? '',
-      senderType: json['senderType'] ?? '',
-      messageType: json['messageType'] ?? '',
-      content: json['content'],
-      mediaUrl: json['mediaUrl'],
-      mediaDuration: json['mediaDuration'],
-      status: json['status'] ?? 'Sent',
-      createdAt: DateTime.parse(json['createdAt']),
-    );
-  }
-}
-
 abstract class WebSocketService {
   static io.Socket? socket;
 
-  static final StreamController<ChatMessageModel> _newMessageController =
+  static final StreamController<ChatHistoryResponseModel> _newMessageController =
       StreamController.broadcast();
 
   static final StreamController<Map<String, dynamic>> _roomJoinedController =
@@ -72,7 +32,7 @@ abstract class WebSocketService {
   static final StreamController<String> _roomClosedController =
       StreamController.broadcast();
 
-  static Stream<ChatMessageModel> get newMessageStream =>
+  static Stream<ChatHistoryResponseModel> get newMessageStream =>
       _newMessageController.stream;
 
   static Stream<Map<String, dynamic>> get roomJoinedStream =>
@@ -121,7 +81,7 @@ abstract class WebSocketService {
 
     socket!.on('new_message', (data) {
       debugPrint('Received new message: $data'); // debug
-      final message = ChatMessageModel.fromJson(data);
+      final message = ChatHistoryResponseModel.fromJson(data);
       _newMessageController.add(message);
     });
 

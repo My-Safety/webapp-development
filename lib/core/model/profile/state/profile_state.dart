@@ -7,6 +7,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mysafety_web/core/model/profile/languages/languages_response_model.dart';
 import 'package:mysafety_web/core/model/qr/qr_scan_response_model.dart';
+import 'package:mysafety_web/core/model/resolve_qr/resolve_qr_response_model.dart';
 import 'package:mysafety_web/core/model/user/user_model.dart';
 
 
@@ -26,6 +27,7 @@ class ProfileState with _$ProfileState {
     @Default([]) List<LanguagesResponseModel> localLanguages,
     LanguagesResponseModel? selectedLanguages,
     QrScanResponseModel? qrScanResponse,
+    ResolveQrResponseModel? resolveQrResponse,
     @Default(false) bool isUpdateProfileLoading,
     @Default(false) bool isHandleDoorBellLoading,
 

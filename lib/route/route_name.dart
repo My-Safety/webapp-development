@@ -9,6 +9,7 @@ abstract class RouteName {
   static String home = '/home';
   static String otp = '/otp';
   static String email = '/email';
+  static String fetchLocation = '/fetchLocation';
 
   static String selectLanguageScreen = '/select_language_screen';
 }

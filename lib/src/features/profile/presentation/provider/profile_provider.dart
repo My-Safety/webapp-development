@@ -87,7 +87,7 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
 
     var result = await ref
         .read(profileRemoteRepoProvider)
-        .handleDoorbellScan(qrId: state.qrId.toString());
+        .handleDoorbellScan(qrId: "181ca48de71aec12b833c41c540d0f2e");
 
     if (result.success == ActionStatus.success.code) {
       state = state.copyWith(
@@ -95,6 +95,32 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
         qrScanResponse: result.data,
       );
       print(state.qrScanResponse!.chatRoom!.qrId.toString());
+    } else {
+      state = state.copyWith(isHandleDoorBellLoading: false, languages: []);
+    }
+  }
+
+  Future<void> resolveQr({
+    required String qrId,
+    required String latitude,
+    required String longitude,
+  }) async {
+    state = state.copyWith(isHandleDoorBellLoading: true);
+
+    var result = await ref
+        .read(profileRemoteRepoProvider)
+        .resolveQr(
+          qrId: state.qrId ?? '181ca48de71aec12b833c41c540d0f2e',
+          // latitude: latitude,
+          // longitude: longitude,
+        );
+
+    if (result.success == ActionStatus.success.code) {
+      state = state.copyWith(
+        isLanguageListLoading: false,
+        resolveQrResponse: result.data,
+      );
+      print(state.resolveQrResponse!.qr!.ownerId.toString());
     } else {
       state = state.copyWith(isHandleDoorBellLoading: false, languages: []);
     }
@@ -114,10 +140,6 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
     }
     state = state.copyWith(globalLanguages: gList, localLanguages: lList);
   }
-
-
-
-
 
   void updateFullAddress(String? address) {
     var a = user?.address?.copyWith(fulladdress: address);

@@ -1,5 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-// Copyright (c) 2025, Indo-Sakura Software Pvt Ltd. All rights reserved.
+// Copyright (c) 2025, Indo-Sakura Software Pvt Ltd.
 // Created By Adwaith c, 16/12/2025
 
 import 'dart:async';
@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mysafety_design_system/design_system/design_system.dart';
+import 'package:mysafety_web/core/model/chat/response/chat_history_response_model/chat_history_response_model.dart';
 import 'package:mysafety_web/core/network/socket/web_socket.dart';
+import 'package:mysafety_web/src/features/chat/presentation/provider/chat_provider.dart';
 import 'package:mysafety_web/src/features/chat/presentation/widget/chat_input_bar.dart';
 import 'package:mysafety_web/src/features/chat/presentation/widget/chat_screen_appbar.dart';
 import 'package:mysafety_web/src/features/chat/presentation/widget/chat_tile.dart';
@@ -15,16 +17,7 @@ import 'package:mysafety_web/src/features/profile/presentation/provider/profile_
 import 'package:mysafety_web/util/formator/date_formator.dart';
 
 class OneToOneChatScreen extends ConsumerStatefulWidget {
-  final String? roomId;
-  final String? userName;
-  final String? avatarUrl;
-
-  const OneToOneChatScreen({
-    super.key,
-    this.roomId = '6940f72ba2d22f17d7a43168',
-    this.userName = "Asok",
-    this.avatarUrl = '',
-  });
+  const OneToOneChatScreen({super.key});
 
   @override
   ConsumerState<OneToOneChatScreen> createState() => _OneToOneChatScreenState();
@@ -32,19 +25,22 @@ class OneToOneChatScreen extends ConsumerStatefulWidget {
 
 class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen>
     with WidgetsBindingObserver {
-  final TextEditingController _controller = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
-  final FocusNode _chatFocusNode = FocusNode();
-  final ImagePicker _picker = ImagePicker();
+  final _controller = TextEditingController();
+  final _scrollController = ScrollController();
+  final _chatFocusNode = FocusNode();
+  final _picker = ImagePicker();
 
-  final ValueNotifier<List<ChatMessageModel>> _messages = ValueNotifier([]);
-
-  bool _isOtherTyping = false;
+  final ValueNotifier<List<ChatHistoryResponseModel>> _messages = ValueNotifier(
+    [],
+  );
 
   StreamSubscription? _newMessageSub;
   StreamSubscription? _typingSub;
-  StreamSubscription? _roomClosedSub;
+  StreamSubscription? _statusUpdateSub;
+
+  bool _isOtherTyping = false;
   String? _roomId;
+  String? visitorName;
 
   @override
   void initState() {
@@ -53,38 +49,65 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen>
     _chatFocusNode.requestFocus();
 
     final profileState = ref.read(profileProvider);
-
     _roomId = profileState.qrScanResponse?.chatRoom?.id;
-    // OR if backend uses roomId
-    // _roomId = profileState.qrScanResponse?.chatRoom?.roomId;
+    visitorName = profileState.resolveQrResponse?.qr?.ownerId?.name;
 
     if (_roomId != null) {
-      _connectWebSocket();
+      _connectSocket();
     }
   }
 
-  Future<void> _connectWebSocket() async {
+  Future<void> _connectSocket() async {
     await WebSocketService.connect();
-
     WebSocketService.joinRoom(_roomId!);
 
+    // NEW MESSAGE
     _newMessageSub = WebSocketService.newMessageStream.listen((message) {
       _messages.value = [..._messages.value, message];
+
+      // Mark delivered for incoming messages
+      if (message.senderType != "Visitor" && message.id != null) {
+        WebSocketService.messageDelivered([message.id!]);
+      }
+
       _scrollToBottom();
+      _markMessagesSeen();
     });
 
+    // TYPING
     _typingSub = WebSocketService.typingStream.listen((data) {
       _isOtherTyping = data['isTyping'] ?? false;
+      setState(() {});
     });
 
-    _roomClosedSub = WebSocketService.roomClosedStream.listen((_) {
-      if (mounted) {
-        // ScaffoldMessenger.of(
-        //   context,
-        // ).showSnackBar(const SnackBar(content: Text('Chat room closed')));
-        // Navigator.of(context).pop();
-      }
+    // STATUS UPDATE
+    _statusUpdateSub = WebSocketService.statusUpdateStream.listen((data) {
+      final messageId = data['messageId'];
+      final status = data['status'];
+
+      if (messageId == null || status == null) return;
+
+      _messages.value = _messages.value.map((m) {
+        if (m.id == messageId) {
+          return m.copyWith(status: status.toString().toLowerCase());
+        }
+        return m;
+      }).toList();
     });
+  }
+
+  void _markMessagesSeen() {
+    final unseen = _messages.value
+        .where(
+          (m) =>
+              m.senderType != "Visitor" && m.status != 'seen' && m.id != null,
+        )
+        .map((m) => m.id!)
+        .toList();
+
+    if (unseen.isNotEmpty && _roomId != null) {
+      WebSocketService.messageSeen(_roomId!, unseen);
+    }
   }
 
   Future<void> _sendText() async {
@@ -97,16 +120,24 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen>
       content: text,
     );
 
-    if (success) {
-      _controller.clear();
-    }
+    if (success) _controller.clear();
   }
 
   Future<void> _pickImage() async {
-    try {
-      final image = await _picker.pickImage(source: ImageSource.gallery);
-      if (image != null) {}
-    } catch (_) {}
+    final picked = await _picker.pickImage(source: ImageSource.gallery);
+    if (picked == null) return;
+
+    final uploadedFile = await ref
+        .read(chatProvider.notifier)
+        .sendFileGetUrl(picked.path);
+
+    if (uploadedFile == null) return;
+
+    await WebSocketService.sendMessage(
+      roomId: _roomId!,
+      messageType: 'Image',
+      mediaUrl: uploadedFile.url,
+    );
   }
 
   void _sendTyping(bool isTyping) {
@@ -125,19 +156,11 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen>
   }
 
   @override
-  void didChangeMetrics() {
-    super.didChangeMetrics();
-    if (MediaQuery.of(context).viewInsets.bottom > 0) {
-      _scrollToBottom();
-    }
-  }
-
-  @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _newMessageSub?.cancel();
     _typingSub?.cancel();
-    _roomClosedSub?.cancel();
+    _statusUpdateSub?.cancel();
     _controller.dispose();
     _scrollController.dispose();
     _chatFocusNode.dispose();
@@ -155,30 +178,28 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen>
           body: Column(
             children: [
               ChatScreenAppBar(
-                avatarUrl: widget.avatarUrl!,
-                userName: widget.userName!,
+                avatarUrl: '',
+                userName: visitorName ?? '',
                 status: _isOtherTyping ? 'typing...' : 'online',
               ),
               Expanded(
-                child: ValueListenableBuilder<List<ChatMessageModel>>(
+                child: ValueListenableBuilder(
                   valueListenable: _messages,
-                  builder: (_, messages, _) {
+                  builder: (_, messages, __) {
                     return ListView.builder(
-                      shrinkWrap: true,
                       controller: _scrollController,
                       padding: const EdgeInsets.all(16),
                       itemCount: messages.length,
                       itemBuilder: (_, index) {
                         final msg = messages[index];
-                        final isIncoming = msg.senderType != "Visitor";
                         return ChatTile(
-                          isIncoming: isIncoming,
-                          imgUrl: widget.avatarUrl,
-                          timeStamp: DateFormats.time12A.format(
-                            msg.createdAt.toLocal(),
-                          ),
+                          isIncoming: msg.senderType != "Visitor",
                           messages: msg.content ?? '',
-                          fileUrl: msg.mediaUrl,
+                          timeStamp: DateFormats.formatTime(msg.createdAt),
+                          status: msg.status,
+                          name: msg.senderDetails?.name ?? '',
+                          imgUrl:
+                              'https://imgs.search.brave.com/zS2iFJDpmWeWHCv2DAzSV2hmCHq4Kxm9kMiC9Ulugvw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oaXBz/LmhlYXJzdGFwcHMu/Y29tL2htZy1wcm9k/L2ltYWdlcy9iYWQt/YnVubnkta2VuZGFs/bC1qZW5uZXItZ2V0/dHlpbWFnZXMtMTY3/Njk5MTYxNS5qcGc_/Y3JvcD0wLjUwMnh3/OjEuMDB4aDswLjQ5/OHh3LDAmcmVzaXpl/PTM2MDoq',
                         );
                       },
                     );
