@@ -3,6 +3,7 @@
 // Created By Adwaith c, 16/12/2025
 
 import 'dart:async';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,7 +16,7 @@ import 'package:mysafety_web/src/features/chat/presentation/widget/chat_screen_a
 import 'package:mysafety_web/src/features/chat/presentation/widget/chat_tile.dart';
 import 'package:mysafety_web/src/features/profile/presentation/provider/profile_provider.dart';
 import 'package:mysafety_web/util/formator/date_formator.dart';
-
+import 'package:record/record.dart';
 class OneToOneChatScreen extends ConsumerStatefulWidget {
   const OneToOneChatScreen({super.key});
 
@@ -29,6 +30,7 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen>
   final _scrollController = ScrollController();
   final _chatFocusNode = FocusNode();
   final _picker = ImagePicker();
+  late ChatNotifierProvider provider;
 
   final ValueNotifier<List<ChatHistoryResponseModel>> _messages = ValueNotifier(
     [],
@@ -41,7 +43,7 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen>
   bool _isOtherTyping = false;
   String? _roomId;
   String? visitorName;
-
+  String? _audioFilePath;
   @override
   void initState() {
     super.initState();
@@ -82,13 +84,17 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen>
 
     // STATUS UPDATE
     _statusUpdateSub = WebSocketService.statusUpdateStream.listen((data) {
-      final messageId = data['messageId'];
+      final List<dynamic>? messageIds = data['messageIds'];
       final status = data['status'];
 
-      if (messageId == null || status == null) return;
+      debugPrint(
+        'MESSAGE STATUS UPDATE -> messageIds: $messageIds | status: $status',
+      );
+
+      if (messageIds == null || status == null) return;
 
       _messages.value = _messages.value.map((m) {
-        if (m.id == messageId) {
+        if (messageIds.contains(m.id)) {
           return m.copyWith(status: status.toString().toLowerCase());
         }
         return m;
@@ -123,20 +129,65 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen>
     if (success) _controller.clear();
   }
 
+  Future<void> _pickAudio() async {
+    if (_roomId == null) return;
+
+    final result = await FilePicker.platform.pickFiles(type: FileType.audio);
+    if (result == null || result.files.isEmpty) return;
+
+    final file = result.files.first;
+    final notifier = ref.read(chatProvider.notifier);
+
+    notifier.setUploadFile = file;
+
+    final success = await notifier.sendFileGetUrl();
+    if (!success) {
+      debugPrint('❌ Audio upload failed');
+      return;
+    }
+
+    final uploadedFile = ref.read(chatProvider).uploadedFile;
+    if (uploadedFile?.fileUrl == null) return;
+
+    debugPrint('🎧 AUDIO URL: ${uploadedFile!.fileUrl}');
+
+    await WebSocketService.sendMessage(
+      roomId: _roomId!,
+      messageType: 'Voice',
+      mediaUrl: uploadedFile.fileUrl,
+      mediaDuration: file.size ~/ 16000,
+    );
+  }
+
   Future<void> _pickImage() async {
     final picked = await _picker.pickImage(source: ImageSource.gallery);
-    if (picked == null) return;
+    if (picked == null || _roomId == null) return;
 
-    final uploadedFile = await ref
-        .read(chatProvider.notifier)
-        .sendFileGetUrl(picked.path);
+    final platformFile = PlatformFile(
+      name: picked.name,
+      path: picked.path,
+      size: await picked.length(),
+    );
 
-    if (uploadedFile == null) return;
+    final notifier = ref.read(chatProvider.notifier);
+
+    // Set file
+    notifier.setUploadFile = platformFile;
+
+    // Upload
+    final success = await notifier.sendFileGetUrl();
+    if (!success) {
+      // debugPrint('Image upload failed');
+      return;
+    }
+
+    final uploadedFile = ref.read(chatProvider).uploadedFile;
+    // debugPrint('✅ IMAGE URL: ${uploadedFile?.fileUrl}');
 
     await WebSocketService.sendMessage(
       roomId: _roomId!,
       messageType: 'Image',
-      mediaUrl: uploadedFile.url,
+      mediaUrl: uploadedFile!.fileUrl,
     );
   }
 
@@ -198,6 +249,9 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen>
                           timeStamp: DateFormats.formatTime(msg.createdAt),
                           status: msg.status,
                           name: msg.senderDetails?.name ?? '',
+                          fileUrl: msg.messageType == 'Image'
+                              ? msg.mediaUrl
+                              : null,
                           imgUrl:
                               'https://imgs.search.brave.com/zS2iFJDpmWeWHCv2DAzSV2hmCHq4Kxm9kMiC9Ulugvw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9oaXBz/LmhlYXJzdGFwcHMu/Y29tL2htZy1wcm9k/L2ltYWdlcy9iYWQt/YnVubnkta2VuZGFs/bC1qZW5uZXItZ2V0/dHlpbWFnZXMtMTY3/Njk5MTYxNS5qcGc_/Y3JvcD0wLjUwMnh3/OjEuMDB4aDswLjQ5/OHh3LDAmcmVzaXpl/PTM2MDoq',
                         );
@@ -212,6 +266,7 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen>
                 onTyping: _sendTyping,
                 isOtherTyping: _isOtherTyping,
                 onMediaTap: _pickImage,
+                onAudioTap: _pickAudio, // 🔥 ADD
               ),
             ],
           ),

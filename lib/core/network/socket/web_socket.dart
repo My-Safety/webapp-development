@@ -11,8 +11,8 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 abstract class WebSocketService {
   static io.Socket? socket;
 
-  static final StreamController<ChatHistoryResponseModel> _newMessageController =
-      StreamController.broadcast();
+  static final StreamController<ChatHistoryResponseModel>
+  _newMessageController = StreamController.broadcast();
 
   static final StreamController<Map<String, dynamic>> _roomJoinedController =
       StreamController.broadcast();
@@ -90,7 +90,7 @@ abstract class WebSocketService {
     });
 
     socket!.on('message_status_update', (data) {
-      _statusUpdateController.add(data);
+      debugPrint('RAW MESSAGE STATUS UPDATE FROM SOCKET: $data');
     });
 
     socket!.on('participant_switched', (data) {

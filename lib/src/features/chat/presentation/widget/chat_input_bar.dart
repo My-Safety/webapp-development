@@ -9,10 +9,12 @@ class ChatInputBar extends StatefulWidget {
   final bool isOtherTyping;
   final TextEditingController chatController;
   final FocusNode? chatFocusNode;
+  final VoidCallback onAudioTap;
 
   const ChatInputBar({
     super.key,
     required this.onSend,
+    required this.onAudioTap,
     required this.onMediaTap,
     required this.onTyping,
     required this.isOtherTyping,
@@ -176,8 +178,10 @@ class _ChatInputBarState extends State<ChatInputBar> {
                   ),
                   onPressed: widget.chatController.text.trim().isNotEmpty
                       ? widget.onSend
-                      : null,
-                  tooltip: 'Send message',
+                      : widget.onAudioTap, // ✅ FIX
+                  tooltip: widget.chatController.text.trim().isNotEmpty
+                      ? 'Send message'
+                      : 'Record audio',
                 ),
               ),
             ],

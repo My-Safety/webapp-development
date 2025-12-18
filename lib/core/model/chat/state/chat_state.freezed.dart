@@ -18,10 +18,12 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ChatState {
   bool get isError => throw _privateConstructorUsedError;
-  Avatar? get uploadedFile => throw _privateConstructorUsedError;
+  FileUploadResponseModel? get uploadedFile =>
+      throw _privateConstructorUsedError;
   bool get isPremiumUser => throw _privateConstructorUsedError;
   bool get isFileUploading => throw _privateConstructorUsedError;
   String? get roomId => throw _privateConstructorUsedError;
+  PlatformFile? get mediafile => throw _privateConstructorUsedError;
 
   /// Create a copy of ChatState
   /// with the given fields replaced by the non-null parameter values.
@@ -37,13 +39,14 @@ abstract class $ChatStateCopyWith<$Res> {
   @useResult
   $Res call({
     bool isError,
-    Avatar? uploadedFile,
+    FileUploadResponseModel? uploadedFile,
     bool isPremiumUser,
     bool isFileUploading,
     String? roomId,
+    PlatformFile? mediafile,
   });
 
-  $AvatarCopyWith<$Res>? get uploadedFile;
+  $FileUploadResponseModelCopyWith<$Res>? get uploadedFile;
 }
 
 /// @nodoc
@@ -66,6 +69,7 @@ class _$ChatStateCopyWithImpl<$Res, $Val extends ChatState>
     Object? isPremiumUser = null,
     Object? isFileUploading = null,
     Object? roomId = freezed,
+    Object? mediafile = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -76,7 +80,7 @@ class _$ChatStateCopyWithImpl<$Res, $Val extends ChatState>
             uploadedFile: freezed == uploadedFile
                 ? _value.uploadedFile
                 : uploadedFile // ignore: cast_nullable_to_non_nullable
-                      as Avatar?,
+                      as FileUploadResponseModel?,
             isPremiumUser: null == isPremiumUser
                 ? _value.isPremiumUser
                 : isPremiumUser // ignore: cast_nullable_to_non_nullable
@@ -89,6 +93,10 @@ class _$ChatStateCopyWithImpl<$Res, $Val extends ChatState>
                 ? _value.roomId
                 : roomId // ignore: cast_nullable_to_non_nullable
                       as String?,
+            mediafile: freezed == mediafile
+                ? _value.mediafile
+                : mediafile // ignore: cast_nullable_to_non_nullable
+                      as PlatformFile?,
           )
           as $Val,
     );
@@ -98,12 +106,14 @@ class _$ChatStateCopyWithImpl<$Res, $Val extends ChatState>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $AvatarCopyWith<$Res>? get uploadedFile {
+  $FileUploadResponseModelCopyWith<$Res>? get uploadedFile {
     if (_value.uploadedFile == null) {
       return null;
     }
 
-    return $AvatarCopyWith<$Res>(_value.uploadedFile!, (value) {
+    return $FileUploadResponseModelCopyWith<$Res>(_value.uploadedFile!, (
+      value,
+    ) {
       return _then(_value.copyWith(uploadedFile: value) as $Val);
     });
   }
@@ -120,14 +130,15 @@ abstract class _$$ChatStateImplCopyWith<$Res>
   @useResult
   $Res call({
     bool isError,
-    Avatar? uploadedFile,
+    FileUploadResponseModel? uploadedFile,
     bool isPremiumUser,
     bool isFileUploading,
     String? roomId,
+    PlatformFile? mediafile,
   });
 
   @override
-  $AvatarCopyWith<$Res>? get uploadedFile;
+  $FileUploadResponseModelCopyWith<$Res>? get uploadedFile;
 }
 
 /// @nodoc
@@ -149,6 +160,7 @@ class __$$ChatStateImplCopyWithImpl<$Res>
     Object? isPremiumUser = null,
     Object? isFileUploading = null,
     Object? roomId = freezed,
+    Object? mediafile = freezed,
   }) {
     return _then(
       _$ChatStateImpl(
@@ -159,7 +171,7 @@ class __$$ChatStateImplCopyWithImpl<$Res>
         uploadedFile: freezed == uploadedFile
             ? _value.uploadedFile
             : uploadedFile // ignore: cast_nullable_to_non_nullable
-                  as Avatar?,
+                  as FileUploadResponseModel?,
         isPremiumUser: null == isPremiumUser
             ? _value.isPremiumUser
             : isPremiumUser // ignore: cast_nullable_to_non_nullable
@@ -172,6 +184,10 @@ class __$$ChatStateImplCopyWithImpl<$Res>
             ? _value.roomId
             : roomId // ignore: cast_nullable_to_non_nullable
                   as String?,
+        mediafile: freezed == mediafile
+            ? _value.mediafile
+            : mediafile // ignore: cast_nullable_to_non_nullable
+                  as PlatformFile?,
       ),
     );
   }
@@ -182,17 +198,19 @@ class __$$ChatStateImplCopyWithImpl<$Res>
 class _$ChatStateImpl implements _ChatState {
   const _$ChatStateImpl({
     this.isError = false,
-    this.uploadedFile,
+    this.uploadedFile = null,
     this.isPremiumUser = false,
     this.isFileUploading = false,
     this.roomId = null,
+    this.mediafile = null,
   });
 
   @override
   @JsonKey()
   final bool isError;
   @override
-  final Avatar? uploadedFile;
+  @JsonKey()
+  final FileUploadResponseModel? uploadedFile;
   @override
   @JsonKey()
   final bool isPremiumUser;
@@ -202,10 +220,13 @@ class _$ChatStateImpl implements _ChatState {
   @override
   @JsonKey()
   final String? roomId;
+  @override
+  @JsonKey()
+  final PlatformFile? mediafile;
 
   @override
   String toString() {
-    return 'ChatState(isError: $isError, uploadedFile: $uploadedFile, isPremiumUser: $isPremiumUser, isFileUploading: $isFileUploading, roomId: $roomId)';
+    return 'ChatState(isError: $isError, uploadedFile: $uploadedFile, isPremiumUser: $isPremiumUser, isFileUploading: $isFileUploading, roomId: $roomId, mediafile: $mediafile)';
   }
 
   @override
@@ -220,7 +241,9 @@ class _$ChatStateImpl implements _ChatState {
                 other.isPremiumUser == isPremiumUser) &&
             (identical(other.isFileUploading, isFileUploading) ||
                 other.isFileUploading == isFileUploading) &&
-            (identical(other.roomId, roomId) || other.roomId == roomId));
+            (identical(other.roomId, roomId) || other.roomId == roomId) &&
+            (identical(other.mediafile, mediafile) ||
+                other.mediafile == mediafile));
   }
 
   @override
@@ -231,6 +254,7 @@ class _$ChatStateImpl implements _ChatState {
     isPremiumUser,
     isFileUploading,
     roomId,
+    mediafile,
   );
 
   /// Create a copy of ChatState
@@ -245,22 +269,25 @@ class _$ChatStateImpl implements _ChatState {
 abstract class _ChatState implements ChatState {
   const factory _ChatState({
     final bool isError,
-    final Avatar? uploadedFile,
+    final FileUploadResponseModel? uploadedFile,
     final bool isPremiumUser,
     final bool isFileUploading,
     final String? roomId,
+    final PlatformFile? mediafile,
   }) = _$ChatStateImpl;
 
   @override
   bool get isError;
   @override
-  Avatar? get uploadedFile;
+  FileUploadResponseModel? get uploadedFile;
   @override
   bool get isPremiumUser;
   @override
   bool get isFileUploading;
   @override
   String? get roomId;
+  @override
+  PlatformFile? get mediafile;
 
   /// Create a copy of ChatState
   /// with the given fields replaced by the non-null parameter values.

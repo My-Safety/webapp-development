@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mysafety_design_system/design_system/design_system.dart';
+import 'package:mysafety_web/src/features/chat/presentation/widget/audio_bubble.dart';
 
 class ChatTile extends StatelessWidget {
   final bool isIncoming;
@@ -10,6 +11,7 @@ class ChatTile extends StatelessWidget {
   final String? fileUrl;
   final String? status;
   final String? name;
+  final String? messageType;
 
   const ChatTile({
     super.key,
@@ -18,6 +20,7 @@ class ChatTile extends StatelessWidget {
     this.imgUrl,
     this.timeStamp,
     this.fileUrl,
+    this.messageType,
     this.status,
     this.name,
   });
@@ -26,7 +29,7 @@ class ChatTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final bubbleColor = isIncoming ? AppColors.greyFD : AppColors.grey8B;
     final textColor = isIncoming ? AppColors.black : Colors.white;
-
+    print('chat tile rebuild:::: $status');
     return Padding(
       padding: EdgeInsets.only(
         left: isIncoming ? 12 : 48,
@@ -102,25 +105,35 @@ class ChatTile extends StatelessWidget {
 
                       if (fileUrl != null) ...[
                         const SizedBox(height: 6),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: CachedNetworkImage(
-                            imageUrl: fileUrl!,
-                            width: 220,
-                            height: 260,
-                            fit: BoxFit.cover,
-                            errorWidget: (_, __, ___) => Container(
+
+                        /// IMAGE MESSAGE
+                        if (messageType == 'Image')
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: CachedNetworkImage(
+                              imageUrl: fileUrl!,
                               width: 220,
                               height: 260,
-                              color: AppColors.greyCF,
-                              child: Icon(
-                                Icons.broken_image,
-                                size: 40,
-                                color: AppColors.grey8B,
+                              fit: BoxFit.cover,
+                              errorWidget: (_, __, ___) => Container(
+                                width: 220,
+                                height: 260,
+                                color: AppColors.greyCF,
+                                child: Icon(
+                                  Icons.broken_image,
+                                  size: 40,
+                                  color: AppColors.grey8B,
+                                ),
                               ),
                             ),
                           ),
-                        ),
+
+                        /// AUDIO MESSAGE
+                        if (messageType == 'Audio')
+                          AudioBubble(
+                            audioUrl: fileUrl!,
+                            isIncoming: isIncoming,
+                          ),
                       ],
                     ],
                   ),
@@ -145,7 +158,6 @@ class ChatTile extends StatelessWidget {
                             : status == 'delivered'
                             ? Icons.done_all
                             : Icons.done,
-                        size: 12,
                         color: status == 'seen'
                             ? Colors.blue
                             : AppColors.greyCF,

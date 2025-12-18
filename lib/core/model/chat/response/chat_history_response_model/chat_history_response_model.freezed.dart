@@ -27,6 +27,8 @@ mixin _$ChatHistoryResponseModel {
   String? get roomId => throw _privateConstructorUsedError;
   String? get senderId => throw _privateConstructorUsedError;
   String? get senderType => throw _privateConstructorUsedError;
+  String? get mediaUrl => throw _privateConstructorUsedError;
+  int? get mediaDuration => throw _privateConstructorUsedError;
   String? get messageType => throw _privateConstructorUsedError;
   String? get content => throw _privateConstructorUsedError;
   String? get status => throw _privateConstructorUsedError;
@@ -57,6 +59,8 @@ abstract class $ChatHistoryResponseModelCopyWith<$Res> {
     String? roomId,
     String? senderId,
     String? senderType,
+    String? mediaUrl,
+    int? mediaDuration,
     String? messageType,
     String? content,
     String? status,
@@ -91,6 +95,8 @@ class _$ChatHistoryResponseModelCopyWithImpl<
     Object? roomId = freezed,
     Object? senderId = freezed,
     Object? senderType = freezed,
+    Object? mediaUrl = freezed,
+    Object? mediaDuration = freezed,
     Object? messageType = freezed,
     Object? content = freezed,
     Object? status = freezed,
@@ -117,6 +123,14 @@ class _$ChatHistoryResponseModelCopyWithImpl<
                 ? _value.senderType
                 : senderType // ignore: cast_nullable_to_non_nullable
                       as String?,
+            mediaUrl: freezed == mediaUrl
+                ? _value.mediaUrl
+                : mediaUrl // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            mediaDuration: freezed == mediaDuration
+                ? _value.mediaDuration
+                : mediaDuration // ignore: cast_nullable_to_non_nullable
+                      as int?,
             messageType: freezed == messageType
                 ? _value.messageType
                 : messageType // ignore: cast_nullable_to_non_nullable
@@ -179,6 +193,8 @@ abstract class _$$ChatHistoryResponseModelImplCopyWith<$Res>
     String? roomId,
     String? senderId,
     String? senderType,
+    String? mediaUrl,
+    int? mediaDuration,
     String? messageType,
     String? content,
     String? status,
@@ -214,6 +230,8 @@ class __$$ChatHistoryResponseModelImplCopyWithImpl<$Res>
     Object? roomId = freezed,
     Object? senderId = freezed,
     Object? senderType = freezed,
+    Object? mediaUrl = freezed,
+    Object? mediaDuration = freezed,
     Object? messageType = freezed,
     Object? content = freezed,
     Object? status = freezed,
@@ -240,6 +258,14 @@ class __$$ChatHistoryResponseModelImplCopyWithImpl<$Res>
             ? _value.senderType
             : senderType // ignore: cast_nullable_to_non_nullable
                   as String?,
+        mediaUrl: freezed == mediaUrl
+            ? _value.mediaUrl
+            : mediaUrl // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        mediaDuration: freezed == mediaDuration
+            ? _value.mediaDuration
+            : mediaDuration // ignore: cast_nullable_to_non_nullable
+                  as int?,
         messageType: freezed == messageType
             ? _value.messageType
             : messageType // ignore: cast_nullable_to_non_nullable
@@ -281,6 +307,8 @@ class _$ChatHistoryResponseModelImpl implements _ChatHistoryResponseModel {
     this.roomId,
     this.senderId,
     this.senderType,
+    this.mediaUrl,
+    this.mediaDuration,
     this.messageType,
     this.content,
     this.status,
@@ -302,6 +330,10 @@ class _$ChatHistoryResponseModelImpl implements _ChatHistoryResponseModel {
   @override
   final String? senderType;
   @override
+  final String? mediaUrl;
+  @override
+  final int? mediaDuration;
+  @override
   final String? messageType;
   @override
   final String? content;
@@ -318,7 +350,7 @@ class _$ChatHistoryResponseModelImpl implements _ChatHistoryResponseModel {
 
   @override
   String toString() {
-    return 'ChatHistoryResponseModel(id: $id, roomId: $roomId, senderId: $senderId, senderType: $senderType, messageType: $messageType, content: $content, status: $status, createdAt: $createdAt, updatedAt: $updatedAt, deliveredAt: $deliveredAt, senderDetails: $senderDetails)';
+    return 'ChatHistoryResponseModel(id: $id, roomId: $roomId, senderId: $senderId, senderType: $senderType, mediaUrl: $mediaUrl, mediaDuration: $mediaDuration, messageType: $messageType, content: $content, status: $status, createdAt: $createdAt, updatedAt: $updatedAt, deliveredAt: $deliveredAt, senderDetails: $senderDetails)';
   }
 
   @override
@@ -332,6 +364,10 @@ class _$ChatHistoryResponseModelImpl implements _ChatHistoryResponseModel {
                 other.senderId == senderId) &&
             (identical(other.senderType, senderType) ||
                 other.senderType == senderType) &&
+            (identical(other.mediaUrl, mediaUrl) ||
+                other.mediaUrl == mediaUrl) &&
+            (identical(other.mediaDuration, mediaDuration) ||
+                other.mediaDuration == mediaDuration) &&
             (identical(other.messageType, messageType) ||
                 other.messageType == messageType) &&
             (identical(other.content, content) || other.content == content) &&
@@ -354,6 +390,8 @@ class _$ChatHistoryResponseModelImpl implements _ChatHistoryResponseModel {
     roomId,
     senderId,
     senderType,
+    mediaUrl,
+    mediaDuration,
     messageType,
     content,
     status,
@@ -386,6 +424,8 @@ abstract class _ChatHistoryResponseModel implements ChatHistoryResponseModel {
     final String? roomId,
     final String? senderId,
     final String? senderType,
+    final String? mediaUrl,
+    final int? mediaDuration,
     final String? messageType,
     final String? content,
     final String? status,
@@ -406,6 +446,10 @@ abstract class _ChatHistoryResponseModel implements ChatHistoryResponseModel {
   String? get senderId;
   @override
   String? get senderType;
+  @override
+  String? get mediaUrl;
+  @override
+  int? get mediaDuration;
   @override
   String? get messageType;
   @override

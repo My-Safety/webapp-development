@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mysafety_web/core/model/chat/avatar/avatar_response_model.dart';
 import 'package:mysafety_web/core/model/chat/state/chat_state.dart';
+import 'package:mysafety_web/core/model/file/response/file_upload_response_model.dart';
 import 'package:mysafety_web/core/network/network_status.dart';
 import 'package:mysafety_web/src/features/chat/data/chat_remote_repo.dart';
 
@@ -24,34 +25,28 @@ class ChatNotifierProvider extends StateNotifier<ChatState> {
 
   // bool get isPremiumUser => state.isPremiumUser;
 
-
   final Ref ref;
+  PlatformFile? get mediafile => state.mediafile;
 
- Future<Avatar?> sendFileGetUrl(String filePath) async {
-  if (filePath.isEmpty) return null;
+  Future<bool> sendFileGetUrl() async {
+    if (mediafile == null) return false;
 
-  state = state.copyWith(isFileUploading: true);
+    state = state.copyWith(isFileUploading: true);
 
-  final fileBytes = await File(filePath).readAsBytes();
-  final platformFile = PlatformFile(
-    name: filePath.split('/').last,
-    path: filePath,
-    bytes: fileBytes,
-    size: fileBytes.length,
-  );
+    var result = await ref
+        .read(chatRemoteRepoProvider)
+        .fileUpload(file: mediafile!);
 
-  final result = await ref
-      .read(chatRemoteRepoProvider)
-      .fileUpload(file: platformFile);
-
-  state = state.copyWith(isFileUploading: false);
-
-  if (result.success == ActionStatus.success.code && result.data != null) {
-    state = state.copyWith(uploadedFile: result.data);
-    return result.data;
+    if (result.success == ActionStatus.success.code) {
+      state = state.copyWith(isFileUploading: false, uploadedFile: result.data);
+      return true;
+    } else {
+      state = state.copyWith(isFileUploading: false, uploadedFile: null);
+      return false;
+    }
   }
 
-  return null;
-}
-
+  set setUploadFile(PlatformFile file) {
+    state = state.copyWith(mediafile: file);
+  }
 }
