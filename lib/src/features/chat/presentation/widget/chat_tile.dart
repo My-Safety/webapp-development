@@ -29,7 +29,7 @@ class ChatTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final bubbleColor = isIncoming ? AppColors.greyFD : AppColors.grey8B;
     final textColor = isIncoming ? AppColors.black : Colors.white;
-    print('chat tile rebuild:::: $status');
+    debugPrint('chat tile rebuild:::: $status');
     return Padding(
       padding: EdgeInsets.only(
         left: isIncoming ? 12 : 48,
@@ -52,7 +52,7 @@ class ChatTile extends StatelessWidget {
                   width: 32,
                   height: 32,
                   fit: BoxFit.cover,
-                  errorWidget: (_, __, ___) =>
+                  errorWidget: (_, _, _) =>
                       Icon(Icons.person, size: 20, color: AppColors.grey7D),
                 ),
               ),
@@ -115,7 +115,7 @@ class ChatTile extends StatelessWidget {
                               width: 220,
                               height: 260,
                               fit: BoxFit.cover,
-                              errorWidget: (_, __, ___) => Container(
+                              errorWidget: (_, _, _) => Container(
                                 width: 220,
                                 height: 260,
                                 color: AppColors.greyCF,

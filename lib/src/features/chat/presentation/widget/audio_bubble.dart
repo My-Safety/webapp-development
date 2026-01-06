@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:mysafety_design_system/design_system/design_system.dart';
 
-import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 class AudioBubble extends StatefulWidget {
   final String audioUrl;
-  final bool isIncoming; // ✅ ADD THIS PARAMETER
+  final bool isIncoming; 
 
   const AudioBubble({
     super.key,

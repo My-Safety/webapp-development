@@ -6,9 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mysafety_web/route/route_name.dart';
-import 'package:mysafety_web/src/features/profile/presentation/provider/profile_provider.dart';
 import 'package:mysafety_web/util/assets/assets.dart';
-import 'package:mysafety_web/util/auth/auth_manager.dart';
 import 'package:mysafety_web/util/extension/extension.dart';
 import 'package:mysafety_design_system/design_system/design_system.dart';
 // import 'dart:html' as html;

@@ -4,7 +4,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:mysafety_design_system/design_system/design_system.dart';
 import 'package:mysafety_web/route/route_name.dart';

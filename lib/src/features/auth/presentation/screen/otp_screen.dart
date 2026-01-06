@@ -37,7 +37,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
     if (isVerify) {
       await ref.read(profileProvider.notifier).handleDoorBellScan();
-      gotoOneToOneChatScreen();
+      gotoSelectOptionScreen();
     }
   }
 
@@ -45,8 +45,10 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     await profileprovider.handleDoorBellScan();
   }
 
-  void gotoOneToOneChatScreen() {
-    context.go(RouteName.oneToOneChatScreen);
+
+
+  void gotoSelectOptionScreen() {
+    context.go(RouteName.selectOptionScreen);
   }
 
   void gotoBack() {

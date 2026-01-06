@@ -10,6 +10,7 @@ import 'package:mysafety_web/core/network/network_status.dart';
 import 'package:mysafety_web/src/features/auth/data/auth_remote_repo.dart';
 import 'package:mysafety_web/src/features/profile/data/profile_remote_repo.dart';
 import 'package:mysafety_web/util/enum/language_enum.dart';
+import 'package:mysafety_web/util/utils.dart';
 
 final profileProvider =
     StateNotifierProvider<ProfileNotifierProvider, ProfileState>(
@@ -87,14 +88,14 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
 
     var result = await ref
         .read(profileRemoteRepoProvider)
-        .handleDoorbellScan(qrId: "181ca48de71aec12b833c41c540d0f2e");
+        .handleDoorbellScan(qrId: "467037be9235c82461a72cd0d9940eaf");
 
     if (result.success == ActionStatus.success.code) {
       state = state.copyWith(
         isLanguageListLoading: false,
         qrScanResponse: result.data,
       );
-      print(state.qrScanResponse!.chatRoom!.qrId.toString());
+      debugPrint(state.qrScanResponse!.chatRoom!.qrId.toString());
     } else {
       state = state.copyWith(isHandleDoorBellLoading: false, languages: []);
     }
@@ -110,7 +111,7 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
     var result = await ref
         .read(profileRemoteRepoProvider)
         .resolveQr(
-          qrId: state.qrId ?? '181ca48de71aec12b833c41c540d0f2e',
+          qrId: state.qrId ?? '467037be9235c82461a72cd0d9940eaf',
           // latitude: latitude,
           // longitude: longitude,
         );
@@ -120,7 +121,7 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
         isLanguageListLoading: false,
         resolveQrResponse: result.data,
       );
-      print(state.resolveQrResponse!.qr!.ownerId.toString());
+      debugPrint(state.resolveQrResponse!.qr!.ownerId.toString());
     } else {
       state = state.copyWith(isHandleDoorBellLoading: false, languages: []);
     }

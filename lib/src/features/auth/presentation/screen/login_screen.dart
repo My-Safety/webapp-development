@@ -1,8 +1,6 @@
 // Copyright (c) 2025, Indo-Sakura Software Pvt Ltd. All rights reserved.
 // Created By Adwaith c, 16/12/2025
 
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -49,7 +47,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (authState.loginResponse?.skipOTP == true) {
       await ref.read(profileProvider.notifier).handleDoorBellScan();
 
-      goToChatScreen();
+      goToselectOptionScreen();
     } else {
       goToOtpScreen();
     }
@@ -59,8 +57,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     context.push(RouteName.otp);
   }
 
-  void goToChatScreen() {
-    context.push(RouteName.oneToOneChatScreen);
+  void goToselectOptionScreen() {
+    context.push(RouteName.selectOptionScreen);
   }
 
   @override
@@ -141,7 +139,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ? false
                               : true;
                           provider.setPhoneNumber = p0.number;
-                
                         },
                       ),
                     ],

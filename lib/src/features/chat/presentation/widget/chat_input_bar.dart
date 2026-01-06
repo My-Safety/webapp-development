@@ -178,7 +178,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
                   ),
                   onPressed: widget.chatController.text.trim().isNotEmpty
                       ? widget.onSend
-                      : widget.onAudioTap, // ✅ FIX
+                      : widget.onAudioTap, 
                   tooltip: widget.chatController.text.trim().isNotEmpty
                       ? 'Send message'
                       : 'Record audio',

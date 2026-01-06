@@ -1,52 +1,107 @@
-// Copyright (c) 2025, Indo-Sakura Software Pvt Ltd. All rights reserved.
-// Created By Adwaith c, 17/12/2025
+import 'dart:async';
 
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mysafety_web/core/model/chat/avatar/avatar_response_model.dart';
-import 'package:mysafety_web/core/model/chat/state/chat_state.dart';
-import 'package:mysafety_web/core/model/file/response/file_upload_response_model.dart';
-import 'package:mysafety_web/core/network/network_status.dart';
-import 'package:mysafety_web/src/features/chat/data/chat_remote_repo.dart';
+import 'package:mysafety_web/core/model/chat/response/chat_history_response_model/chat_history_response_model.dart';
+import 'package:mysafety_web/core/network/socket/web_socket.dart';
 
-final chatProvider = StateNotifierProvider<ChatNotifierProvider, ChatState>(
-  (ref) => ChatNotifierProvider(ref),
-);
-final chatRemoteRepoProvider = Provider<ChatRemoteRepo>(
-  (ref) => ChatRemoteRepo(),
-);
+final oneToOneChatControllerProvider =
+    StateNotifierProvider<
+      OneToOneChatController,
+      List<ChatHistoryResponseModel>
+    >((ref) => OneToOneChatController(ref));
 
-class ChatNotifierProvider extends StateNotifier<ChatState> {
-  ChatNotifierProvider(this.ref) : super(const ChatState());
-
-  // CallLogType get activeCallLogTab => state.activeCallLogTab;
-
-  // bool get isPremiumUser => state.isPremiumUser;
+class OneToOneChatController
+    extends StateNotifier<List<ChatHistoryResponseModel>> {
+  OneToOneChatController(this.ref) : super([]);
 
   final Ref ref;
-  PlatformFile? get mediafile => state.mediafile;
 
-  Future<bool> sendFileGetUrl() async {
-    if (mediafile == null) return false;
+  StreamSubscription? _messageSub;
+  StreamSubscription? _typingSub;
+  StreamSubscription? _statusSub;
 
-    state = state.copyWith(isFileUploading: true);
+  bool isOtherTyping = false;
+  String? roomId;
 
-    var result = await ref
-        .read(chatRemoteRepoProvider)
-        .fileUpload(file: mediafile!);
+  Future<void> connect(String room) async {
+    roomId = room;
 
-    if (result.success == ActionStatus.success.code) {
-      state = state.copyWith(isFileUploading: false, uploadedFile: result.data);
-      return true;
-    } else {
-      state = state.copyWith(isFileUploading: false, uploadedFile: null);
-      return false;
+    await WebSocketService.connect();
+    WebSocketService.joinRoom(room);
+
+    _listenMessages();
+    _listenTyping();
+    _listenStatus();
+  }
+
+  void _listenMessages() {
+    _messageSub = WebSocketService.newMessageStream.listen((message) {
+      state = [...state, message];
+
+      if (message.senderType != "Visitor" && message.id != null) {
+        WebSocketService.messageDelivered([message.id!]);
+      }
+
+      _markSeen();
+    });
+  }
+
+  void _listenTyping() {
+    _typingSub = WebSocketService.typingStream.listen((data) {
+      isOtherTyping = data['isTyping'] ?? false;
+    });
+  }
+
+  void _listenStatus() {
+    _statusSub = WebSocketService.statusUpdateStream.listen((data) {
+      final ids = data['messageIds'];
+      final status = data['status'];
+
+      if (ids == null || status == null) return;
+
+      state = state
+          .map(
+            (m) => ids.contains(m.id)
+                ? m.copyWith(status: status.toString().toLowerCase())
+                : m,
+          )
+          .toList();
+    });
+  }
+
+  Future<void> sendText(String text) {
+    if (roomId == null) return Future.value();
+    return WebSocketService.sendMessage(
+      roomId: roomId!,
+      messageType: 'Text',
+      content: text,
+    );
+  }
+
+  void sendTyping(bool typing) {
+    if (roomId == null) return;
+    WebSocketService.sendTyping(roomId!, typing);
+  }
+
+  void _markSeen() {
+    final unseen = state
+        .where(
+          (m) =>
+              m.senderType != "Visitor" && m.status != 'seen' && m.id != null,
+        )
+        .map((m) => m.id!)
+        .toList();
+
+    if (unseen.isNotEmpty && roomId != null) {
+      WebSocketService.messageSeen(roomId!, unseen);
     }
   }
 
-  set setUploadFile(PlatformFile file) {
-    state = state.copyWith(mediafile: file);
+  @override
+  void dispose() {
+    _messageSub?.cancel();
+    _typingSub?.cancel();
+    _statusSub?.cancel();
+    super.dispose();
   }
 }

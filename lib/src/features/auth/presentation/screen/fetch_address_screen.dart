@@ -1,14 +1,14 @@
 // Copyright (c) 2025, Indo-Sakura Software Pvt Ltd. All rights reserved.
 // Created By Adwaith c, 16/12/2025
 
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 // import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:mysafety_design_system/design_system/design_system.dart';
+import 'package:mysafety_web/route/route_name.dart';
 // import 'package:mysafety_web/route/route_name.dart';
 import 'package:mysafety_web/src/features/profile/presentation/provider/profile_provider.dart';
 import 'package:mysafety_web/util/assets/assets.dart';
@@ -39,9 +39,9 @@ class _FetchAddressScreenState extends ConsumerState<FetchAddressScreen> {
     );
   }
 
-  // void gotoAddAddressScreen() {
-  //   context.pushReplacement(RouteName.addAddress);
-  // }
+  void gotoSelectLanguageScreen() {
+    context.pushReplacement(RouteName.selectLanguageScreen);
+  }
 
   @override
   void initState() {
@@ -90,15 +90,15 @@ class _FetchAddressScreenState extends ConsumerState<FetchAddressScreen> {
                 ],
               ),
             ),
-            // if (!provider.isAddressLoading)
-            //   Positioned(
-            //     bottom: 60,
-            //     right: 16,
-            //     child: Align(
-            //       alignment: Alignment.centerRight,
-            //       child: BrandIconButton.next(onTap: gotoAddAddressScreen),
-            //     ),
-            //   ),
+            if (!provider.isAddressLoading)
+              Positioned(
+                bottom: 60,
+                right: 16,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: BrandIconButton.next(onTap: gotoSelectLanguageScreen),
+                ),
+              ),
           ],
         ),
       ),

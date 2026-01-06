@@ -7,6 +7,7 @@ import 'package:mysafety_web/route/route_name.dart';
 import 'package:mysafety_web/src/features/auth/presentation/screen/login_screen.dart';
 import 'package:mysafety_web/src/features/auth/presentation/screen/otp_screen.dart';
 import 'package:mysafety_web/src/features/auth/presentation/screen/select_language_screen.dart';
+import 'package:mysafety_web/src/features/auth/presentation/screen/select_option_screen.dart';
 import 'package:mysafety_web/src/features/chat/presentation/screen/one_to_one_chat_screen.dart';
 import 'package:mysafety_web/src/features/profile/presentation/screens/fetch_location.dart';
 import 'package:mysafety_web/src/features/splash/presentation/screen/error_screen.dart';
@@ -28,6 +29,9 @@ final GoRouter routerConfig = GoRouter(
     GoRoute(
       path: RouteName.selectLanguageScreen,
       builder: (context, state) => SelectLanguageScreen(),
+    ),   GoRoute(
+      path: RouteName.selectOptionScreen,
+      builder: (context, state) => SelectOptionScreen(),
     ),
   ],
 );

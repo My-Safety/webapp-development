@@ -97,5 +97,6 @@
     "house_flat_block_no":"house flat block no",
     "apartment_road_area_optional":"apartment road area optional",
     "edit_profile":"Edit Profile",
-    "upload_profile_image":"Upload Profile Image"
+    "upload_profile_image":"Upload Profile Image",
+    "select_option":"Select Option"
 }

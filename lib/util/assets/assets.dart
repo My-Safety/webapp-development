@@ -25,5 +25,8 @@ abstract class Assets {
   static const user = 'assets/icon/user.png';
   static const demoQr = 'assets/image/demo_qr.png';
   static const qrLogo = 'assets/image/qr_logo.png';
+  static const audioCall = 'assets/image/audio_call.png';
+  static const videoCall = 'assets/image/video_call.png';
+  static const chat = 'assets/image/chat.png';
   static const String uploadIcon = 'assets/icon/document-upload.png';
 }
