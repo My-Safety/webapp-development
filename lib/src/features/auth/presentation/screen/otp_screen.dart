@@ -29,55 +29,90 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
   TextEditingController otpController = TextEditingController();
 
-  Future<void> verifyOtp() async {
-    final authProviderNotifier = ref.read(authProvider.notifier);
-    final isVerify = await authProviderNotifier.verifyOtp(
-      otp: otpController.text,
-    );
+  @override
+  void initState() {
+    super.initState();
 
-    if (isVerify) {
-      await ref.read(profileProvider.notifier).handleDoorBellScan();
-      gotoSelectOptionScreen();
+    _initialize();
+  }
+
+  Future<void> _initialize() async {}
+
+  Future<void> verifyOtp() async {
+    if (!_validateOtp()) return;
+
+    try {
+      final isVerify = await provider.verifyOtp(otp: otpController.text);
+
+      if (isVerify) {
+        await _handlePostVerification();
+      }
+    } catch (e) {
+      debugPrint('OTP verification error: $e');
     }
   }
 
-  Future<void> handleDoorBellScan() async {
-    await profileprovider.handleDoorBellScan();
+  bool _validateOtp() {
+    if (otpController.text.isEmpty) {
+      return false;
+    }
+    return true;
   }
 
+  Future<void> _handlePostVerification() async {
+    await _handleDoorBellScan();
+    _navigateToSelectOption();
+  }
 
+  Future<void> _handleDoorBellScan() async {
+    try {
+      await profileprovider.handleDoorBellScan(
+        qrId: "406795f7a5724028be3a7db4248c38b6",
+        // qrId: profileprovider.qrId ?? ,
+      );
+    } catch (e) {
+      debugPrint('Doorbell scan error: $e');
+    }
+  }
 
-  void gotoSelectOptionScreen() {
-    context.go(RouteName.selectOptionScreen);
+  Future<void> resendOtp() async {
+    try {
+      final profile = ref.read(profileProvider);
+      final lang = profile.selectedLanguages?.code?.toString() ?? 'en';
+
+      if (provider.phoneNo == null) {
+        debugPrint('Phone number not available');
+        return;
+      }
+
+      await provider.sendOtp(
+        phoneNo: provider.phoneNo!,
+        name: provider.name!,
+        lang: lang,
+      );
+    } catch (e) {
+      debugPrint('Resend OTP error: $e');
+    }
+  }
+
+  void _navigateToSelectOption() {
+    final roomId = profileprovider.qrScanResponse?.chatRoom?.id;
+    final qrId = profileprovider.qrId ?? "406795f7a5724028be3a7db4248c38b6";
+    if (roomId != null) {
+      context.go('${RouteName.selectOptionScreen}?roomId=$roomId&qrId=$qrId');
+    } else {
+      context.go(RouteName.selectOptionScreen);
+    }
   }
 
   void gotoBack() {
     context.pop();
   }
 
-  Future<void> resendOtp() async {
-    final profile = ref.read(profileProvider);
-    final lang = profile.selectedLanguages?.code?.toString() ?? 'en';
-    if (provider.phoneNo == null) return;
-    await provider.sendOtp(
-      phoneNo: provider.phoneNo!,
-      name: provider.name!,
-      lang: lang,
-    );
-  }
-
-  Future<void> fetchData() async {}
-
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
-
   @override
   Widget build(BuildContext context) {
-    ref.watch(authProvider);
     provider = ref.read(authProvider.notifier);
+    profileprovider = ref.read(profileProvider.notifier);
     return BaseLayout(
       appBar: BrandAppBar(title: context.loc.enter_otp, centerTitle: false),
       child: Expanded(

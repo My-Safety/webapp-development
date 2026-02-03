@@ -23,7 +23,6 @@ abstract class DateFormats {
   /// EEE HH:mm:ss -> WED 13:12:06
   static final eeehhmmss = DateFormat("EEE HH:mm:ss");
 
-  /// ✅ Safe time formatter for chat timestamps
   static String formatTime(dynamic createdAt) {
     if (createdAt == null) return '';
 

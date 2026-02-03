@@ -29,7 +29,6 @@ class _SelectLanguageScreenState extends ConsumerState<SelectLanguageScreen> {
   }
 
 
-  // ref.read(profileProvider.notifier).handleDoorBellScan();
 
   Future<void> nextOnTap() async {
     gotoLoginScreen();
@@ -44,7 +43,6 @@ class _SelectLanguageScreenState extends ConsumerState<SelectLanguageScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await getLanguage();
-      // await handleDoorBellScan();
     });
   }
 

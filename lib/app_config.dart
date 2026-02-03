@@ -2,9 +2,10 @@
 // Created By Adwaith c, 16/12/2025
 
 // const String appDomain = 'http://192.168.0.120:4000/api/';
-
-const String appDomain = 'http://192.168.0.119:4000/api/';
-const String webSocket = 'http://192.168.0.119:4000';
+const String appDomain = 'http://192.168.0.132:4000/api/';
+const String webSocket = 'http://192.168.0.132:4000';
+// const String appDomain = 'http://192.168.0.120:4000/api/';
+// const String webSocket = 'http://192.168.0.120:4000';
 const String googleMapKey = 'AIzaSyCI-T5kfFDaBGWiLZPAJXzbQa9v7miTYuE';
 const String encryptKey = 'ThisIsMy32LengthKeyForEncryption';
 const String encryptIV = '1234567890';

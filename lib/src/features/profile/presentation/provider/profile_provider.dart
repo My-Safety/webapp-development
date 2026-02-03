@@ -3,14 +3,18 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mysafety_web/core/model/address/address_model.dart';
 import 'package:mysafety_web/core/model/profile/languages/languages_response_model.dart';
 import 'package:mysafety_web/core/model/profile/state/profile_state.dart';
+import 'package:mysafety_web/core/model/qr/qr_scan_response_model.dart';
 import 'package:mysafety_web/core/model/user/user_model.dart';
 import 'package:mysafety_web/core/network/network_status.dart';
 import 'package:mysafety_web/src/features/auth/data/auth_remote_repo.dart';
 import 'package:mysafety_web/src/features/profile/data/profile_remote_repo.dart';
 import 'package:mysafety_web/util/enum/language_enum.dart';
 import 'package:mysafety_web/util/utils.dart';
+import 'package:mysafety_web/util/storage/local_storage.dart';
+import 'package:mysafety_web/util/storage/local_storage_key.dart';
 
 final profileProvider =
     StateNotifierProvider<ProfileNotifierProvider, ProfileState>(
@@ -23,6 +27,7 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
   final Ref ref;
 
   User? get user => state.user;
+  AddressModel? get addressModel => state.addressModel;
 
   String? get name => user?.name;
 
@@ -38,13 +43,16 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
 
   LanguagesResponseModel? get selectedLanguages => state.selectedLanguages;
 
+  QrScanResponseModel? get qrScanResponse => state.qrScanResponse;
+
   bool get isUserResponseLoading => state.isUserResponseLoading;
 
   bool get isUpdateProfileLoading => state.isUpdateProfileLoading;
   bool get isHandleDoorBellLoading => state.isHandleDoorBellLoading;
   String? get qrId => state.qrId;
+  bool get hasProfile => state.resolveQrResponse?.profile != null;
 
-  void setQrId(String value) {
+  set qrId(String value) {
     state = state.copyWith(qrId: value);
   }
 
@@ -58,10 +66,10 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
     if (result.success == ActionStatus.success.code) {
       state = state.copyWith(
         isAddressLoading: false,
-        user: user?.copyWith(address: result.data),
+        addressModel: result.data,
       );
     } else {
-      state = state.copyWith(isAddressLoading: false, user: null);
+      state = state.copyWith(isAddressLoading: false, addressModel: null);
     }
   }
 
@@ -83,21 +91,35 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
     }
   }
 
-  Future<void> handleDoorBellScan() async {
+  Future<void> handleDoorBellScan({String? qrId}) async {
+    debugPrint('🔵 handleDoorBellScan called');
+
+    if (state.isHandleDoorBellLoading) {
+      debugPrint('⚠️ Skipping - already loading');
+      return;
+    }
+
+    debugPrint('🌐 Calling doorbell API...');
     state = state.copyWith(isHandleDoorBellLoading: true);
 
     var result = await ref
         .read(profileRemoteRepoProvider)
-        .handleDoorbellScan(qrId: "467037be9235c82461a72cd0d9940eaf");
+        .handleDoorbellScan(qrId: qrId??'');
+
+    debugPrint('📡 API response: ${result.success}');
 
     if (result.success == ActionStatus.success.code) {
       state = state.copyWith(
-        isLanguageListLoading: false,
+        isHandleDoorBellLoading: false,
         qrScanResponse: result.data,
       );
-      debugPrint(state.qrScanResponse!.chatRoom!.qrId.toString());
+      debugPrint('✅ Room ID: ${state.qrScanResponse?.chatRoom?.id}');
     } else {
-      state = state.copyWith(isHandleDoorBellLoading: false, languages: []);
+      state = state.copyWith(
+        isHandleDoorBellLoading: false,
+        qrScanResponse: null,
+      );
+      debugPrint('🔴 API failed');
     }
   }
 
@@ -110,20 +132,27 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
 
     var result = await ref
         .read(profileRemoteRepoProvider)
-        .resolveQr(
-          qrId: state.qrId ?? '467037be9235c82461a72cd0d9940eaf',
-          // latitude: latitude,
-          // longitude: longitude,
-        );
+        .resolveQr(qrId: qrId, latitude: latitude, longitude: longitude);
 
     if (result.success == ActionStatus.success.code) {
       state = state.copyWith(
-        isLanguageListLoading: false,
+        isHandleDoorBellLoading: false,
         resolveQrResponse: result.data,
       );
-      debugPrint(state.resolveQrResponse!.qr!.ownerId.toString());
+      debugPrint('✅ QR resolved: ${state.resolveQrResponse!.qr!.ownerId}');
+
+      // ✅ If profile exists (house is assigned), create chat room
+      if (state.resolveQrResponse?.qr?.ownerId != null) {
+        debugPrint('✅ House assigned - creating chat room');
+        // await handleDoorBellScan();
+      } else {
+        debugPrint('⚠️ House not assigned yet');
+      }
     } else {
-      state = state.copyWith(isHandleDoorBellLoading: false, languages: []);
+      state = state.copyWith(
+        isHandleDoorBellLoading: false,
+        resolveQrResponse: null,
+      );
     }
   }
 
@@ -164,7 +193,25 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
     state = state.copyWith(isAddressLoading: value);
   }
 
+  set setQrId(String value) {
+    debugPrint("qrid set done$value");
+    state = state.copyWith(qrId: value);
+  }
+
   set setSelectedLanguage(LanguagesResponseModel value) {
     state = state.copyWith(selectedLanguages: value);
+  }
+
+  /// Logout - Clear all data
+  Future<void> logout() async {
+    try {
+      await LocalStorage.clearKey(LocalStorageKey.token);
+      await LocalStorage.clearKey(LocalStorageKey.userData);
+
+      state = const ProfileState();
+      debugPrint('✅ Logout successful - all data cleared');
+    } catch (e) {
+      debugPrint('🔴 Error during logout: $e');
+    }
   }
 }

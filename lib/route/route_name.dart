@@ -11,6 +11,7 @@ abstract class RouteName {
   static String email = '/email';
   static String fetchLocation = '/fetchLocation';
   static String selectOptionScreen = '/selectOptionScreen';
-
   static String selectLanguageScreen = '/select_language_screen';
+  static String agoraVideoCall = '/agoraVideoCall';
+  static String agoraAudioCall = '/agoraAudioCall';
 }

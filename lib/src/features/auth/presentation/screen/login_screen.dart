@@ -43,22 +43,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     if (!isSend) return;
 
-    final authState = ref.read(authProvider);
-    if (authState.loginResponse?.skipOTP == true) {
-      await ref.read(profileProvider.notifier).handleDoorBellScan();
-
-      goToselectOptionScreen();
-    } else {
-      goToOtpScreen();
-    }
+    // Always navigate to OTP screen for verification
+    _goToOtpScreen();
   }
 
-  void goToOtpScreen() {
+  void _goToOtpScreen() {
     context.push(RouteName.otp);
-  }
-
-  void goToselectOptionScreen() {
-    context.push(RouteName.selectOptionScreen);
   }
 
   @override

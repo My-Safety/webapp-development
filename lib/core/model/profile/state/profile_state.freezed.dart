@@ -20,6 +20,7 @@ mixin _$ProfileState {
   bool get isAddressLoading => throw _privateConstructorUsedError;
   bool get isLanguageListLoading => throw _privateConstructorUsedError;
   User? get user => throw _privateConstructorUsedError;
+  AddressModel? get addressModel => throw _privateConstructorUsedError;
   String? get qrId => throw _privateConstructorUsedError;
   bool get isUserResponseLoading => throw _privateConstructorUsedError;
   List<LanguagesResponseModel> get languages =>
@@ -54,6 +55,7 @@ abstract class $ProfileStateCopyWith<$Res> {
     bool isAddressLoading,
     bool isLanguageListLoading,
     User? user,
+    AddressModel? addressModel,
     String? qrId,
     bool isUserResponseLoading,
     List<LanguagesResponseModel> languages,
@@ -67,6 +69,7 @@ abstract class $ProfileStateCopyWith<$Res> {
   });
 
   $UserCopyWith<$Res>? get user;
+  $AddressModelCopyWith<$Res>? get addressModel;
   $LanguagesResponseModelCopyWith<$Res>? get selectedLanguages;
   $QrScanResponseModelCopyWith<$Res>? get qrScanResponse;
   $ResolveQrResponseModelCopyWith<$Res>? get resolveQrResponse;
@@ -90,6 +93,7 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
     Object? isAddressLoading = null,
     Object? isLanguageListLoading = null,
     Object? user = freezed,
+    Object? addressModel = freezed,
     Object? qrId = freezed,
     Object? isUserResponseLoading = null,
     Object? languages = null,
@@ -115,6 +119,10 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
                 ? _value.user
                 : user // ignore: cast_nullable_to_non_nullable
                       as User?,
+            addressModel: freezed == addressModel
+                ? _value.addressModel
+                : addressModel // ignore: cast_nullable_to_non_nullable
+                      as AddressModel?,
             qrId: freezed == qrId
                 ? _value.qrId
                 : qrId // ignore: cast_nullable_to_non_nullable
@@ -178,6 +186,20 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
+  $AddressModelCopyWith<$Res>? get addressModel {
+    if (_value.addressModel == null) {
+      return null;
+    }
+
+    return $AddressModelCopyWith<$Res>(_value.addressModel!, (value) {
+      return _then(_value.copyWith(addressModel: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
   $LanguagesResponseModelCopyWith<$Res>? get selectedLanguages {
     if (_value.selectedLanguages == null) {
       return null;
@@ -234,6 +256,7 @@ abstract class _$$ProfileStateImplCopyWith<$Res>
     bool isAddressLoading,
     bool isLanguageListLoading,
     User? user,
+    AddressModel? addressModel,
     String? qrId,
     bool isUserResponseLoading,
     List<LanguagesResponseModel> languages,
@@ -248,6 +271,8 @@ abstract class _$$ProfileStateImplCopyWith<$Res>
 
   @override
   $UserCopyWith<$Res>? get user;
+  @override
+  $AddressModelCopyWith<$Res>? get addressModel;
   @override
   $LanguagesResponseModelCopyWith<$Res>? get selectedLanguages;
   @override
@@ -273,6 +298,7 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
     Object? isAddressLoading = null,
     Object? isLanguageListLoading = null,
     Object? user = freezed,
+    Object? addressModel = freezed,
     Object? qrId = freezed,
     Object? isUserResponseLoading = null,
     Object? languages = null,
@@ -298,6 +324,10 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
             ? _value.user
             : user // ignore: cast_nullable_to_non_nullable
                   as User?,
+        addressModel: freezed == addressModel
+            ? _value.addressModel
+            : addressModel // ignore: cast_nullable_to_non_nullable
+                  as AddressModel?,
         qrId: freezed == qrId
             ? _value.qrId
             : qrId // ignore: cast_nullable_to_non_nullable
@@ -350,6 +380,7 @@ class _$ProfileStateImpl implements _ProfileState {
     this.isAddressLoading = false,
     this.isLanguageListLoading = false,
     this.user,
+    this.addressModel,
     this.qrId,
     this.isUserResponseLoading = false,
     final List<LanguagesResponseModel> languages = const [],
@@ -372,6 +403,8 @@ class _$ProfileStateImpl implements _ProfileState {
   final bool isLanguageListLoading;
   @override
   final User? user;
+  @override
+  final AddressModel? addressModel;
   @override
   final String? qrId;
   @override
@@ -419,7 +452,7 @@ class _$ProfileStateImpl implements _ProfileState {
 
   @override
   String toString() {
-    return 'ProfileState(isAddressLoading: $isAddressLoading, isLanguageListLoading: $isLanguageListLoading, user: $user, qrId: $qrId, isUserResponseLoading: $isUserResponseLoading, languages: $languages, globalLanguages: $globalLanguages, localLanguages: $localLanguages, selectedLanguages: $selectedLanguages, qrScanResponse: $qrScanResponse, resolveQrResponse: $resolveQrResponse, isUpdateProfileLoading: $isUpdateProfileLoading, isHandleDoorBellLoading: $isHandleDoorBellLoading)';
+    return 'ProfileState(isAddressLoading: $isAddressLoading, isLanguageListLoading: $isLanguageListLoading, user: $user, addressModel: $addressModel, qrId: $qrId, isUserResponseLoading: $isUserResponseLoading, languages: $languages, globalLanguages: $globalLanguages, localLanguages: $localLanguages, selectedLanguages: $selectedLanguages, qrScanResponse: $qrScanResponse, resolveQrResponse: $resolveQrResponse, isUpdateProfileLoading: $isUpdateProfileLoading, isHandleDoorBellLoading: $isHandleDoorBellLoading)';
   }
 
   @override
@@ -432,6 +465,8 @@ class _$ProfileStateImpl implements _ProfileState {
             (identical(other.isLanguageListLoading, isLanguageListLoading) ||
                 other.isLanguageListLoading == isLanguageListLoading) &&
             (identical(other.user, user) || other.user == user) &&
+            (identical(other.addressModel, addressModel) ||
+                other.addressModel == addressModel) &&
             (identical(other.qrId, qrId) || other.qrId == qrId) &&
             (identical(other.isUserResponseLoading, isUserResponseLoading) ||
                 other.isUserResponseLoading == isUserResponseLoading) &&
@@ -468,6 +503,7 @@ class _$ProfileStateImpl implements _ProfileState {
     isAddressLoading,
     isLanguageListLoading,
     user,
+    addressModel,
     qrId,
     isUserResponseLoading,
     const DeepCollectionEquality().hash(_languages),
@@ -494,6 +530,7 @@ abstract class _ProfileState implements ProfileState {
     final bool isAddressLoading,
     final bool isLanguageListLoading,
     final User? user,
+    final AddressModel? addressModel,
     final String? qrId,
     final bool isUserResponseLoading,
     final List<LanguagesResponseModel> languages,
@@ -512,6 +549,8 @@ abstract class _ProfileState implements ProfileState {
   bool get isLanguageListLoading;
   @override
   User? get user;
+  @override
+  AddressModel? get addressModel;
   @override
   String? get qrId;
   @override

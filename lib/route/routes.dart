@@ -4,6 +4,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:mysafety_web/route/navigation_service.dart';
 import 'package:mysafety_web/route/route_name.dart';
+import 'package:mysafety_web/src/features/agora/presentation/screen/agora_audio_call_screen.dart';
+import 'package:mysafety_web/src/features/agora/presentation/screen/agora_call_screen.dart';
 import 'package:mysafety_web/src/features/auth/presentation/screen/login_screen.dart';
 import 'package:mysafety_web/src/features/auth/presentation/screen/otp_screen.dart';
 import 'package:mysafety_web/src/features/auth/presentation/screen/select_language_screen.dart';
@@ -24,14 +26,50 @@ final GoRouter routerConfig = GoRouter(
     GoRoute(path: RouteName.login, builder: (context, state) => LoginScreen()),
 
     GoRoute(path: RouteName.otp, builder: (context, state) => OtpScreen()),
-    GoRoute(path: RouteName.fetchLocation, builder: (context, state) => FetchLocation()),
-    GoRoute(path: RouteName.oneToOneChatScreen, builder: (context, state) => OneToOneChatScreen()),
+    GoRoute(
+      path: RouteName.fetchLocation,
+      builder: (context, state) => FetchLocation(),
+    ),
+    GoRoute(
+      path: RouteName.oneToOneChatScreen,
+      builder: (context, state) {
+        final roomId = state.uri.queryParameters['roomId'];
+        final qrId = state.uri.queryParameters['qrId'];
+        return OneToOneChatScreen(roomId: roomId, qrId: qrId);
+      },
+    ),
     GoRoute(
       path: RouteName.selectLanguageScreen,
       builder: (context, state) => SelectLanguageScreen(),
-    ),   GoRoute(
+    ),
+    GoRoute(
       path: RouteName.selectOptionScreen,
-      builder: (context, state) => SelectOptionScreen(),
+      builder: (context, state) {
+        final roomId = state.uri.queryParameters['roomId'];
+        final qrId = state.uri.queryParameters['qrId'];
+        return SelectOptionScreen(roomId: roomId, qrId: qrId);
+      },
+    ),
+    GoRoute(
+      path: RouteName.agoraVideoCall,
+      builder: (context, state) {
+        final qrId = state.uri.queryParameters['qrId'];
+        final role = state.uri.queryParameters['role'] ?? 'visitor';
+        return AgoraCallScreen(
+          bookingId: qrId,
+          moduleType: 'DoorBell',
+          callType: 'video',
+          role: role,
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteName.agoraAudioCall,
+      builder: (context, state) {
+        final qrId = state.uri.queryParameters['qrId'];
+        final callId = state.uri.queryParameters['callId'];
+        return AgoraAudioCallScreen(qrId: qrId, callId: callId);
+      },
     ),
   ],
 );

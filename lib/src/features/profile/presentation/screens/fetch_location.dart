@@ -10,7 +10,6 @@ import 'package:mysafety_web/route/route_name.dart';
 import 'package:mysafety_web/src/features/profile/presentation/provider/profile_provider.dart';
 import 'package:mysafety_web/util/assets/assets.dart';
 import 'package:mysafety_web/util/extension/extension.dart';
-import 'package:mysafety_web/util/location/location_manager.dart';
 
 class FetchLocation extends ConsumerStatefulWidget {
   const FetchLocation({super.key});
@@ -20,40 +19,61 @@ class FetchLocation extends ConsumerStatefulWidget {
 }
 
 class _FetchLocationState extends ConsumerState<FetchLocation> {
-  late ProfileNotifierProvider provider;
-
-  Future<void> fetchAddress() async {
-    provider.setIsAddressLoading = true;
-
-    var location = await LocationManager.getCurrentLocation();
-
-    provider.setIsAddressLoading = false;
-
-    if (location == null) return;
-
-    provider.resolveQr(
-      qrId: provider.qrId ?? '',
-      latitude: location.latitude.toString(),
-      longitude: location.longitude.toString(),
-    );
-  }
-
-  void gotolanguage() {
-    context.pushReplacement(RouteName.selectLanguageScreen);
-  }
+  String? errorMessage;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      fetchAddress();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) => fetchAddress());
+  }
+
+  // Future<void> fetchAddress() async {
+  //   final provider = ref.read(profileProvider.notifier);
+  //   final state = ref.read(profileProvider);
+
+  //   // Step 2: Get location
+  //   var location = await LocationManager.getCurrentLocation();
+  //   if (location == null) {
+  //     provider.setIsAddressLoading = false;
+  //     setState(() => errorMessage = 'Unable to get location');
+  //     return;
+  //   }
+
+  //   debugPrint('📍 Location: ${location.latitude}, ${location.longitude}');
+
+  //   // // Step 3: Get address from lat/lng
+  //   // await provider.getAddressFromLatLng(
+  //   //   latlng: LatLng(location.latitude, location.longitude),
+  //   // );
+
+  //   // Step 4: Resolve QR
+  //   await provider.resolveQr(
+  //     qrId: state.qrId ?? '',
+  //     latitude: location.latitude.toString(),
+  //     longitude: location.longitude.toString(),
+  //   );
+
+  //   provider.setIsAddressLoading = false;
+
+  //   // Step 5: Check if profile exists
+  //   final resolveResponse = ref.read(profileProvider).resolveQrResponse;
+  //   if (resolveResponse == null) {
+  //   } else {
+  //     if (mounted) {
+  //     }
+  //   }
+  // }
+  void moveToSelectLang() {
+    context.pushReplacement(RouteName.selectLanguageScreen);
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.watch(profileProvider);
-    provider = ref.read(profileProvider.notifier);
+    final state = ref.watch(profileProvider);
+    final isLoading = state.isAddressLoading;
+    final address = state.addressModel?.address;
+    final hasAddress = address != null;
+
     return BaseLayout(
       child: Expanded(
         child: Stack(
@@ -78,24 +98,35 @@ class _FetchLocationState extends ConsumerState<FetchLocation> {
                     fontWeight: FontWeight.w600,
                   ),
                   BrandVSpace.gap10(),
-                  if (provider.user?.address != null) ...[
+                  if (address != null) ...[
+                    BrandText.white(data: address, textAlign: TextAlign.center),
+                  ] else if (!isLoading) ...[
                     BrandText.white(
-                      data: provider.user?.address?.fulladdress ?? '',
+                      data: 'Unable to get location',
                       textAlign: TextAlign.center,
+                      fontColor: Colors.red,
                     ),
+                    BrandVSpace.gap16(),
+                    // ElevatedButton(
+                    //   onPressed: fetchAddress,
+                    //   child: const Text('Retry'),
+                    // ),
                   ] else
                     BrandText.white(data: context.loc.fetching_your_location),
-                  if (provider.isAddressLoading) BrandLoaderWidget(width: 55),
+                  if (isLoading) BrandLoaderWidget(width: 55),
                 ],
               ),
             ),
-            if (!provider.isAddressLoading)
+            if (hasAddress && !isLoading && errorMessage == null)
               Positioned(
                 bottom: 60,
                 right: 16,
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: BrandIconButton.next(onTap: gotolanguage),
+                  child: BrandIconButton.next(
+                    onTap: () =>
+                        context.pushReplacement(RouteName.selectLanguageScreen),
+                  ),
                 ),
               ),
           ],

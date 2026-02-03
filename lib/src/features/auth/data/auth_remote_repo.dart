@@ -6,6 +6,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mysafety_web/core/model/address/address_model.dart';
 import 'package:mysafety_web/core/model/auth/login_response_model.dart';
 import 'package:mysafety_web/core/model/base/base_dynamic_response_model.dart';
 import 'package:mysafety_web/core/model/user/user_model.dart';
@@ -74,7 +75,7 @@ class AuthRemoteRepo implements AuthRepo {
   }
 
   @override
-  Future<BaseDynamicResponse<Address?>> getAddressFromLatLng({
+  Future<BaseDynamicResponse<AddressModel?>> getAddressFromLatLng({
     required LatLng latlng,
   }) async {
     try {
@@ -85,9 +86,9 @@ class AuthRemoteRepo implements AuthRepo {
 
       if (response?.statusCode == NetworkStatus.status200.statusCode) {
         var body = json.decode(response!.body);
-        var result = BaseDynamicResponse<Address?>.fromJson(
+        var result = BaseDynamicResponse<AddressModel?>.fromJson(
           body,
-          (json) => Address.fromJson(json as Map<String, dynamic>),
+          (json) => AddressModel.fromJson(json as Map<String, dynamic>),
         );
         return result;
       }

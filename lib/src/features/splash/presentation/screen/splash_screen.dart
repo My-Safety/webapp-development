@@ -3,13 +3,20 @@
 
 // ignore_for_file: avoid_web_libraries_in_flutter
 
+// ignore: depend_on_referenced_packages
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mysafety_web/route/navigation_service.dart';
+import 'package:mysafety_web/util/location/location_manager.dart';
+// ignore: depend_on_referenced_packages
+import 'package:web/web.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mysafety_web/route/route_name.dart';
+import 'package:mysafety_web/src/features/profile/presentation/provider/profile_provider.dart';
 import 'package:mysafety_web/util/assets/assets.dart';
 import 'package:mysafety_web/util/extension/extension.dart';
 import 'package:mysafety_design_system/design_system/design_system.dart';
-// import 'dart:html' as html;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -20,56 +27,69 @@ class SplashScreen extends ConsumerStatefulWidget {
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
+  late ProfileNotifierProvider provider;
+
   @override
   void initState() {
     super.initState();
-
-    // final qrId = _getQrIdFromUrl();
-
-    // if (qrId != null && qrId.isNotEmpty) {
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     ref.read(profileProvider.notifier).setQrId(qrId);
-
-    //     // ref.read(profileProvider.notifier).handleDoorBellScan();
-    //   });
-    // }
     _loadInit();
   }
 
-  void _loadInit() {
-    Future.delayed(const Duration(seconds: 2), () {
-      if (!mounted) return;
-      gotoFetchLocation();
-    });
+  Future<void> _loadInit() async {
+    await Future.delayed(const Duration(seconds: 2));
+    if (!mounted) return;
+
+    provider = ref.read(profileProvider.notifier);
+    final qrId = _getQrIdFromUrl();
+
+    if (qrId.isNotEmpty) {
+      provider.setQrId = qrId;
+    }
+
+    // Step 1: Get lat/long
+    var location = await LocationManager.getCurrentLocation();
+    if (location == null) {
+      debugPrint('🔴 Unable to get location');
+      return;
+    }
+
+    debugPrint('📍 Lat: ${location.latitude}, Long: ${location.longitude}');
+
+    // Step 2: Get address
+    await provider.getAddressFromLatLng(
+      latlng: LatLng(location.latitude, location.longitude),
+    );
+
+    // Step 3: Resolve QR
+    await provider.resolveQr(
+      qrId: provider.qrId ?? '',
+      latitude: "12.886777523521594",
+      longitude: "77.5832043774426",
+    );
+
+    if (!mounted) return;
+
+    // Step 4: Check profile - if null show error, else navigate to fetch address
+    if (provider.hasProfile) {
+      context.go(RouteName.fetchLocation);
+      debugPrint('🔴 Profile  found - house  assigned');
+    } else {
+      NavigationService.showErrorSnackbar(
+        message: " Profile not found - house not assigned",
+      );
+      debugPrint('🔴 Profile not found - house not assigned');
+    }
   }
 
-  // String? _getQrIdFromUrl() {
-  //   final uri = Uri.parse(html.window.location.href);
-  //   return uri.queryParameters['qrId'];
-  // }
-
-  // Future<void> _init() async {
-  //   await AuthManager().fetchToken();
-
-  //   if (!mounted) return;
-
-  //   if (AuthManager().token == null || AuthManager().token!.isEmpty) {
-  //     gotoLanguageSelection();
-  //     return;
-  //   }
-  //   await ref.read(profileProvider.notifier).handleDoorBellScan();
-
-  //   goToHome();
-  // }
-
-  void gotoFetchLocation() {
-    context.go(RouteName.fetchLocation);
+  String _getQrIdFromUrl() {
+    final uri = Uri.parse(window.location.href);
+    return uri.queryParameters['qrId'] ?? "406795f7a5724028be3a7db4248c38b6";
   }
-
-
 
   @override
   Widget build(BuildContext context) {
+    provider = ref.read(profileProvider.notifier);
+
     return BaseLayout(
       child: Expanded(
         child: Column(

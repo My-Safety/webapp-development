@@ -6,10 +6,15 @@ class ChatScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String avatarUrl;
   final String userName;
   final String status;
+  final VoidCallback? onAudioCall;
+  final VoidCallback? onVideoCall;
+  
   const ChatScreenAppBar({
     required this.avatarUrl,
     required this.userName,
     required this.status,
+    this.onAudioCall,
+    this.onVideoCall,
     super.key,
   });
 
@@ -23,7 +28,12 @@ class ChatScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       title: Row(
         children: [
-          Icon(Icons.arrow_back, color: AppColors.white, size: 24),
+          IconButton(
+            icon: const Icon(Icons.arrow_back, color: AppColors.white, size: 24),
+            onPressed: () => Navigator.of(context).pop(),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+          ),
           BrandHSpace.gap12(),
 
           CircleAvatar(
@@ -36,9 +46,9 @@ class ChatScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
                 height: 40,
                 fit: BoxFit.cover,
                 placeholder: (context, url) =>
-                    Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                    const Center(child: CircularProgressIndicator(strokeWidth: 2)),
                 errorWidget: (context, url, error) =>
-                    Icon(Icons.person, color: AppColors.primary),
+                    const Icon(Icons.person, color: AppColors.primary),
               ),
             ),
           ),
@@ -65,10 +75,13 @@ class ChatScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           icon: const Icon(Icons.call, color: AppColors.white),
-          onPressed: () {},
-        ), IconButton(
+          onPressed: onAudioCall,
+          tooltip: 'Audio Call',
+        ),
+        IconButton(
           icon: const Icon(Icons.video_call_rounded, color: AppColors.white),
-          onPressed: () {},
+          onPressed: onVideoCall,
+          tooltip: 'Video Call',
         ),
       ],
     );

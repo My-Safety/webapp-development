@@ -4,5 +4,7 @@
 abstract class LocalStorageKey {
   static String userData = 'userData';
   static String token = 'token';
-  // static String refreshToken = 'refreshToken';
+  static String qrId = 'qrId';
+  static String chatRoomId = 'chatRoomId';
+  static String qrScanResponse = 'qrScanResponse';
 }

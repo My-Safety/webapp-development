@@ -3,7 +3,6 @@
 
 abstract class ProfileEndpoint {
   static const getLanguages = 'app/languages';
-  static const handleDoorbellScan = 'user/scan/doorbell';
+  static const handleDoorbellScan = 'user/scan/createRoom';
   static const resolveQr = 'user/scan';
-
 }

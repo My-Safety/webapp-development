@@ -29,7 +29,6 @@ class ChatTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final bubbleColor = isIncoming ? AppColors.greyFD : AppColors.grey8B;
     final textColor = isIncoming ? AppColors.black : Colors.white;
-    debugPrint('chat tile rebuild:::: $status');
     return Padding(
       padding: EdgeInsets.only(
         left: isIncoming ? 12 : 48,
