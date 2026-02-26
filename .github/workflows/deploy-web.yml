@@ -14,6 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
+      - name: Setup SSH for private repos
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
