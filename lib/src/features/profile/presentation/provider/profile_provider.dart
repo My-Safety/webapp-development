@@ -56,13 +56,14 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
   String? get qrId => state.qrId;
   String? get visitorId => state.visitorId;
   String? get activeProfileType => state.activeProfileType;
-  List<PredefinedMessageModel> get predefinedMessages => state.predefinedMessages;
+  List<PredefinedMessageModel> get predefinedMessages =>
+      state.predefinedMessages;
   bool get isPredefinedMessagesLoading => state.isPredefinedMessagesLoading;
-  
+
   String? get visitorName {
     final response = state.resolveQrResponse;
     if (response == null) return null;
-    
+
     switch (ProfileType.fromString(state.activeProfileType)) {
       case ProfileType.doorbell:
         return response.doorbell?.houseName;
@@ -76,7 +77,7 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
         return null;
     }
   }
-  
+
   bool get hasProfile =>
       state.resolveQrResponse?.doorbell != null ||
       state.resolveQrResponse?.vehicle != null ||
@@ -146,7 +147,7 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
           address: addressModel?.address,
         );
 
-    debugPrint('📡 API response: ${result.success}');
+    debugPrint('API response: ${result.success}');
 
     if (result.success == ActionStatus.success.code) {
       state = state.copyWith(
@@ -154,14 +155,14 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
         qrScanResponse: result.data,
         visitorId: result.data?.visit?.id,
       );
-      debugPrint('✅ Room ID: ${state.qrScanResponse?.chatRoom?.id}');
-      debugPrint('✅ Visitor ID: ${state.visitorId}');
+      debugPrint('Room ID: ${state.qrScanResponse?.chatRoom?.id}');
+      debugPrint('Visitor ID: ${state.visitorId}');
     } else {
       state = state.copyWith(
         isHandleDoorBellLoading: false,
         qrScanResponse: null,
       );
-      debugPrint('🔴 API failed');
+      debugPrint('API failed');
     }
   }
 
@@ -181,26 +182,26 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
         isHandleDoorBellLoading: false,
         resolveQrResponse: result.data,
       );
-      
+
       // Set active profile type
       if (result.data?.doorbell != null) {
-        state = state.copyWith(activeProfileType: 'doorbell');
+        state = state.copyWith(activeProfileType:'doorbell');
       } else if (result.data?.vehicle != null) {
-        state = state.copyWith(activeProfileType: 'vehicle');
+        state = state.copyWith(activeProfileType:'vehicle');
       } else if (result.data?.lostfound != null) {
         state = state.copyWith(activeProfileType: 'lostfound');
       } else if (result.data?.smartcard != null) {
         state = state.copyWith(activeProfileType: 'smartcard');
       }
-      
-      debugPrint('✅ QR resolved: ${state.resolveQrResponse!.qr!.ownerId}');
 
-      // ✅ If profile exists (house is assigned), create chat room
+      debugPrint('QR resolved: ${state.resolveQrResponse!.qr!.ownerId}');
+
+      // f profile exists (house is assigned), create chat room
       if (state.resolveQrResponse?.qr?.ownerId != null) {
-        debugPrint('✅ House assigned - creating chat room');
+        debugPrint('House assigned - creating chat room');
         // await handleDoorBellScan();
       } else {
-        debugPrint('⚠️ House not assigned yet');
+        debugPrint('House not assigned yet');
       }
     } else {
       state = state.copyWith(
@@ -283,9 +284,9 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
       await LocalStorage.clearKey(LocalStorageKey.userData);
 
       state = const ProfileState();
-      debugPrint('✅ Logout successful - all data cleared');
+      debugPrint('Logout successful - all data cleared');
     } catch (e) {
-      debugPrint('🔴 Error during logout: $e');
+      debugPrint('Error during logout: $e');
     }
   }
 }

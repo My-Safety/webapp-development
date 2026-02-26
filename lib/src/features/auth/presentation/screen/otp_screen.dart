@@ -46,7 +46,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     try {
       final isVerify = await provider.verifyOtp(
         otp: otpController.text,
-        qrId: profileprovider.qrId ?? 'e984cacef7ac469118002759547df6a8',
+        qrId: profileprovider.qrId ?? '',
       );
 
       if (isVerify) {
@@ -82,8 +82,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       }
       await profileprovider.handleDoorBellScan(
         location: LatLng(location.latitude, location.longitude),
-        qrId: "e984cacef7ac469118002759547df6a8",
-        // qrId: profileprovider.qrId ?? ,
+        qrId: profileprovider.qrId ?? "",
       );
     } catch (e) {
       debugPrint('Doorbell scan error: $e');
@@ -104,7 +103,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
         phoneNo: provider.phoneNo!,
         name: provider.name!,
         lang: lang,
-        qrId: profileprovider.qrId ?? 'e984cacef7ac469118002759547df6a8',
+        qrId: profileprovider.qrId ?? '',
       );
     } catch (e) {
       debugPrint('Resend OTP error: $e');
@@ -120,7 +119,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     debugPrint('🔍 Visitor ID: $visitorId');
 
     // ignore: avoid_print
-    print(
+   print(
       'Navigating to SelectOptionScreen with roomId: $roomId, visitorId: $visitorId',
     );
     final qrId = profileprovider.qrId ?? "e984cacef7ac469118002759547df6a8";
@@ -132,7 +131,6 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       context.go(RouteName.selectOptionScreen);
     }
   }
-
   void gotoBack() {
     context.pop();
   }

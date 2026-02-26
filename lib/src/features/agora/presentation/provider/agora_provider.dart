@@ -94,15 +94,22 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
         );
     if (response.success == ActionStatus.success.code) {
       state = state.copyWith(isLoading: false, startCallData: response.data);
+
       debugPrint(' Call started: ${state.startCallData!.callId}');
+
       await joinCall(
         role: "visitor",
         callId: state.startCallData!.callId,
         visitorId: visitorId,
       );
+
       return true;
     } else {
-      state = state.copyWith(isLoading: false, startCallData: null, isCallInitiated: false);
+      state = state.copyWith(
+        isLoading: false,
+        startCallData: null,
+        isCallInitiated: false,
+      );
       return false;
     }
   }
@@ -114,6 +121,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
   }) async {
     try {
       state = state.copyWith(isLoading: true);
+
       debugPrint(' Joining call: $callId');
 
       final response = await ref
@@ -136,9 +144,13 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
         debugPrint(' Token data set: AppId=${state.tokenData?.appId}');
 
         await _initializeAgoraEngine();
+
         await _joinChannel();
+
         _startTokenRefreshTimer();
+
         _startCallDurationMonitor();
+
         return true;
       }
 
@@ -180,6 +192,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
       await _loadAgoraWebSdk();
 
       debugPrint(' Agora Web SDK loaded');
+
       debugPrint('Initializing with AppId: ${state.tokenData!.appId}');
 
       state = state.copyWith(isWebSdkLoaded: true);
@@ -393,7 +406,9 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
                     debugPrint('✅ Video track stored for uid: $uid');
                     // Force UI rebuild
                     if (!_isDisposed) {
-                      state = state.copyWith(remoteUsers: [...state.remoteUsers]);
+                      state = state.copyWith(
+                        remoteUsers: [...state.remoteUsers],
+                      );
                     }
                   }
                 }
@@ -479,7 +494,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
 
       // Create tracks BEFORE joining channel
       debugPrint('🎥 Creating media tracks...');
-      
+
       // Create audio track
       final audioTrack = await agoraRTC.createMicrophoneAudioTrack().toDart;
       _localAudioTrack = audioTrack as ILocalAudioTrack?;
@@ -647,7 +662,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
           if (_localVideoTrack == null) {
             final videoTrack = await agoraRTC.createCameraVideoTrack().toDart;
             _localVideoTrack = videoTrack as ILocalVideoTrack?;
-            
+
             if (_localVideoTrack != null && _webClient != null) {
               final videoJS = (_localVideoTrack as JSAny);
               await _webClient!.publish(videoJS).toDart;
@@ -664,7 +679,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
             debugPrint('✅ Video track disabled');
           }
         }
-        
+
         // Force UI rebuild by updating state
         state = state.copyWith(
           isVideoEnabled: newVideoState,
@@ -741,7 +756,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
           if (_localAudioTrack != null) {
             final closePromise = _localAudioTrack!.close();
             await closePromise.toDart;
-                      _localAudioTrack = null;
+            _localAudioTrack = null;
             debugPrint(' Audio track closed');
           }
         } catch (e) {
@@ -753,7 +768,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
           if (_localVideoTrack != null) {
             final closePromise = _localVideoTrack!.close();
             await closePromise.toDart;
-                      _localVideoTrack = null;
+            _localVideoTrack = null;
             debugPrint(' Video track closed');
           }
         } catch (e) {

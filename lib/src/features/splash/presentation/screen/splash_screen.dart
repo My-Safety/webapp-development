@@ -44,19 +44,19 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     if (qrId.isNotEmpty) {
       provider.setQrId = qrId;
-      debugPrint('🟢 Splash Screen - qrId set: $qrId');
+      debugPrint('qrId set: $qrId');
     } else {
-      debugPrint('🔴 Splash Screen - qrId is empty');
+      debugPrint('qrId is empty');
     }
 
     // Step 1: Get lat/long
     var location = await LocationManager.getCurrentLocation();
     if (location == null) {
-      debugPrint('🔴 Unable to get location');
+      debugPrint('Unable to get location');
       return;
     }
 
-    debugPrint('📍 Lat: ${location.latitude}, Long: ${location.longitude}');
+    debugPrint(' Lat: ${location.latitude}, Long: ${location.longitude}');
 
     // Step 2: Get address
     await provider.getAddressFromLatLng(
@@ -75,20 +75,19 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     // Step 4: Check profile - if null show error, else navigate to fetch address
     if (provider.hasProfile) {
       context.go(RouteName.fetchLocation);
-      debugPrint('🔴 Profile  found - house  assigned');
+      debugPrint('Profile  found house  assigned');
     } else {
       NavigationService.showErrorSnackbar(
-        message: " Profile not found - house not assigned",
+        message: "Profile not found house not assigned",
       );
-      debugPrint('🔴 Profile not found - house not assigned');
     }
   }
 
   String _getQrIdFromUrl() {
     final uri = Uri.parse(window.location.href);
     final qrId =
-        uri.queryParameters['qrId'] ?? "e984cacef7ac469118002759547df6a8";
-    debugPrint('🌐 URL qrId extracted: $qrId');
+        uri.queryParameters['qrId']??"";
+    debugPrint(' URL qrId extracted: $qrId');
     return qrId;
   }
 

@@ -10,8 +10,11 @@ import 'package:mysafety_web/route/routes.dart';
 import 'package:mysafety_design_system/design_system/theme/theme.dart';
 import 'package:mysafety_web/src/features/agora/presentation/service/call_listener_service.dart';
 import 'package:mysafety_web/util/lifecycle/web_lifecycle_manager.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void main() {
+    setUrlStrategy(PathUrlStrategy());
+
   runApp(ProviderScope(child: const MyApp()));
 }
 

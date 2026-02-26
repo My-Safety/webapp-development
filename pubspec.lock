@@ -1059,7 +1059,7 @@ packages:
       path: "."
       ref: HEAD
       resolved-ref: c5a647ff2d56822ca8f9d9914b53e53ad8b2f3b6
-      url: "git@github.com:My-Safety/My-Safety-Design-System-Mobile.git"
+      url: "https://github.com/My-Safety/My-Safety-Design-System-Mobile.git"
     source: git
     version: "0.0.1"
   network_info_plus:
