@@ -1,0 +1,13 @@
+# For web-build branch - only track build/web folder
+
+# Ignore everything
+*
+
+# Except build/web
+!build/
+!build/web/
+!build/web/**
+
+# Keep this file
+!.gitignore
+!README.md
