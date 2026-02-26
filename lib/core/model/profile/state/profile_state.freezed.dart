@@ -22,6 +22,7 @@ mixin _$ProfileState {
   User? get user => throw _privateConstructorUsedError;
   AddressModel? get addressModel => throw _privateConstructorUsedError;
   String? get qrId => throw _privateConstructorUsedError;
+  String? get visitorId => throw _privateConstructorUsedError;
   bool get isUserResponseLoading => throw _privateConstructorUsedError;
   List<LanguagesResponseModel> get languages =>
       throw _privateConstructorUsedError;
@@ -36,6 +37,10 @@ mixin _$ProfileState {
       throw _privateConstructorUsedError;
   bool get isUpdateProfileLoading => throw _privateConstructorUsedError;
   bool get isHandleDoorBellLoading => throw _privateConstructorUsedError;
+  String? get activeProfileType => throw _privateConstructorUsedError;
+  List<PredefinedMessageModel> get predefinedMessages =>
+      throw _privateConstructorUsedError;
+  bool get isPredefinedMessagesLoading => throw _privateConstructorUsedError;
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -57,6 +62,7 @@ abstract class $ProfileStateCopyWith<$Res> {
     User? user,
     AddressModel? addressModel,
     String? qrId,
+    String? visitorId,
     bool isUserResponseLoading,
     List<LanguagesResponseModel> languages,
     List<LanguagesResponseModel> globalLanguages,
@@ -66,6 +72,9 @@ abstract class $ProfileStateCopyWith<$Res> {
     ResolveQrResponseModel? resolveQrResponse,
     bool isUpdateProfileLoading,
     bool isHandleDoorBellLoading,
+    String? activeProfileType,
+    List<PredefinedMessageModel> predefinedMessages,
+    bool isPredefinedMessagesLoading,
   });
 
   $UserCopyWith<$Res>? get user;
@@ -95,6 +104,7 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
     Object? user = freezed,
     Object? addressModel = freezed,
     Object? qrId = freezed,
+    Object? visitorId = freezed,
     Object? isUserResponseLoading = null,
     Object? languages = null,
     Object? globalLanguages = null,
@@ -104,6 +114,9 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
     Object? resolveQrResponse = freezed,
     Object? isUpdateProfileLoading = null,
     Object? isHandleDoorBellLoading = null,
+    Object? activeProfileType = freezed,
+    Object? predefinedMessages = null,
+    Object? isPredefinedMessagesLoading = null,
   }) {
     return _then(
       _value.copyWith(
@@ -126,6 +139,10 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
             qrId: freezed == qrId
                 ? _value.qrId
                 : qrId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            visitorId: freezed == visitorId
+                ? _value.visitorId
+                : visitorId // ignore: cast_nullable_to_non_nullable
                       as String?,
             isUserResponseLoading: null == isUserResponseLoading
                 ? _value.isUserResponseLoading
@@ -162,6 +179,18 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
             isHandleDoorBellLoading: null == isHandleDoorBellLoading
                 ? _value.isHandleDoorBellLoading
                 : isHandleDoorBellLoading // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            activeProfileType: freezed == activeProfileType
+                ? _value.activeProfileType
+                : activeProfileType // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            predefinedMessages: null == predefinedMessages
+                ? _value.predefinedMessages
+                : predefinedMessages // ignore: cast_nullable_to_non_nullable
+                      as List<PredefinedMessageModel>,
+            isPredefinedMessagesLoading: null == isPredefinedMessagesLoading
+                ? _value.isPredefinedMessagesLoading
+                : isPredefinedMessagesLoading // ignore: cast_nullable_to_non_nullable
                       as bool,
           )
           as $Val,
@@ -258,6 +287,7 @@ abstract class _$$ProfileStateImplCopyWith<$Res>
     User? user,
     AddressModel? addressModel,
     String? qrId,
+    String? visitorId,
     bool isUserResponseLoading,
     List<LanguagesResponseModel> languages,
     List<LanguagesResponseModel> globalLanguages,
@@ -267,6 +297,9 @@ abstract class _$$ProfileStateImplCopyWith<$Res>
     ResolveQrResponseModel? resolveQrResponse,
     bool isUpdateProfileLoading,
     bool isHandleDoorBellLoading,
+    String? activeProfileType,
+    List<PredefinedMessageModel> predefinedMessages,
+    bool isPredefinedMessagesLoading,
   });
 
   @override
@@ -300,6 +333,7 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
     Object? user = freezed,
     Object? addressModel = freezed,
     Object? qrId = freezed,
+    Object? visitorId = freezed,
     Object? isUserResponseLoading = null,
     Object? languages = null,
     Object? globalLanguages = null,
@@ -309,6 +343,9 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
     Object? resolveQrResponse = freezed,
     Object? isUpdateProfileLoading = null,
     Object? isHandleDoorBellLoading = null,
+    Object? activeProfileType = freezed,
+    Object? predefinedMessages = null,
+    Object? isPredefinedMessagesLoading = null,
   }) {
     return _then(
       _$ProfileStateImpl(
@@ -331,6 +368,10 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
         qrId: freezed == qrId
             ? _value.qrId
             : qrId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        visitorId: freezed == visitorId
+            ? _value.visitorId
+            : visitorId // ignore: cast_nullable_to_non_nullable
                   as String?,
         isUserResponseLoading: null == isUserResponseLoading
             ? _value.isUserResponseLoading
@@ -368,6 +409,18 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
             ? _value.isHandleDoorBellLoading
             : isHandleDoorBellLoading // ignore: cast_nullable_to_non_nullable
                   as bool,
+        activeProfileType: freezed == activeProfileType
+            ? _value.activeProfileType
+            : activeProfileType // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        predefinedMessages: null == predefinedMessages
+            ? _value._predefinedMessages
+            : predefinedMessages // ignore: cast_nullable_to_non_nullable
+                  as List<PredefinedMessageModel>,
+        isPredefinedMessagesLoading: null == isPredefinedMessagesLoading
+            ? _value.isPredefinedMessagesLoading
+            : isPredefinedMessagesLoading // ignore: cast_nullable_to_non_nullable
+                  as bool,
       ),
     );
   }
@@ -382,6 +435,7 @@ class _$ProfileStateImpl implements _ProfileState {
     this.user,
     this.addressModel,
     this.qrId,
+    this.visitorId,
     this.isUserResponseLoading = false,
     final List<LanguagesResponseModel> languages = const [],
     final List<LanguagesResponseModel> globalLanguages = const [],
@@ -391,9 +445,13 @@ class _$ProfileStateImpl implements _ProfileState {
     this.resolveQrResponse,
     this.isUpdateProfileLoading = false,
     this.isHandleDoorBellLoading = false,
+    this.activeProfileType,
+    final List<PredefinedMessageModel> predefinedMessages = const [],
+    this.isPredefinedMessagesLoading = false,
   }) : _languages = languages,
        _globalLanguages = globalLanguages,
-       _localLanguages = localLanguages;
+       _localLanguages = localLanguages,
+       _predefinedMessages = predefinedMessages;
 
   @override
   @JsonKey()
@@ -407,6 +465,8 @@ class _$ProfileStateImpl implements _ProfileState {
   final AddressModel? addressModel;
   @override
   final String? qrId;
+  @override
+  final String? visitorId;
   @override
   @JsonKey()
   final bool isUserResponseLoading;
@@ -449,10 +509,25 @@ class _$ProfileStateImpl implements _ProfileState {
   @override
   @JsonKey()
   final bool isHandleDoorBellLoading;
+  @override
+  final String? activeProfileType;
+  final List<PredefinedMessageModel> _predefinedMessages;
+  @override
+  @JsonKey()
+  List<PredefinedMessageModel> get predefinedMessages {
+    if (_predefinedMessages is EqualUnmodifiableListView)
+      return _predefinedMessages;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_predefinedMessages);
+  }
+
+  @override
+  @JsonKey()
+  final bool isPredefinedMessagesLoading;
 
   @override
   String toString() {
-    return 'ProfileState(isAddressLoading: $isAddressLoading, isLanguageListLoading: $isLanguageListLoading, user: $user, addressModel: $addressModel, qrId: $qrId, isUserResponseLoading: $isUserResponseLoading, languages: $languages, globalLanguages: $globalLanguages, localLanguages: $localLanguages, selectedLanguages: $selectedLanguages, qrScanResponse: $qrScanResponse, resolveQrResponse: $resolveQrResponse, isUpdateProfileLoading: $isUpdateProfileLoading, isHandleDoorBellLoading: $isHandleDoorBellLoading)';
+    return 'ProfileState(isAddressLoading: $isAddressLoading, isLanguageListLoading: $isLanguageListLoading, user: $user, addressModel: $addressModel, qrId: $qrId, visitorId: $visitorId, isUserResponseLoading: $isUserResponseLoading, languages: $languages, globalLanguages: $globalLanguages, localLanguages: $localLanguages, selectedLanguages: $selectedLanguages, qrScanResponse: $qrScanResponse, resolveQrResponse: $resolveQrResponse, isUpdateProfileLoading: $isUpdateProfileLoading, isHandleDoorBellLoading: $isHandleDoorBellLoading, activeProfileType: $activeProfileType, predefinedMessages: $predefinedMessages, isPredefinedMessagesLoading: $isPredefinedMessagesLoading)';
   }
 
   @override
@@ -468,6 +543,8 @@ class _$ProfileStateImpl implements _ProfileState {
             (identical(other.addressModel, addressModel) ||
                 other.addressModel == addressModel) &&
             (identical(other.qrId, qrId) || other.qrId == qrId) &&
+            (identical(other.visitorId, visitorId) ||
+                other.visitorId == visitorId) &&
             (identical(other.isUserResponseLoading, isUserResponseLoading) ||
                 other.isUserResponseLoading == isUserResponseLoading) &&
             const DeepCollectionEquality().equals(
@@ -494,7 +571,19 @@ class _$ProfileStateImpl implements _ProfileState {
                   other.isHandleDoorBellLoading,
                   isHandleDoorBellLoading,
                 ) ||
-                other.isHandleDoorBellLoading == isHandleDoorBellLoading));
+                other.isHandleDoorBellLoading == isHandleDoorBellLoading) &&
+            (identical(other.activeProfileType, activeProfileType) ||
+                other.activeProfileType == activeProfileType) &&
+            const DeepCollectionEquality().equals(
+              other._predefinedMessages,
+              _predefinedMessages,
+            ) &&
+            (identical(
+                  other.isPredefinedMessagesLoading,
+                  isPredefinedMessagesLoading,
+                ) ||
+                other.isPredefinedMessagesLoading ==
+                    isPredefinedMessagesLoading));
   }
 
   @override
@@ -505,6 +594,7 @@ class _$ProfileStateImpl implements _ProfileState {
     user,
     addressModel,
     qrId,
+    visitorId,
     isUserResponseLoading,
     const DeepCollectionEquality().hash(_languages),
     const DeepCollectionEquality().hash(_globalLanguages),
@@ -514,6 +604,9 @@ class _$ProfileStateImpl implements _ProfileState {
     resolveQrResponse,
     isUpdateProfileLoading,
     isHandleDoorBellLoading,
+    activeProfileType,
+    const DeepCollectionEquality().hash(_predefinedMessages),
+    isPredefinedMessagesLoading,
   );
 
   /// Create a copy of ProfileState
@@ -532,6 +625,7 @@ abstract class _ProfileState implements ProfileState {
     final User? user,
     final AddressModel? addressModel,
     final String? qrId,
+    final String? visitorId,
     final bool isUserResponseLoading,
     final List<LanguagesResponseModel> languages,
     final List<LanguagesResponseModel> globalLanguages,
@@ -541,6 +635,9 @@ abstract class _ProfileState implements ProfileState {
     final ResolveQrResponseModel? resolveQrResponse,
     final bool isUpdateProfileLoading,
     final bool isHandleDoorBellLoading,
+    final String? activeProfileType,
+    final List<PredefinedMessageModel> predefinedMessages,
+    final bool isPredefinedMessagesLoading,
   }) = _$ProfileStateImpl;
 
   @override
@@ -553,6 +650,8 @@ abstract class _ProfileState implements ProfileState {
   AddressModel? get addressModel;
   @override
   String? get qrId;
+  @override
+  String? get visitorId;
   @override
   bool get isUserResponseLoading;
   @override
@@ -571,6 +670,12 @@ abstract class _ProfileState implements ProfileState {
   bool get isUpdateProfileLoading;
   @override
   bool get isHandleDoorBellLoading;
+  @override
+  String? get activeProfileType;
+  @override
+  List<PredefinedMessageModel> get predefinedMessages;
+  @override
+  bool get isPredefinedMessagesLoading;
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.

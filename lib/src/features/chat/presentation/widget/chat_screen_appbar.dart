@@ -8,7 +8,7 @@ class ChatScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String status;
   final VoidCallback? onAudioCall;
   final VoidCallback? onVideoCall;
-  
+
   const ChatScreenAppBar({
     required this.avatarUrl,
     required this.userName,
@@ -29,7 +29,11 @@ class ChatScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.white, size: 24),
+            icon: const Icon(
+              Icons.arrow_back,
+              color: AppColors.white,
+              size: 24,
+            ),
             onPressed: () => Navigator.of(context).pop(),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
@@ -45,31 +49,34 @@ class ChatScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
                 width: 40,
                 height: 40,
                 fit: BoxFit.cover,
-                placeholder: (context, url) =>
-                    const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
                 errorWidget: (context, url, error) =>
                     const Icon(Icons.person, color: AppColors.primary),
               ),
             ),
           ),
           BrandHSpace.gap12(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BrandText.primary(
-                data: userName,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              fontColor: AppColors.white,
-              ),
-              BrandText.secondary(
-                data: status,
-                fontSize: 12,
-                fontColor: AppColors.green24,
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BrandText.primary(
+                  data: userName,
+                  overflow: TextOverflow.ellipsis,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  fontColor: AppColors.white,
+                ),
+                BrandText.secondary(
+                  data: status,
+                  fontSize: 12,
+                  fontColor: AppColors.green24,
+                ),
+              ],
+            ),
           ),
-
         ],
       ),
       actions: [

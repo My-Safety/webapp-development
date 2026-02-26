@@ -12,6 +12,8 @@ final oneToOneChatControllerProvider =
       List<ChatHistoryResponseModel>
     >((ref) => OneToOneChatController(ref));
 
+final selectedMessageIndexProvider = StateProvider<int?>((ref) => null);
+
 class OneToOneChatController
     extends StateNotifier<List<ChatHistoryResponseModel>> {
   OneToOneChatController(this.ref) : super([]);
@@ -118,7 +120,12 @@ class OneToOneChatController
     });
   }
 
-  Future<void> sendText(String text) async {
+  Future<void> sendText(String text, {int? messageIndex}) async {
+    if (messageIndex != null) {
+      ref.read(selectedMessageIndexProvider.notifier).state = messageIndex;
+    }
+
+
     if (roomId == null) {
       debugPrint('🔴 Cannot send - roomId is null');
       return;

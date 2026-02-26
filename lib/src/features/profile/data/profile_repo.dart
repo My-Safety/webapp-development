@@ -3,6 +3,7 @@
 
 import 'package:mysafety_web/core/model/base/base_dynamic_response_model.dart';
 import 'package:mysafety_web/core/model/profile/languages/languages_response_model.dart';
+import 'package:mysafety_web/core/model/profile/predefined_message/predefined_message_model.dart';
 import 'package:mysafety_web/core/model/qr/qr_scan_response_model.dart';
 import 'package:mysafety_web/core/model/resolve_qr/resolve_qr_response_model.dart';
 
@@ -12,10 +13,16 @@ abstract class ProfileRepo {
   /// Doorbell QR Scan
   Future<BaseDynamicResponse<QrScanResponseModel>> handleDoorbellScan({
     required String qrId,
+    String? latitude,
+    String? longitude,
+    String? address,
   });
   Future<BaseDynamicResponse<ResolveQrResponseModel>> resolveQr({
     required String qrId,
     required String latitude,
     required String longitude,
+  });
+  Future<BaseDynamicResponse<List<PredefinedMessageModel>>> getPredefinedMessages({
+    required String qrId,
   });
 }

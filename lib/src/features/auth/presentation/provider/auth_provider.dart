@@ -1,8 +1,6 @@
 // Copyright (c) 2025, Indo-Sakura Software Pvt Ltd. All rights reserved.
 // Created By Adwaith c, 16/12/2025
 
-
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl_phone_field/countries.dart';
 import 'package:mysafety_web/core/model/auth/login_response_model.dart';
@@ -10,6 +8,7 @@ import 'package:mysafety_web/core/model/auth/state/auth_state.dart';
 import 'package:mysafety_web/core/model/user/user_model.dart';
 import 'package:mysafety_web/core/network/network_status.dart';
 import 'package:mysafety_web/src/features/auth/data/auth_remote_repo.dart';
+import 'package:mysafety_web/util/utils.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifierProvider, AuthState>(
   (ref) => AuthNotifierProvider(ref),
@@ -38,6 +37,7 @@ class AuthNotifierProvider extends StateNotifier<AuthState> {
 
   User? get user => state.user;
   LoginResponseModel? get loginresponse => state.loginResponse;
+  String? get visitorId => state.user?.id;
 
   List<Country> defaultCountries = [
     Country(
@@ -55,12 +55,15 @@ class AuthNotifierProvider extends StateNotifier<AuthState> {
     required String phoneNo,
     required String name,
     required String lang,
+    required String qrId,
   }) async {
     state = state.copyWith(isSendOtpLoading: true);
 
+    debugPrint('🔵 Auth Provider - qrId from profile: $qrId');
+
     var result = await ref
         .read(authRemoteRepoProvider)
-        .sendOtp(phoneNo: phoneNo, name: name, lang: lang);
+        .sendOtp(phoneNo: phoneNo, name: name, lang: lang, qrId: qrId);
 
     if (result.success == ActionStatus.success.code) {
       state = state.copyWith(
@@ -74,16 +77,18 @@ class AuthNotifierProvider extends StateNotifier<AuthState> {
     }
   }
 
-  Future<bool> verifyOtp({required String otp}) async {
+  Future<bool> verifyOtp({required String otp, required String qrId}) async {
     if (phoneNo == null) return false;
 
     state = state.copyWith(isVerifyOtpLoading: true);
+  
 
     var result = await ref
         .read(authRemoteRepoProvider)
-        .verifyOtp(phoneNo: phoneNo!, otp: otp);
+        .verifyOtp(phoneNo: phoneNo!, otp: otp, qrId: qrId);
 
     if (result.success == ActionStatus.success.code) {
+      debugPrint('✅ Verify OTP Success - User ID: ${result.data?.id}');
       state = state.copyWith(isVerifyOtpLoading: false, user: result.data);
       return true;
     } else {

@@ -24,6 +24,7 @@ AgoraJoinCallRequestModel _$AgoraJoinCallRequestModelFromJson(
 /// @nodoc
 mixin _$AgoraJoinCallRequestModel {
   String get role => throw _privateConstructorUsedError;
+  String? get visitorId => throw _privateConstructorUsedError;
 
   /// Serializes this AgoraJoinCallRequestModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,7 +43,7 @@ abstract class $AgoraJoinCallRequestModelCopyWith<$Res> {
     $Res Function(AgoraJoinCallRequestModel) then,
   ) = _$AgoraJoinCallRequestModelCopyWithImpl<$Res, AgoraJoinCallRequestModel>;
   @useResult
-  $Res call({String role});
+  $Res call({String role, String? visitorId});
 }
 
 /// @nodoc
@@ -62,13 +63,17 @@ class _$AgoraJoinCallRequestModelCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? role = null}) {
+  $Res call({Object? role = null, Object? visitorId = freezed}) {
     return _then(
       _value.copyWith(
             role: null == role
                 ? _value.role
                 : role // ignore: cast_nullable_to_non_nullable
                       as String,
+            visitorId: freezed == visitorId
+                ? _value.visitorId
+                : visitorId // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -84,7 +89,7 @@ abstract class _$$AgoraJoinCallRequestModelImplCopyWith<$Res>
   ) = __$$AgoraJoinCallRequestModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String role});
+  $Res call({String role, String? visitorId});
 }
 
 /// @nodoc
@@ -104,13 +109,17 @@ class __$$AgoraJoinCallRequestModelImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? role = null}) {
+  $Res call({Object? role = null, Object? visitorId = freezed}) {
     return _then(
       _$AgoraJoinCallRequestModelImpl(
         role: null == role
             ? _value.role
             : role // ignore: cast_nullable_to_non_nullable
                   as String,
+        visitorId: freezed == visitorId
+            ? _value.visitorId
+            : visitorId // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -119,7 +128,7 @@ class __$$AgoraJoinCallRequestModelImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$AgoraJoinCallRequestModelImpl implements _AgoraJoinCallRequestModel {
-  const _$AgoraJoinCallRequestModelImpl({this.role = 'owner'});
+  const _$AgoraJoinCallRequestModelImpl({this.role = 'owner', this.visitorId});
 
   factory _$AgoraJoinCallRequestModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$AgoraJoinCallRequestModelImplFromJson(json);
@@ -127,10 +136,12 @@ class _$AgoraJoinCallRequestModelImpl implements _AgoraJoinCallRequestModel {
   @override
   @JsonKey()
   final String role;
+  @override
+  final String? visitorId;
 
   @override
   String toString() {
-    return 'AgoraJoinCallRequestModel(role: $role)';
+    return 'AgoraJoinCallRequestModel(role: $role, visitorId: $visitorId)';
   }
 
   @override
@@ -138,12 +149,14 @@ class _$AgoraJoinCallRequestModelImpl implements _AgoraJoinCallRequestModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AgoraJoinCallRequestModelImpl &&
-            (identical(other.role, role) || other.role == role));
+            (identical(other.role, role) || other.role == role) &&
+            (identical(other.visitorId, visitorId) ||
+                other.visitorId == visitorId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, role);
+  int get hashCode => Object.hash(runtimeType, role, visitorId);
 
   /// Create a copy of AgoraJoinCallRequestModel
   /// with the given fields replaced by the non-null parameter values.
@@ -163,14 +176,18 @@ class _$AgoraJoinCallRequestModelImpl implements _AgoraJoinCallRequestModel {
 }
 
 abstract class _AgoraJoinCallRequestModel implements AgoraJoinCallRequestModel {
-  const factory _AgoraJoinCallRequestModel({final String role}) =
-      _$AgoraJoinCallRequestModelImpl;
+  const factory _AgoraJoinCallRequestModel({
+    final String role,
+    final String? visitorId,
+  }) = _$AgoraJoinCallRequestModelImpl;
 
   factory _AgoraJoinCallRequestModel.fromJson(Map<String, dynamic> json) =
       _$AgoraJoinCallRequestModelImpl.fromJson;
 
   @override
   String get role;
+  @override
+  String? get visitorId;
 
   /// Create a copy of AgoraJoinCallRequestModel
   /// with the given fields replaced by the non-null parameter values.

@@ -12,11 +12,13 @@ abstract class AuthRepo {
     required String phoneNo,
     required String name,
     required String lang,
+    String? qrId,
   });
 
   Future<BaseDynamicResponse<User?>> verifyOtp({
     required String phoneNo,
     required String otp,
+    required String qrId,
   });
 
   Future<BaseDynamicResponse<AddressModel?>> getAddressFromLatLng({

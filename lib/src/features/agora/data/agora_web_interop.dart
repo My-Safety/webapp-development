@@ -49,8 +49,10 @@ class ILocalVideoTrack {}
 
 extension ILocalVideoTrackExtension on ILocalVideoTrack {
   external void setEnabled(bool enabled);
+  external bool get enabled;
   external JSPromise close();
   external JSPromise play(JSAny element);
+  external void stop();
 }
 
 @JS()

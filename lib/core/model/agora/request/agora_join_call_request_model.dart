@@ -11,6 +11,8 @@ part 'agora_join_call_request_model.g.dart';
 class AgoraJoinCallRequestModel with _$AgoraJoinCallRequestModel {
   const factory AgoraJoinCallRequestModel({
     @Default('owner') String role,
+    String? visitorId,
+    
   }) = _AgoraJoinCallRequestModel;
 
   factory AgoraJoinCallRequestModel.fromJson(Map<String, dynamic> json) =>

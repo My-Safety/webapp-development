@@ -5,13 +5,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mysafety_web/core/model/address/address_model.dart';
 import 'package:mysafety_web/core/model/profile/languages/languages_response_model.dart';
+import 'package:mysafety_web/core/model/profile/predefined_message/predefined_message_model.dart';
 import 'package:mysafety_web/core/model/profile/state/profile_state.dart';
 import 'package:mysafety_web/core/model/qr/qr_scan_response_model.dart';
+import 'package:mysafety_web/core/model/resolve_qr/resolve_qr_response_model.dart';
 import 'package:mysafety_web/core/model/user/user_model.dart';
 import 'package:mysafety_web/core/network/network_status.dart';
 import 'package:mysafety_web/src/features/auth/data/auth_remote_repo.dart';
 import 'package:mysafety_web/src/features/profile/data/profile_remote_repo.dart';
 import 'package:mysafety_web/util/enum/language_enum.dart';
+import 'package:mysafety_web/util/enum/profile_type_enum.dart';
 import 'package:mysafety_web/util/utils.dart';
 import 'package:mysafety_web/util/storage/local_storage.dart';
 import 'package:mysafety_web/util/storage/local_storage_key.dart';
@@ -44,13 +47,45 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
   LanguagesResponseModel? get selectedLanguages => state.selectedLanguages;
 
   QrScanResponseModel? get qrScanResponse => state.qrScanResponse;
+  ResolveQrResponseModel? get resolveQrResponse => state.resolveQrResponse;
 
   bool get isUserResponseLoading => state.isUserResponseLoading;
 
   bool get isUpdateProfileLoading => state.isUpdateProfileLoading;
   bool get isHandleDoorBellLoading => state.isHandleDoorBellLoading;
   String? get qrId => state.qrId;
-  bool get hasProfile => state.resolveQrResponse?.profile != null;
+  String? get visitorId => state.visitorId;
+  String? get activeProfileType => state.activeProfileType;
+  List<PredefinedMessageModel> get predefinedMessages => state.predefinedMessages;
+  bool get isPredefinedMessagesLoading => state.isPredefinedMessagesLoading;
+  
+  String? get visitorName {
+    final response = state.resolveQrResponse;
+    if (response == null) return null;
+    
+    switch (ProfileType.fromString(state.activeProfileType)) {
+      case ProfileType.doorbell:
+        return response.doorbell?.houseName;
+      case ProfileType.vehicle:
+        return response.vehicle?.ownerName;
+      case ProfileType.lostfound:
+        return response.lostfound?.itemName;
+      case ProfileType.smartcard:
+        return response.smartcard?.displayName;
+      default:
+        return null;
+    }
+  }
+  
+  bool get hasProfile =>
+      state.resolveQrResponse?.doorbell != null ||
+      state.resolveQrResponse?.vehicle != null ||
+      state.resolveQrResponse?.lostfound != null ||
+      state.resolveQrResponse?.smartcard != null;
+
+  set activeProfileType(String? value) {
+    state = state.copyWith(activeProfileType: value);
+  }
 
   set qrId(String value) {
     state = state.copyWith(qrId: value);
@@ -91,7 +126,7 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
     }
   }
 
-  Future<void> handleDoorBellScan({String? qrId}) async {
+  Future<void> handleDoorBellScan({String? qrId, LatLng? location}) async {
     debugPrint('🔵 handleDoorBellScan called');
 
     if (state.isHandleDoorBellLoading) {
@@ -104,7 +139,12 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
 
     var result = await ref
         .read(profileRemoteRepoProvider)
-        .handleDoorbellScan(qrId: qrId??'');
+        .handleDoorbellScan(
+          qrId: qrId ?? '',
+          latitude: location?.latitude.toString(),
+          longitude: location?.longitude.toString(),
+          address: addressModel?.address,
+        );
 
     debugPrint('📡 API response: ${result.success}');
 
@@ -112,8 +152,10 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
       state = state.copyWith(
         isHandleDoorBellLoading: false,
         qrScanResponse: result.data,
+        visitorId: result.data?.visit?.id,
       );
       debugPrint('✅ Room ID: ${state.qrScanResponse?.chatRoom?.id}');
+      debugPrint('✅ Visitor ID: ${state.visitorId}');
     } else {
       state = state.copyWith(
         isHandleDoorBellLoading: false,
@@ -139,6 +181,18 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
         isHandleDoorBellLoading: false,
         resolveQrResponse: result.data,
       );
+      
+      // Set active profile type
+      if (result.data?.doorbell != null) {
+        state = state.copyWith(activeProfileType: 'doorbell');
+      } else if (result.data?.vehicle != null) {
+        state = state.copyWith(activeProfileType: 'vehicle');
+      } else if (result.data?.lostfound != null) {
+        state = state.copyWith(activeProfileType: 'lostfound');
+      } else if (result.data?.smartcard != null) {
+        state = state.copyWith(activeProfileType: 'smartcard');
+      }
+      
       debugPrint('✅ QR resolved: ${state.resolveQrResponse!.qr!.ownerId}');
 
       // ✅ If profile exists (house is assigned), create chat room
@@ -200,6 +254,26 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
 
   set setSelectedLanguage(LanguagesResponseModel value) {
     state = state.copyWith(selectedLanguages: value);
+  }
+
+  Future<void> getPredefinedMessages({required String qrId}) async {
+    state = state.copyWith(isPredefinedMessagesLoading: true);
+
+    var result = await ref
+        .read(profileRemoteRepoProvider)
+        .getPredefinedMessages(qrId: qrId);
+
+    if (result.success == ActionStatus.success.code) {
+      state = state.copyWith(
+        isPredefinedMessagesLoading: false,
+        predefinedMessages: result.data,
+      );
+    } else {
+      state = state.copyWith(
+        isPredefinedMessagesLoading: false,
+        predefinedMessages: [],
+      );
+    }
   }
 
   /// Logout - Clear all data

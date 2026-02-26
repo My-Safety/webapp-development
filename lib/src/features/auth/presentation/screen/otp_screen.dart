@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:mysafety_design_system/design_system/design_system.dart';
 import 'package:mysafety_web/route/route_name.dart';
@@ -11,6 +12,7 @@ import 'package:mysafety_web/src/features/auth/presentation/provider/auth_provid
 import 'package:mysafety_web/src/features/profile/presentation/provider/profile_provider.dart';
 import 'package:mysafety_web/src/theme/pin_put_theme.dart';
 import 'package:mysafety_web/util/extension/extension.dart';
+import 'package:mysafety_web/util/location/location_manager.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpScreen extends ConsumerStatefulWidget {
@@ -42,9 +44,15 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     if (!_validateOtp()) return;
 
     try {
-      final isVerify = await provider.verifyOtp(otp: otpController.text);
+      final isVerify = await provider.verifyOtp(
+        otp: otpController.text,
+        qrId: profileprovider.qrId ?? 'e984cacef7ac469118002759547df6a8',
+      );
 
       if (isVerify) {
+        debugPrint(
+          '🟢 OTP Verified - User ID: ${ref.read(authProvider).user?.id}',
+        );
         await _handlePostVerification();
       }
     } catch (e) {
@@ -66,8 +74,15 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
   Future<void> _handleDoorBellScan() async {
     try {
+      // Step 1: Get lat/long
+      var location = await LocationManager.getCurrentLocation();
+      if (location == null) {
+        debugPrint('🔴 Unable to get location');
+        return;
+      }
       await profileprovider.handleDoorBellScan(
-        qrId: "406795f7a5724028be3a7db4248c38b6",
+        location: LatLng(location.latitude, location.longitude),
+        qrId: "e984cacef7ac469118002759547df6a8",
         // qrId: profileprovider.qrId ?? ,
       );
     } catch (e) {
@@ -89,6 +104,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
         phoneNo: provider.phoneNo!,
         name: provider.name!,
         lang: lang,
+        qrId: profileprovider.qrId ?? 'e984cacef7ac469118002759547df6a8',
       );
     } catch (e) {
       debugPrint('Resend OTP error: $e');
@@ -96,10 +112,22 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   }
 
   void _navigateToSelectOption() {
+    final authState = ref.read(authProvider);
     final roomId = profileprovider.qrScanResponse?.chatRoom?.id;
-    final qrId = profileprovider.qrId ?? "406795f7a5724028be3a7db4248c38b6";
+    final visitorId = authState.user?.id;
+
+    debugPrint('🔍 Auth State User: ${authState.user}');
+    debugPrint('🔍 Visitor ID: $visitorId');
+
+    // ignore: avoid_print
+    print(
+      'Navigating to SelectOptionScreen with roomId: $roomId, visitorId: $visitorId',
+    );
+    final qrId = profileprovider.qrId ?? "e984cacef7ac469118002759547df6a8";
     if (roomId != null) {
-      context.go('${RouteName.selectOptionScreen}?roomId=$roomId&qrId=$qrId');
+      context.go(
+        '${RouteName.selectOptionScreen}?roomId=$roomId&qrId=$qrId&visitorId=$visitorId',
+      );
     } else {
       context.go(RouteName.selectOptionScreen);
     }

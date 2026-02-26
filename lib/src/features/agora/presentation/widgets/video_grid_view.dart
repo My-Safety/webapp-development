@@ -42,12 +42,16 @@ class _VideoGridViewState extends ConsumerState<VideoGridView> {
         Container(color: Colors.black),
         Center(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (kIsWeb)
-                _buildWebLocalVideo(notifier)
-              else
-                _buildMobileLocalVideo(notifier),
+              SizedBox(
+                width: 300,
+                height: 400,
+                child: kIsWeb
+                    ? _buildWebLocalVideo(notifier)
+                    : _buildMobileLocalVideo(notifier),
+              ),
               const SizedBox(height: 20),
               const Text(
                 'Waiting for others...',
@@ -167,6 +171,7 @@ class _VideoGridViewState extends ConsumerState<VideoGridView> {
     return WebVideoPlayer(
       localTrack: localTrack,
       viewId: 'local-video-${localTrack.hashCode}',
+      isEnabled: notifier.isVideoEnabled,
     );
   }
 

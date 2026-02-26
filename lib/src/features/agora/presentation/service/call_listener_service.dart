@@ -16,99 +16,108 @@ final callListenerProvider = Provider<CallListenerService>((ref) {
 
 class CallListenerService {
   final Ref ref;
-  StreamSubscription? _callSubscription;
-  OverlayEntry? _overlayEntry;
+  StreamSubscription? _callStartedSubscription;
+  StreamSubscription? _callEndedSubscription;
+  OverlayEntry? _callOverlayEntry;
+  Map<String, dynamic>? _pendingCallData;
 
   CallListenerService(this.ref);
 
   void startListening() {
-    _callSubscription?.cancel();
+    _callStartedSubscription?.cancel();
+    _callEndedSubscription?.cancel();
 
-    _callSubscription = WebSocketService.callStartedStream.listen((data) {
-      print(' Call Started Event Received');
+    // Listen for incoming calls
+    _callStartedSubscription = WebSocketService.callStartedStream.listen((data) {
+      print('📞 Call Started Event Received');
       print('Payload: $data');
 
       final callId = data['callId'] as String?;
       final callType = data['callType'] as String?;
-      final channelName = data['channelName'] as String?;
+      final callerName = data['callerName'] as String? ?? 'Unknown';
 
-      if (callId != null) {
-        print('CallId: $callId');
-        print('CallType: $callType');
-        print('ChannelName: $channelName');
-
-        _showIncomingCallNotification(
-          callId: callId,
-          callType: callType ?? 'Audio',
-          callerName: channelName ?? 'Unknown',
-        );
-      } else {
-        print(' No callId in payload');
+      if (callId != null && !ref.read(agoraProvider).isCallInitiated) {
+        _pendingCallData = data;
+        _showCallOverlay(data);
       }
+    });
+
+    // Listen for call ended
+    _callEndedSubscription = WebSocketService.callEndedStream.listen((data) {
+      print('📞 Call Ended Event Received');
+      handleCallEnd();
     });
   }
 
-  void _showIncomingCallNotification({
-    required String callId,
-    required String callType,
-    required String callerName,
-  }) {
+  void _showCallOverlay(Map<String, dynamic> data) {
+    final callId = data['callId'] ?? '';
+    final callType = data['callType'] ?? 'audio';
+    final callerName = data['callerName'] ?? 'Unknown';
+
     final navigatorState = NavigationService.navigatorKey.currentState;
-    final callProvider = ref.read(agoraProvider);
+    if (navigatorState == null || navigatorState.overlay == null) return;
 
-    if (navigatorState == null || navigatorState.overlay == null) {
-      print(' Navigator or Overlay not available yet');
-      return;
-    }
-
-    if (callProvider.isCallInitiated) {
-      print(' Ignoring - call was initiated by me');
-      return;
-    }
-
-    _overlayEntry?.remove();
-    _overlayEntry = OverlayEntry(
-      builder: (_) => Positioned(
-        top: 80,
-        left: 16,
-        right: 16,
+    _callOverlayEntry?.remove();
+    _callOverlayEntry = OverlayEntry(
+      builder: (_) => Material(
+        color: Colors.transparent,
         child: IncomingCallNotification(
           callerName: callerName,
           callType: callType,
           onAccept: () async {
-            _overlayEntry?.remove();
-            _overlayEntry = null;
-            await _joinCall(callId, callType);
+            _callOverlayEntry?.remove();
+            _callOverlayEntry = null;
+            _pendingCallData = null;
+            _joinCall(callId, callType);
           },
-          onDecline: () {
-            _overlayEntry?.remove();
-            _overlayEntry = null;
-            print(' Call Declined');
+          onDecline: () async {
+            handleCallEnd();
+            await _endCall(callId);
           },
         ),
       ),
     );
 
-    navigatorState.overlay!.insert(_overlayEntry!);
+    navigatorState.overlay!.insert(_callOverlayEntry!);
+  }
+
+  void handleCallEnd() {
+    _callOverlayEntry?.remove();
+    _callOverlayEntry = null;
+    _pendingCallData = null;
+    print('✅ Call overlay removed');
   }
 
   Future<void> _joinCall(String callId, String callType) async {
-    print(' Accepting call: $callId');
+    print('✅ Accepting call: $callId');
 
     final context = NavigationService.navigatorKey.currentContext;
     if (context == null) return;
 
+    // Get visitorId from pending call data if available
+    final visitorId = _pendingCallData?['visitorId'] as String? ?? '';
+
     if (callType.toLowerCase() == 'video') {
-      context.push('${RouteName.agoraVideoCall}?callId=$callId');
+      context.push('${RouteName.agoraVideoCall}?callId=$callId&visitorId=$visitorId');
     } else {
-      context.push('${RouteName.agoraAudioCall}?callId=$callId');
+      context.push('${RouteName.agoraAudioCall}?callId=$callId&visitorId=$visitorId');
+    }
+  }
+
+  Future<void> _endCall(String callId) async {
+    try {
+      await ref.read(agoraProvider.notifier).endCall();
+      print('✅ Call declined: $callId');
+    } catch (e) {
+      print('⚠️ Error declining call: $e');
     }
   }
 
   void dispose() {
-    _callSubscription?.cancel();
-    if (_overlayEntry != null && _overlayEntry!.mounted) {
-      _overlayEntry?.remove();
+    _callStartedSubscription?.cancel();
+    _callEndedSubscription?.cancel();
+    if (_callOverlayEntry != null && _callOverlayEntry!.mounted) {
+      _callOverlayEntry?.remove();
     }
   }
 }

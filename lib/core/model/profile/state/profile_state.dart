@@ -7,6 +7,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mysafety_web/core/model/address/address_model.dart';
 import 'package:mysafety_web/core/model/profile/languages/languages_response_model.dart';
+import 'package:mysafety_web/core/model/profile/predefined_message/predefined_message_model.dart';
 import 'package:mysafety_web/core/model/qr/qr_scan_response_model.dart';
 import 'package:mysafety_web/core/model/resolve_qr/resolve_qr_response_model.dart';
 import 'package:mysafety_web/core/model/user/user_model.dart' hide Address;
@@ -21,6 +22,7 @@ class ProfileState with _$ProfileState {
     User? user,
     AddressModel? addressModel,
     String? qrId,
+    String? visitorId,
 
     @Default(false) bool isUserResponseLoading,
     @Default([]) List<LanguagesResponseModel> languages,
@@ -31,5 +33,8 @@ class ProfileState with _$ProfileState {
     ResolveQrResponseModel? resolveQrResponse,
     @Default(false) bool isUpdateProfileLoading,
     @Default(false) bool isHandleDoorBellLoading,
+    String? activeProfileType,
+    @Default([]) List<PredefinedMessageModel> predefinedMessages,
+    @Default(false) bool isPredefinedMessagesLoading,
   }) = _ProfileState;
 }

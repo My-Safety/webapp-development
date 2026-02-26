@@ -44,6 +44,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     if (qrId.isNotEmpty) {
       provider.setQrId = qrId;
+      debugPrint('🟢 Splash Screen - qrId set: $qrId');
+    } else {
+      debugPrint('🔴 Splash Screen - qrId is empty');
     }
 
     // Step 1: Get lat/long
@@ -63,8 +66,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     // Step 3: Resolve QR
     await provider.resolveQr(
       qrId: provider.qrId ?? '',
-      latitude: "12.886777523521594",
-      longitude: "77.5832043774426",
+      latitude: location.latitude.toString(),
+      longitude: location.longitude.toString(),
     );
 
     if (!mounted) return;
@@ -83,7 +86,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
   String _getQrIdFromUrl() {
     final uri = Uri.parse(window.location.href);
-    return uri.queryParameters['qrId'] ?? "406795f7a5724028be3a7db4248c38b6";
+    final qrId =
+        uri.queryParameters['qrId'] ?? "e984cacef7ac469118002759547df6a8";
+    debugPrint('🌐 URL qrId extracted: $qrId');
+    return qrId;
   }
 
   @override

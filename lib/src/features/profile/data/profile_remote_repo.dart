@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mysafety_web/core/model/base/base_dynamic_response_model.dart';
 import 'package:mysafety_web/core/model/profile/languages/languages_response_model.dart';
+import 'package:mysafety_web/core/model/profile/predefined_message/predefined_message_model.dart';
 import 'package:mysafety_web/core/model/qr/qr_scan_response_model.dart';
 import 'package:mysafety_web/core/model/resolve_qr/resolve_qr_response_model.dart';
 import 'package:mysafety_web/core/network/endpoints/profile_endpoint.dart';
@@ -78,11 +79,21 @@ class ProfileRemoteRepo implements ProfileRepo {
   @override
   Future<BaseDynamicResponse<QrScanResponseModel>> handleDoorbellScan({
     required String qrId,
+    String? latitude,
+    String? longitude,
+    String? address,
   }) async {
     try {
       var response = await NetworkClient.post(
         endPoint: ProfileEndpoint.handleDoorbellScan,
-        body: {'qrId': qrId},
+        body: {
+          'qrId': qrId,
+          'location': {
+            'latitude': latitude,
+            'longitude': longitude,
+            'address': address ?? '',
+          },
+        },
       );
 
       if (response?.statusCode == NetworkStatus.status200.statusCode) {
@@ -90,6 +101,35 @@ class ProfileRemoteRepo implements ProfileRepo {
         var result = BaseDynamicResponse<QrScanResponseModel>.fromJson(
           body,
           (json) => QrScanResponseModel.fromJson(json as Map<String, dynamic>),
+        );
+        return BaseDynamicResponse(
+          data: result.data,
+          message: result.message,
+          statusCode: result.statusCode,
+          success: result.success,
+        );
+      }
+    } catch (e) {
+      return BaseDynamicResponse.error();
+    }
+    return BaseDynamicResponse.error();
+  }
+
+  @override
+  Future<BaseDynamicResponse<List<PredefinedMessageModel>>> getPredefinedMessages({
+    required String qrId,
+  }) async {
+    try {
+      var response = await NetworkClient.post(
+        endPoint: ProfileEndpoint.getPredefinedMessages,
+        body: {'qrId': qrId},
+      );
+
+      if (response?.statusCode == NetworkStatus.status200.statusCode) {
+        var body = json.decode(response!.body);
+        var result = BaseDynamicResponse<PredefinedMessageModel>.fromJson(
+          body,
+          (json) => PredefinedMessageModel.fromJson(json as Map<String, dynamic>),
         );
         return BaseDynamicResponse(
           data: result.data,

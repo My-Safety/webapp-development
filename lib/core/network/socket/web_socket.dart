@@ -39,6 +39,9 @@ abstract class WebSocketService {
   static final StreamController<Map<String, dynamic>> _callStartedController =
       StreamController.broadcast();
 
+  static final StreamController<Map<String, dynamic>> _callEndedController =
+      StreamController.broadcast();
+
   static Stream<ChatHistoryResponseModel> get newMessageStream =>
       _newMessageController.stream;
 
@@ -58,8 +61,12 @@ abstract class WebSocketService {
 
   static Stream<String> get roomClosedStream => _roomClosedController.stream;
 
+
   static Stream<Map<String, dynamic>> get callStartedStream =>
       _callStartedController.stream;
+
+  static Stream<Map<String, dynamic>> get callEndedStream =>
+      _callEndedController.stream;
 
   static Future<void> connect() async {
     if (socket?.connected == true) {
@@ -156,13 +163,23 @@ abstract class WebSocketService {
     _listenersSetUp = true;
 
     socket!.on('room_joined', (data) {
-      _roomJoinedController.add(data);
+      try {
+        final mapData = Map<String, dynamic>.from(data as Map);
+        _roomJoinedController.add(mapData);
+      } catch (e) {
+        debugPrint('⚠️ Error parsing room_joined: $e');
+      }
     });
 
     socket!.on('new_message', (data) {
-      debugPrint('Received new message: $data'); // debug
-      final message = ChatHistoryResponseModel.fromJson(data);
-      _newMessageController.add(message);
+      try {
+        debugPrint('Received new message: $data');
+        final mapData = Map<String, dynamic>.from(data as Map);
+        final message = ChatHistoryResponseModel.fromJson(mapData);
+        _newMessageController.add(message);
+      } catch (e) {
+        debugPrint('⚠️ Error parsing new_message: $e');
+      }
     });
 
     socket!.on('user_typing', (data) {
@@ -170,26 +187,63 @@ abstract class WebSocketService {
     });
 
     socket!.on('message_status_update', (data) {
-      debugPrint('RAW MESSAGE STATUS UPDATE FROM SOCKET: $data');
-      _statusUpdateController.add(data);
+      try {
+        debugPrint('RAW MESSAGE STATUS UPDATE FROM SOCKET: $data');
+        final mapData = Map<String, dynamic>.from(data as Map);
+        _statusUpdateController.add(mapData);
+      } catch (e) {
+        debugPrint('⚠️ Error parsing message_status_update: $e');
+      }
     });
 
     socket!.on('participant_switched', (data) {
-      _participantSwitchedController.add(data);
+      try {
+        final mapData = Map<String, dynamic>.from(data as Map);
+        _participantSwitchedController.add(mapData);
+      } catch (e) {
+        debugPrint('⚠️ Error parsing participant_switched: $e');
+      }
     });
 
     socket!.on('room_closed', (data) {
-      final roomId = data['roomId'] as String?;
-      if (roomId != null) _roomClosedController.add(roomId);
+      try {
+        final mapData = Map<String, dynamic>.from(data as Map);
+        final roomId = mapData['roomId'] as String?;
+        if (roomId != null) _roomClosedController.add(roomId);
+      } catch (e) {
+        debugPrint('⚠️ Error parsing room_closed: $e');
+      }
     });
 
     socket!.on('participants_status', (data) {
-      final participants = List<Map<String, dynamic>>.from(data);
-      _participantsStatusController.add(participants);
+      try {
+        final participants = (data as List)
+            .map((e) => Map<String, dynamic>.from(e as Map))
+            .toList();
+        _participantsStatusController.add(participants);
+      } catch (e) {
+        debugPrint('⚠️ Error parsing participants_status: $e');
+      }
     });
+
     socket!.on('call_started', (data) {
-      debugPrint('Call started event received: $data');
-      _callStartedController.add(data);
+      try {
+        debugPrint('📞 Received call_started event: $data');
+        final mapData = Map<String, dynamic>.from(data as Map);
+        _callStartedController.add(mapData);
+      } catch (e) {
+        debugPrint('⚠️ Error parsing call_started: $e');
+      }
+    });
+
+    socket!.on('call_ended', (data) {
+      try {
+        debugPrint('📞 Received call_ended event: $data');
+        final mapData = Map<String, dynamic>.from(data as Map);
+        _callEndedController.add(mapData);
+      } catch (e) {
+        debugPrint('⚠️ Error parsing call_ended: $e');
+      }
     });
   }
 

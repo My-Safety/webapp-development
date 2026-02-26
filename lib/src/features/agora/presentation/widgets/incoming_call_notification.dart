@@ -63,7 +63,7 @@ class _IncomingCallNotificationState
         child: SlideTransition(
           position: _slide,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(24),
               child: BackdropFilter(
@@ -105,7 +105,7 @@ class _IncomingCallNotificationState
                           fontSize: 15,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      Spacer(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -121,6 +121,7 @@ class _IncomingCallNotificationState
                           ),
                         ],
                       ),
+                      const SizedBox(height: 100),
                     ],
                   ),
                 ),

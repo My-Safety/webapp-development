@@ -1,7 +1,6 @@
 // Copyright (c) 2025, Indo-Sakura Software Pvt Ltd. All rights reserved.
 // Created By Adwaith c, 16/12/2025
 
-
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +14,7 @@ import 'package:mysafety_web/core/network/endpoints/location_endpoint.dart';
 import 'package:mysafety_web/core/network/network.dart';
 import 'package:mysafety_web/core/network/network_status.dart';
 import 'package:mysafety_web/src/features/auth/data/auth_repo.dart';
+import 'package:mysafety_web/util/utils.dart';
 
 class AuthRemoteRepo implements AuthRepo {
   @override
@@ -22,11 +22,19 @@ class AuthRemoteRepo implements AuthRepo {
     required String phoneNo,
     required String name,
     required String lang,
+    String? qrId,
   }) async {
     try {
+      var body = {"mobile": phoneNo, "name": name, "lang": lang, "qrId": qrId};
+      if (qrId != null) {
+        debugPrint('🔵 Auth Remote Repo - Adding qrId to request: $qrId');
+      } else {
+        debugPrint('🔴 Auth Remote Repo - qrId is null, not adding to request');
+      }
+
       var response = await NetworkClient.post(
         endPoint: AuthEndPoints.sendOtp,
-        body: {"mobile": phoneNo, "name": name, "lang": lang},
+        body: body,
       );
 
       if (response?.statusCode == NetworkStatus.status200.statusCode) {
@@ -47,26 +55,27 @@ class AuthRemoteRepo implements AuthRepo {
   Future<BaseDynamicResponse<User?>> verifyOtp({
     required String phoneNo,
     required String otp,
+    String? qrId,
   }) async {
     try {
       var response = await NetworkClient.post(
         endPoint: AuthEndPoints.verifyOtp,
-        body: {"mobile": phoneNo, "otp": otp},
+        body: {"mobile": phoneNo, "otp": otp, "qrId": qrId},
       );
 
       if (response?.statusCode == NetworkStatus.status200.statusCode) {
         var body = json.decode(response!.body);
-        body = {
-          "success": body['success'],
-          "actionCode": body["actionCode"],
-          "message": body["message"],
-          "data": body['data']['user'],
-        };
+
         var result = BaseDynamicResponse<User?>.fromJson(
           body,
           (json) => User.fromJson(json as Map<String, dynamic>),
         );
-        return result;
+        return BaseDynamicResponse(
+          data: result.data,
+          message: result.message,
+          statusCode: result.statusCode,
+          success: result.success,
+        );
       }
     } catch (e) {
       return BaseDynamicResponse.error();

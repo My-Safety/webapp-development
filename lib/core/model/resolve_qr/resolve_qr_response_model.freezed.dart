@@ -24,7 +24,10 @@ ResolveQrResponseModel _$ResolveQrResponseModelFromJson(
 /// @nodoc
 mixin _$ResolveQrResponseModel {
   Qr? get qr => throw _privateConstructorUsedError;
-  Profile? get profile => throw _privateConstructorUsedError;
+  Doorbell? get doorbell => throw _privateConstructorUsedError;
+  Vehicle? get vehicle => throw _privateConstructorUsedError;
+  Smartcard? get smartcard => throw _privateConstructorUsedError;
+  LostFound? get lostfound => throw _privateConstructorUsedError;
 
   /// Serializes this ResolveQrResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,10 +46,19 @@ abstract class $ResolveQrResponseModelCopyWith<$Res> {
     $Res Function(ResolveQrResponseModel) then,
   ) = _$ResolveQrResponseModelCopyWithImpl<$Res, ResolveQrResponseModel>;
   @useResult
-  $Res call({Qr? qr, Profile? profile});
+  $Res call({
+    Qr? qr,
+    Doorbell? doorbell,
+    Vehicle? vehicle,
+    Smartcard? smartcard,
+    LostFound? lostfound,
+  });
 
   $QrCopyWith<$Res>? get qr;
-  $ProfileCopyWith<$Res>? get profile;
+  $DoorbellCopyWith<$Res>? get doorbell;
+  $VehicleCopyWith<$Res>? get vehicle;
+  $SmartcardCopyWith<$Res>? get smartcard;
+  $LostFoundCopyWith<$Res>? get lostfound;
 }
 
 /// @nodoc
@@ -66,17 +78,35 @@ class _$ResolveQrResponseModelCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? qr = freezed, Object? profile = freezed}) {
+  $Res call({
+    Object? qr = freezed,
+    Object? doorbell = freezed,
+    Object? vehicle = freezed,
+    Object? smartcard = freezed,
+    Object? lostfound = freezed,
+  }) {
     return _then(
       _value.copyWith(
             qr: freezed == qr
                 ? _value.qr
                 : qr // ignore: cast_nullable_to_non_nullable
                       as Qr?,
-            profile: freezed == profile
-                ? _value.profile
-                : profile // ignore: cast_nullable_to_non_nullable
-                      as Profile?,
+            doorbell: freezed == doorbell
+                ? _value.doorbell
+                : doorbell // ignore: cast_nullable_to_non_nullable
+                      as Doorbell?,
+            vehicle: freezed == vehicle
+                ? _value.vehicle
+                : vehicle // ignore: cast_nullable_to_non_nullable
+                      as Vehicle?,
+            smartcard: freezed == smartcard
+                ? _value.smartcard
+                : smartcard // ignore: cast_nullable_to_non_nullable
+                      as Smartcard?,
+            lostfound: freezed == lostfound
+                ? _value.lostfound
+                : lostfound // ignore: cast_nullable_to_non_nullable
+                      as LostFound?,
           )
           as $Val,
     );
@@ -100,13 +130,55 @@ class _$ResolveQrResponseModelCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $ProfileCopyWith<$Res>? get profile {
-    if (_value.profile == null) {
+  $DoorbellCopyWith<$Res>? get doorbell {
+    if (_value.doorbell == null) {
       return null;
     }
 
-    return $ProfileCopyWith<$Res>(_value.profile!, (value) {
-      return _then(_value.copyWith(profile: value) as $Val);
+    return $DoorbellCopyWith<$Res>(_value.doorbell!, (value) {
+      return _then(_value.copyWith(doorbell: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ResolveQrResponseModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $VehicleCopyWith<$Res>? get vehicle {
+    if (_value.vehicle == null) {
+      return null;
+    }
+
+    return $VehicleCopyWith<$Res>(_value.vehicle!, (value) {
+      return _then(_value.copyWith(vehicle: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ResolveQrResponseModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SmartcardCopyWith<$Res>? get smartcard {
+    if (_value.smartcard == null) {
+      return null;
+    }
+
+    return $SmartcardCopyWith<$Res>(_value.smartcard!, (value) {
+      return _then(_value.copyWith(smartcard: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ResolveQrResponseModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LostFoundCopyWith<$Res>? get lostfound {
+    if (_value.lostfound == null) {
+      return null;
+    }
+
+    return $LostFoundCopyWith<$Res>(_value.lostfound!, (value) {
+      return _then(_value.copyWith(lostfound: value) as $Val);
     });
   }
 }
@@ -120,12 +192,24 @@ abstract class _$$ResolveQrResponseModelImplCopyWith<$Res>
   ) = __$$ResolveQrResponseModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Qr? qr, Profile? profile});
+  $Res call({
+    Qr? qr,
+    Doorbell? doorbell,
+    Vehicle? vehicle,
+    Smartcard? smartcard,
+    LostFound? lostfound,
+  });
 
   @override
   $QrCopyWith<$Res>? get qr;
   @override
-  $ProfileCopyWith<$Res>? get profile;
+  $DoorbellCopyWith<$Res>? get doorbell;
+  @override
+  $VehicleCopyWith<$Res>? get vehicle;
+  @override
+  $SmartcardCopyWith<$Res>? get smartcard;
+  @override
+  $LostFoundCopyWith<$Res>? get lostfound;
 }
 
 /// @nodoc
@@ -142,17 +226,35 @@ class __$$ResolveQrResponseModelImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? qr = freezed, Object? profile = freezed}) {
+  $Res call({
+    Object? qr = freezed,
+    Object? doorbell = freezed,
+    Object? vehicle = freezed,
+    Object? smartcard = freezed,
+    Object? lostfound = freezed,
+  }) {
     return _then(
       _$ResolveQrResponseModelImpl(
         qr: freezed == qr
             ? _value.qr
             : qr // ignore: cast_nullable_to_non_nullable
                   as Qr?,
-        profile: freezed == profile
-            ? _value.profile
-            : profile // ignore: cast_nullable_to_non_nullable
-                  as Profile?,
+        doorbell: freezed == doorbell
+            ? _value.doorbell
+            : doorbell // ignore: cast_nullable_to_non_nullable
+                  as Doorbell?,
+        vehicle: freezed == vehicle
+            ? _value.vehicle
+            : vehicle // ignore: cast_nullable_to_non_nullable
+                  as Vehicle?,
+        smartcard: freezed == smartcard
+            ? _value.smartcard
+            : smartcard // ignore: cast_nullable_to_non_nullable
+                  as Smartcard?,
+        lostfound: freezed == lostfound
+            ? _value.lostfound
+            : lostfound // ignore: cast_nullable_to_non_nullable
+                  as LostFound?,
       ),
     );
   }
@@ -161,7 +263,13 @@ class __$$ResolveQrResponseModelImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ResolveQrResponseModelImpl implements _ResolveQrResponseModel {
-  const _$ResolveQrResponseModelImpl({this.qr, this.profile});
+  const _$ResolveQrResponseModelImpl({
+    this.qr,
+    this.doorbell,
+    this.vehicle,
+    this.smartcard,
+    this.lostfound,
+  });
 
   factory _$ResolveQrResponseModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ResolveQrResponseModelImplFromJson(json);
@@ -169,11 +277,17 @@ class _$ResolveQrResponseModelImpl implements _ResolveQrResponseModel {
   @override
   final Qr? qr;
   @override
-  final Profile? profile;
+  final Doorbell? doorbell;
+  @override
+  final Vehicle? vehicle;
+  @override
+  final Smartcard? smartcard;
+  @override
+  final LostFound? lostfound;
 
   @override
   String toString() {
-    return 'ResolveQrResponseModel(qr: $qr, profile: $profile)';
+    return 'ResolveQrResponseModel(qr: $qr, doorbell: $doorbell, vehicle: $vehicle, smartcard: $smartcard, lostfound: $lostfound)';
   }
 
   @override
@@ -182,12 +296,19 @@ class _$ResolveQrResponseModelImpl implements _ResolveQrResponseModel {
         (other.runtimeType == runtimeType &&
             other is _$ResolveQrResponseModelImpl &&
             (identical(other.qr, qr) || other.qr == qr) &&
-            (identical(other.profile, profile) || other.profile == profile));
+            (identical(other.doorbell, doorbell) ||
+                other.doorbell == doorbell) &&
+            (identical(other.vehicle, vehicle) || other.vehicle == vehicle) &&
+            (identical(other.smartcard, smartcard) ||
+                other.smartcard == smartcard) &&
+            (identical(other.lostfound, lostfound) ||
+                other.lostfound == lostfound));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, qr, profile);
+  int get hashCode =>
+      Object.hash(runtimeType, qr, doorbell, vehicle, smartcard, lostfound);
 
   /// Create a copy of ResolveQrResponseModel
   /// with the given fields replaced by the non-null parameter values.
@@ -210,7 +331,10 @@ class _$ResolveQrResponseModelImpl implements _ResolveQrResponseModel {
 abstract class _ResolveQrResponseModel implements ResolveQrResponseModel {
   const factory _ResolveQrResponseModel({
     final Qr? qr,
-    final Profile? profile,
+    final Doorbell? doorbell,
+    final Vehicle? vehicle,
+    final Smartcard? smartcard,
+    final LostFound? lostfound,
   }) = _$ResolveQrResponseModelImpl;
 
   factory _ResolveQrResponseModel.fromJson(Map<String, dynamic> json) =
@@ -219,7 +343,13 @@ abstract class _ResolveQrResponseModel implements ResolveQrResponseModel {
   @override
   Qr? get qr;
   @override
-  Profile? get profile;
+  Doorbell? get doorbell;
+  @override
+  Vehicle? get vehicle;
+  @override
+  Smartcard? get smartcard;
+  @override
+  LostFound? get lostfound;
 
   /// Create a copy of ResolveQrResponseModel
   /// with the given fields replaced by the non-null parameter values.
@@ -229,12 +359,769 @@ abstract class _ResolveQrResponseModel implements ResolveQrResponseModel {
   get copyWith => throw _privateConstructorUsedError;
 }
 
-Profile _$ProfileFromJson(Map<String, dynamic> json) {
-  return _Profile.fromJson(json);
+LostFound _$LostFoundFromJson(Map<String, dynamic> json) {
+  return _LostFound.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Profile {
+mixin _$LostFound {
+  @JsonKey(name: '_id')
+  String? get id => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
+  String? get itemName => throw _privateConstructorUsedError;
+  String? get itemDescription => throw _privateConstructorUsedError;
+  String? get itemPhoto => throw _privateConstructorUsedError;
+  String? get category => throw _privateConstructorUsedError;
+  String? get contactPreference => throw _privateConstructorUsedError;
+  String? get status => throw _privateConstructorUsedError;
+  List<dynamic>? get memberIds => throw _privateConstructorUsedError;
+  List<dynamic>? get frozenMemberIds => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
+  String? get qrId => throw _privateConstructorUsedError;
+
+  /// Serializes this LostFound to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of LostFound
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $LostFoundCopyWith<LostFound> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LostFoundCopyWith<$Res> {
+  factory $LostFoundCopyWith(LostFound value, $Res Function(LostFound) then) =
+      _$LostFoundCopyWithImpl<$Res, LostFound>;
+  @useResult
+  $Res call({
+    @JsonKey(name: '_id') String? id,
+    String? userId,
+    String? itemName,
+    String? itemDescription,
+    String? itemPhoto,
+    String? category,
+    String? contactPreference,
+    String? status,
+    List<dynamic>? memberIds,
+    List<dynamic>? frozenMemberIds,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? qrId,
+  });
+}
+
+/// @nodoc
+class _$LostFoundCopyWithImpl<$Res, $Val extends LostFound>
+    implements $LostFoundCopyWith<$Res> {
+  _$LostFoundCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of LostFound
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? userId = freezed,
+    Object? itemName = freezed,
+    Object? itemDescription = freezed,
+    Object? itemPhoto = freezed,
+    Object? category = freezed,
+    Object? contactPreference = freezed,
+    Object? status = freezed,
+    Object? memberIds = freezed,
+    Object? frozenMemberIds = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? qrId = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            id: freezed == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            userId: freezed == userId
+                ? _value.userId
+                : userId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            itemName: freezed == itemName
+                ? _value.itemName
+                : itemName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            itemDescription: freezed == itemDescription
+                ? _value.itemDescription
+                : itemDescription // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            itemPhoto: freezed == itemPhoto
+                ? _value.itemPhoto
+                : itemPhoto // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            category: freezed == category
+                ? _value.category
+                : category // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            contactPreference: freezed == contactPreference
+                ? _value.contactPreference
+                : contactPreference // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            status: freezed == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            memberIds: freezed == memberIds
+                ? _value.memberIds
+                : memberIds // ignore: cast_nullable_to_non_nullable
+                      as List<dynamic>?,
+            frozenMemberIds: freezed == frozenMemberIds
+                ? _value.frozenMemberIds
+                : frozenMemberIds // ignore: cast_nullable_to_non_nullable
+                      as List<dynamic>?,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            updatedAt: freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            qrId: freezed == qrId
+                ? _value.qrId
+                : qrId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$LostFoundImplCopyWith<$Res>
+    implements $LostFoundCopyWith<$Res> {
+  factory _$$LostFoundImplCopyWith(
+    _$LostFoundImpl value,
+    $Res Function(_$LostFoundImpl) then,
+  ) = __$$LostFoundImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    @JsonKey(name: '_id') String? id,
+    String? userId,
+    String? itemName,
+    String? itemDescription,
+    String? itemPhoto,
+    String? category,
+    String? contactPreference,
+    String? status,
+    List<dynamic>? memberIds,
+    List<dynamic>? frozenMemberIds,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? qrId,
+  });
+}
+
+/// @nodoc
+class __$$LostFoundImplCopyWithImpl<$Res>
+    extends _$LostFoundCopyWithImpl<$Res, _$LostFoundImpl>
+    implements _$$LostFoundImplCopyWith<$Res> {
+  __$$LostFoundImplCopyWithImpl(
+    _$LostFoundImpl _value,
+    $Res Function(_$LostFoundImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of LostFound
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? userId = freezed,
+    Object? itemName = freezed,
+    Object? itemDescription = freezed,
+    Object? itemPhoto = freezed,
+    Object? category = freezed,
+    Object? contactPreference = freezed,
+    Object? status = freezed,
+    Object? memberIds = freezed,
+    Object? frozenMemberIds = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? qrId = freezed,
+  }) {
+    return _then(
+      _$LostFoundImpl(
+        id: freezed == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        userId: freezed == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        itemName: freezed == itemName
+            ? _value.itemName
+            : itemName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        itemDescription: freezed == itemDescription
+            ? _value.itemDescription
+            : itemDescription // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        itemPhoto: freezed == itemPhoto
+            ? _value.itemPhoto
+            : itemPhoto // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        category: freezed == category
+            ? _value.category
+            : category // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        contactPreference: freezed == contactPreference
+            ? _value.contactPreference
+            : contactPreference // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        status: freezed == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        memberIds: freezed == memberIds
+            ? _value._memberIds
+            : memberIds // ignore: cast_nullable_to_non_nullable
+                  as List<dynamic>?,
+        frozenMemberIds: freezed == frozenMemberIds
+            ? _value._frozenMemberIds
+            : frozenMemberIds // ignore: cast_nullable_to_non_nullable
+                  as List<dynamic>?,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        updatedAt: freezed == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        qrId: freezed == qrId
+            ? _value.qrId
+            : qrId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$LostFoundImpl implements _LostFound {
+  const _$LostFoundImpl({
+    @JsonKey(name: '_id') this.id,
+    this.userId,
+    this.itemName,
+    this.itemDescription,
+    this.itemPhoto,
+    this.category,
+    this.contactPreference,
+    this.status,
+    final List<dynamic>? memberIds,
+    final List<dynamic>? frozenMemberIds,
+    this.createdAt,
+    this.updatedAt,
+    this.qrId,
+  }) : _memberIds = memberIds,
+       _frozenMemberIds = frozenMemberIds;
+
+  factory _$LostFoundImpl.fromJson(Map<String, dynamic> json) =>
+      _$$LostFoundImplFromJson(json);
+
+  @override
+  @JsonKey(name: '_id')
+  final String? id;
+  @override
+  final String? userId;
+  @override
+  final String? itemName;
+  @override
+  final String? itemDescription;
+  @override
+  final String? itemPhoto;
+  @override
+  final String? category;
+  @override
+  final String? contactPreference;
+  @override
+  final String? status;
+  final List<dynamic>? _memberIds;
+  @override
+  List<dynamic>? get memberIds {
+    final value = _memberIds;
+    if (value == null) return null;
+    if (_memberIds is EqualUnmodifiableListView) return _memberIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<dynamic>? _frozenMemberIds;
+  @override
+  List<dynamic>? get frozenMemberIds {
+    final value = _frozenMemberIds;
+    if (value == null) return null;
+    if (_frozenMemberIds is EqualUnmodifiableListView) return _frozenMemberIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final DateTime? createdAt;
+  @override
+  final DateTime? updatedAt;
+  @override
+  final String? qrId;
+
+  @override
+  String toString() {
+    return 'LostFound(id: $id, userId: $userId, itemName: $itemName, itemDescription: $itemDescription, itemPhoto: $itemPhoto, category: $category, contactPreference: $contactPreference, status: $status, memberIds: $memberIds, frozenMemberIds: $frozenMemberIds, createdAt: $createdAt, updatedAt: $updatedAt, qrId: $qrId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LostFoundImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.itemName, itemName) ||
+                other.itemName == itemName) &&
+            (identical(other.itemDescription, itemDescription) ||
+                other.itemDescription == itemDescription) &&
+            (identical(other.itemPhoto, itemPhoto) ||
+                other.itemPhoto == itemPhoto) &&
+            (identical(other.category, category) ||
+                other.category == category) &&
+            (identical(other.contactPreference, contactPreference) ||
+                other.contactPreference == contactPreference) &&
+            (identical(other.status, status) || other.status == status) &&
+            const DeepCollectionEquality().equals(
+              other._memberIds,
+              _memberIds,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._frozenMemberIds,
+              _frozenMemberIds,
+            ) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.qrId, qrId) || other.qrId == qrId));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    userId,
+    itemName,
+    itemDescription,
+    itemPhoto,
+    category,
+    contactPreference,
+    status,
+    const DeepCollectionEquality().hash(_memberIds),
+    const DeepCollectionEquality().hash(_frozenMemberIds),
+    createdAt,
+    updatedAt,
+    qrId,
+  );
+
+  /// Create a copy of LostFound
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LostFoundImplCopyWith<_$LostFoundImpl> get copyWith =>
+      __$$LostFoundImplCopyWithImpl<_$LostFoundImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$LostFoundImplToJson(this);
+  }
+}
+
+abstract class _LostFound implements LostFound {
+  const factory _LostFound({
+    @JsonKey(name: '_id') final String? id,
+    final String? userId,
+    final String? itemName,
+    final String? itemDescription,
+    final String? itemPhoto,
+    final String? category,
+    final String? contactPreference,
+    final String? status,
+    final List<dynamic>? memberIds,
+    final List<dynamic>? frozenMemberIds,
+    final DateTime? createdAt,
+    final DateTime? updatedAt,
+    final String? qrId,
+  }) = _$LostFoundImpl;
+
+  factory _LostFound.fromJson(Map<String, dynamic> json) =
+      _$LostFoundImpl.fromJson;
+
+  @override
+  @JsonKey(name: '_id')
+  String? get id;
+  @override
+  String? get userId;
+  @override
+  String? get itemName;
+  @override
+  String? get itemDescription;
+  @override
+  String? get itemPhoto;
+  @override
+  String? get category;
+  @override
+  String? get contactPreference;
+  @override
+  String? get status;
+  @override
+  List<dynamic>? get memberIds;
+  @override
+  List<dynamic>? get frozenMemberIds;
+  @override
+  DateTime? get createdAt;
+  @override
+  DateTime? get updatedAt;
+  @override
+  String? get qrId;
+
+  /// Create a copy of LostFound
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LostFoundImplCopyWith<_$LostFoundImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Smartcard _$SmartcardFromJson(Map<String, dynamic> json) {
+  return _Smartcard.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Smartcard {
+  @JsonKey(name: '_id')
+  String? get id => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
+  String? get displayName => throw _privateConstructorUsedError;
+  List<dynamic>? get activeSocialLinks => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
+  String? get qrId => throw _privateConstructorUsedError;
+
+  /// Serializes this Smartcard to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of Smartcard
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SmartcardCopyWith<Smartcard> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SmartcardCopyWith<$Res> {
+  factory $SmartcardCopyWith(Smartcard value, $Res Function(Smartcard) then) =
+      _$SmartcardCopyWithImpl<$Res, Smartcard>;
+  @useResult
+  $Res call({
+    @JsonKey(name: '_id') String? id,
+    String? userId,
+    String? displayName,
+    List<dynamic>? activeSocialLinks,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? qrId,
+  });
+}
+
+/// @nodoc
+class _$SmartcardCopyWithImpl<$Res, $Val extends Smartcard>
+    implements $SmartcardCopyWith<$Res> {
+  _$SmartcardCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of Smartcard
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? userId = freezed,
+    Object? displayName = freezed,
+    Object? activeSocialLinks = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? qrId = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            id: freezed == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            userId: freezed == userId
+                ? _value.userId
+                : userId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            displayName: freezed == displayName
+                ? _value.displayName
+                : displayName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            activeSocialLinks: freezed == activeSocialLinks
+                ? _value.activeSocialLinks
+                : activeSocialLinks // ignore: cast_nullable_to_non_nullable
+                      as List<dynamic>?,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            updatedAt: freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            qrId: freezed == qrId
+                ? _value.qrId
+                : qrId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$SmartcardImplCopyWith<$Res>
+    implements $SmartcardCopyWith<$Res> {
+  factory _$$SmartcardImplCopyWith(
+    _$SmartcardImpl value,
+    $Res Function(_$SmartcardImpl) then,
+  ) = __$$SmartcardImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    @JsonKey(name: '_id') String? id,
+    String? userId,
+    String? displayName,
+    List<dynamic>? activeSocialLinks,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? qrId,
+  });
+}
+
+/// @nodoc
+class __$$SmartcardImplCopyWithImpl<$Res>
+    extends _$SmartcardCopyWithImpl<$Res, _$SmartcardImpl>
+    implements _$$SmartcardImplCopyWith<$Res> {
+  __$$SmartcardImplCopyWithImpl(
+    _$SmartcardImpl _value,
+    $Res Function(_$SmartcardImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of Smartcard
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? userId = freezed,
+    Object? displayName = freezed,
+    Object? activeSocialLinks = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? qrId = freezed,
+  }) {
+    return _then(
+      _$SmartcardImpl(
+        id: freezed == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        userId: freezed == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        displayName: freezed == displayName
+            ? _value.displayName
+            : displayName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        activeSocialLinks: freezed == activeSocialLinks
+            ? _value._activeSocialLinks
+            : activeSocialLinks // ignore: cast_nullable_to_non_nullable
+                  as List<dynamic>?,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        updatedAt: freezed == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        qrId: freezed == qrId
+            ? _value.qrId
+            : qrId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SmartcardImpl implements _Smartcard {
+  const _$SmartcardImpl({
+    @JsonKey(name: '_id') this.id,
+    this.userId,
+    this.displayName,
+    final List<dynamic>? activeSocialLinks,
+    this.createdAt,
+    this.updatedAt,
+    this.qrId,
+  }) : _activeSocialLinks = activeSocialLinks;
+
+  factory _$SmartcardImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SmartcardImplFromJson(json);
+
+  @override
+  @JsonKey(name: '_id')
+  final String? id;
+  @override
+  final String? userId;
+  @override
+  final String? displayName;
+  final List<dynamic>? _activeSocialLinks;
+  @override
+  List<dynamic>? get activeSocialLinks {
+    final value = _activeSocialLinks;
+    if (value == null) return null;
+    if (_activeSocialLinks is EqualUnmodifiableListView)
+      return _activeSocialLinks;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final DateTime? createdAt;
+  @override
+  final DateTime? updatedAt;
+  @override
+  final String? qrId;
+
+  @override
+  String toString() {
+    return 'Smartcard(id: $id, userId: $userId, displayName: $displayName, activeSocialLinks: $activeSocialLinks, createdAt: $createdAt, updatedAt: $updatedAt, qrId: $qrId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SmartcardImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
+            const DeepCollectionEquality().equals(
+              other._activeSocialLinks,
+              _activeSocialLinks,
+            ) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.qrId, qrId) || other.qrId == qrId));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    userId,
+    displayName,
+    const DeepCollectionEquality().hash(_activeSocialLinks),
+    createdAt,
+    updatedAt,
+    qrId,
+  );
+
+  /// Create a copy of Smartcard
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SmartcardImplCopyWith<_$SmartcardImpl> get copyWith =>
+      __$$SmartcardImplCopyWithImpl<_$SmartcardImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SmartcardImplToJson(this);
+  }
+}
+
+abstract class _Smartcard implements Smartcard {
+  const factory _Smartcard({
+    @JsonKey(name: '_id') final String? id,
+    final String? userId,
+    final String? displayName,
+    final List<dynamic>? activeSocialLinks,
+    final DateTime? createdAt,
+    final DateTime? updatedAt,
+    final String? qrId,
+  }) = _$SmartcardImpl;
+
+  factory _Smartcard.fromJson(Map<String, dynamic> json) =
+      _$SmartcardImpl.fromJson;
+
+  @override
+  @JsonKey(name: '_id')
+  String? get id;
+  @override
+  String? get userId;
+  @override
+  String? get displayName;
+  @override
+  List<dynamic>? get activeSocialLinks;
+  @override
+  DateTime? get createdAt;
+  @override
+  DateTime? get updatedAt;
+  @override
+  String? get qrId;
+
+  /// Create a copy of Smartcard
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SmartcardImplCopyWith<_$SmartcardImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Doorbell _$DoorbellFromJson(Map<String, dynamic> json) {
+  return _Doorbell.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Doorbell {
   String? get id => throw _privateConstructorUsedError;
   String? get userId => throw _privateConstructorUsedError;
   String? get houseName => throw _privateConstructorUsedError;
@@ -249,19 +1136,20 @@ mixin _$Profile {
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   String? get qrId => throw _privateConstructorUsedError;
 
-  /// Serializes this Profile to a JSON map.
+  /// Serializes this Doorbell to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of Profile
+  /// Create a copy of Doorbell
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $ProfileCopyWith<Profile> get copyWith => throw _privateConstructorUsedError;
+  $DoorbellCopyWith<Doorbell> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ProfileCopyWith<$Res> {
-  factory $ProfileCopyWith(Profile value, $Res Function(Profile) then) =
-      _$ProfileCopyWithImpl<$Res, Profile>;
+abstract class $DoorbellCopyWith<$Res> {
+  factory $DoorbellCopyWith(Doorbell value, $Res Function(Doorbell) then) =
+      _$DoorbellCopyWithImpl<$Res, Doorbell>;
   @useResult
   $Res call({
     String? id,
@@ -281,16 +1169,16 @@ abstract class $ProfileCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
-    implements $ProfileCopyWith<$Res> {
-  _$ProfileCopyWithImpl(this._value, this._then);
+class _$DoorbellCopyWithImpl<$Res, $Val extends Doorbell>
+    implements $DoorbellCopyWith<$Res> {
+  _$DoorbellCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of Profile
+  /// Create a copy of Doorbell
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -370,11 +1258,12 @@ class _$ProfileCopyWithImpl<$Res, $Val extends Profile>
 }
 
 /// @nodoc
-abstract class _$$ProfileImplCopyWith<$Res> implements $ProfileCopyWith<$Res> {
-  factory _$$ProfileImplCopyWith(
-    _$ProfileImpl value,
-    $Res Function(_$ProfileImpl) then,
-  ) = __$$ProfileImplCopyWithImpl<$Res>;
+abstract class _$$DoorbellImplCopyWith<$Res>
+    implements $DoorbellCopyWith<$Res> {
+  factory _$$DoorbellImplCopyWith(
+    _$DoorbellImpl value,
+    $Res Function(_$DoorbellImpl) then,
+  ) = __$$DoorbellImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({
@@ -395,15 +1284,15 @@ abstract class _$$ProfileImplCopyWith<$Res> implements $ProfileCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$ProfileImplCopyWithImpl<$Res>
-    extends _$ProfileCopyWithImpl<$Res, _$ProfileImpl>
-    implements _$$ProfileImplCopyWith<$Res> {
-  __$$ProfileImplCopyWithImpl(
-    _$ProfileImpl _value,
-    $Res Function(_$ProfileImpl) _then,
+class __$$DoorbellImplCopyWithImpl<$Res>
+    extends _$DoorbellCopyWithImpl<$Res, _$DoorbellImpl>
+    implements _$$DoorbellImplCopyWith<$Res> {
+  __$$DoorbellImplCopyWithImpl(
+    _$DoorbellImpl _value,
+    $Res Function(_$DoorbellImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of Profile
+  /// Create a copy of Doorbell
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -423,7 +1312,7 @@ class __$$ProfileImplCopyWithImpl<$Res>
     Object? qrId = freezed,
   }) {
     return _then(
-      _$ProfileImpl(
+      _$DoorbellImpl(
         id: freezed == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
@@ -483,8 +1372,8 @@ class __$$ProfileImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ProfileImpl implements _Profile {
-  const _$ProfileImpl({
+class _$DoorbellImpl implements _Doorbell {
+  const _$DoorbellImpl({
     this.id,
     this.userId,
     this.houseName,
@@ -501,8 +1390,8 @@ class _$ProfileImpl implements _Profile {
   }) : _memberIds = memberIds,
        _frozenMemberIds = frozenMemberIds;
 
-  factory _$ProfileImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ProfileImplFromJson(json);
+  factory _$DoorbellImpl.fromJson(Map<String, dynamic> json) =>
+      _$$DoorbellImplFromJson(json);
 
   @override
   final String? id;
@@ -549,14 +1438,14 @@ class _$ProfileImpl implements _Profile {
 
   @override
   String toString() {
-    return 'Profile(id: $id, userId: $userId, houseName: $houseName, houseNumber: $houseNumber, apartment: $apartment, fullAddressUrl: $fullAddressUrl, latitude: $latitude, longitude: $longitude, memberIds: $memberIds, frozenMemberIds: $frozenMemberIds, createdAt: $createdAt, updatedAt: $updatedAt, qrId: $qrId)';
+    return 'Doorbell(id: $id, userId: $userId, houseName: $houseName, houseNumber: $houseNumber, apartment: $apartment, fullAddressUrl: $fullAddressUrl, latitude: $latitude, longitude: $longitude, memberIds: $memberIds, frozenMemberIds: $frozenMemberIds, createdAt: $createdAt, updatedAt: $updatedAt, qrId: $qrId)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ProfileImpl &&
+            other is _$DoorbellImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.houseName, houseName) ||
@@ -605,22 +1494,22 @@ class _$ProfileImpl implements _Profile {
     qrId,
   );
 
-  /// Create a copy of Profile
+  /// Create a copy of Doorbell
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$ProfileImplCopyWith<_$ProfileImpl> get copyWith =>
-      __$$ProfileImplCopyWithImpl<_$ProfileImpl>(this, _$identity);
+  _$$DoorbellImplCopyWith<_$DoorbellImpl> get copyWith =>
+      __$$DoorbellImplCopyWithImpl<_$DoorbellImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ProfileImplToJson(this);
+    return _$$DoorbellImplToJson(this);
   }
 }
 
-abstract class _Profile implements Profile {
-  const factory _Profile({
+abstract class _Doorbell implements Doorbell {
+  const factory _Doorbell({
     final String? id,
     final String? userId,
     final String? houseName,
@@ -634,9 +1523,10 @@ abstract class _Profile implements Profile {
     final DateTime? createdAt,
     final DateTime? updatedAt,
     final String? qrId,
-  }) = _$ProfileImpl;
+  }) = _$DoorbellImpl;
 
-  factory _Profile.fromJson(Map<String, dynamic> json) = _$ProfileImpl.fromJson;
+  factory _Doorbell.fromJson(Map<String, dynamic> json) =
+      _$DoorbellImpl.fromJson;
 
   @override
   String? get id;
@@ -665,11 +1555,1525 @@ abstract class _Profile implements Profile {
   @override
   String? get qrId;
 
-  /// Create a copy of Profile
+  /// Create a copy of Doorbell
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ProfileImplCopyWith<_$ProfileImpl> get copyWith =>
+  _$$DoorbellImplCopyWith<_$DoorbellImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Vehicle _$VehicleFromJson(Map<String, dynamic> json) {
+  return _Vehicle.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Vehicle {
+  @JsonKey(name: '_id')
+  String? get id => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
+  String? get vehicleNumber => throw _privateConstructorUsedError;
+  String? get vehicleType => throw _privateConstructorUsedError;
+  String? get brand => throw _privateConstructorUsedError;
+  String? get model => throw _privateConstructorUsedError;
+  String? get color => throw _privateConstructorUsedError;
+  String? get vehicleImage => throw _privateConstructorUsedError;
+  String? get ownerName => throw _privateConstructorUsedError;
+  String? get ownerNumber => throw _privateConstructorUsedError;
+  String? get issueDate => throw _privateConstructorUsedError;
+  String? get vehicleClass => throw _privateConstructorUsedError;
+  String? get fuel => throw _privateConstructorUsedError;
+  String? get unldWt => throw _privateConstructorUsedError;
+  String? get manufDate => throw _privateConstructorUsedError;
+  String? get wheelbase => throw _privateConstructorUsedError;
+  String? get seatCap => throw _privateConstructorUsedError;
+  String? get regAuthority => throw _privateConstructorUsedError;
+  String? get rcStatus => throw _privateConstructorUsedError;
+  String? get rcExpiry => throw _privateConstructorUsedError;
+  UnderTheHood? get underTheHood => throw _privateConstructorUsedError;
+  Insurance? get insurance => throw _privateConstructorUsedError;
+  Puc? get puc => throw _privateConstructorUsedError;
+  bool? get isManualEntry => throw _privateConstructorUsedError;
+  List<dynamic>? get emergencyContacts => throw _privateConstructorUsedError;
+  List<dynamic>? get challanDetails => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
+  String? get qrId => throw _privateConstructorUsedError;
+
+  /// Serializes this Vehicle to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of Vehicle
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $VehicleCopyWith<Vehicle> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $VehicleCopyWith<$Res> {
+  factory $VehicleCopyWith(Vehicle value, $Res Function(Vehicle) then) =
+      _$VehicleCopyWithImpl<$Res, Vehicle>;
+  @useResult
+  $Res call({
+    @JsonKey(name: '_id') String? id,
+    String? userId,
+    String? vehicleNumber,
+    String? vehicleType,
+    String? brand,
+    String? model,
+    String? color,
+    String? vehicleImage,
+    String? ownerName,
+    String? ownerNumber,
+    String? issueDate,
+    String? vehicleClass,
+    String? fuel,
+    String? unldWt,
+    String? manufDate,
+    String? wheelbase,
+    String? seatCap,
+    String? regAuthority,
+    String? rcStatus,
+    String? rcExpiry,
+    UnderTheHood? underTheHood,
+    Insurance? insurance,
+    Puc? puc,
+    bool? isManualEntry,
+    List<dynamic>? emergencyContacts,
+    List<dynamic>? challanDetails,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? qrId,
+  });
+
+  $UnderTheHoodCopyWith<$Res>? get underTheHood;
+  $InsuranceCopyWith<$Res>? get insurance;
+  $PucCopyWith<$Res>? get puc;
+}
+
+/// @nodoc
+class _$VehicleCopyWithImpl<$Res, $Val extends Vehicle>
+    implements $VehicleCopyWith<$Res> {
+  _$VehicleCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of Vehicle
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? userId = freezed,
+    Object? vehicleNumber = freezed,
+    Object? vehicleType = freezed,
+    Object? brand = freezed,
+    Object? model = freezed,
+    Object? color = freezed,
+    Object? vehicleImage = freezed,
+    Object? ownerName = freezed,
+    Object? ownerNumber = freezed,
+    Object? issueDate = freezed,
+    Object? vehicleClass = freezed,
+    Object? fuel = freezed,
+    Object? unldWt = freezed,
+    Object? manufDate = freezed,
+    Object? wheelbase = freezed,
+    Object? seatCap = freezed,
+    Object? regAuthority = freezed,
+    Object? rcStatus = freezed,
+    Object? rcExpiry = freezed,
+    Object? underTheHood = freezed,
+    Object? insurance = freezed,
+    Object? puc = freezed,
+    Object? isManualEntry = freezed,
+    Object? emergencyContacts = freezed,
+    Object? challanDetails = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? qrId = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            id: freezed == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            userId: freezed == userId
+                ? _value.userId
+                : userId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            vehicleNumber: freezed == vehicleNumber
+                ? _value.vehicleNumber
+                : vehicleNumber // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            vehicleType: freezed == vehicleType
+                ? _value.vehicleType
+                : vehicleType // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            brand: freezed == brand
+                ? _value.brand
+                : brand // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            model: freezed == model
+                ? _value.model
+                : model // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            color: freezed == color
+                ? _value.color
+                : color // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            vehicleImage: freezed == vehicleImage
+                ? _value.vehicleImage
+                : vehicleImage // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            ownerName: freezed == ownerName
+                ? _value.ownerName
+                : ownerName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            ownerNumber: freezed == ownerNumber
+                ? _value.ownerNumber
+                : ownerNumber // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            issueDate: freezed == issueDate
+                ? _value.issueDate
+                : issueDate // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            vehicleClass: freezed == vehicleClass
+                ? _value.vehicleClass
+                : vehicleClass // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            fuel: freezed == fuel
+                ? _value.fuel
+                : fuel // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            unldWt: freezed == unldWt
+                ? _value.unldWt
+                : unldWt // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            manufDate: freezed == manufDate
+                ? _value.manufDate
+                : manufDate // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            wheelbase: freezed == wheelbase
+                ? _value.wheelbase
+                : wheelbase // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            seatCap: freezed == seatCap
+                ? _value.seatCap
+                : seatCap // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            regAuthority: freezed == regAuthority
+                ? _value.regAuthority
+                : regAuthority // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            rcStatus: freezed == rcStatus
+                ? _value.rcStatus
+                : rcStatus // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            rcExpiry: freezed == rcExpiry
+                ? _value.rcExpiry
+                : rcExpiry // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            underTheHood: freezed == underTheHood
+                ? _value.underTheHood
+                : underTheHood // ignore: cast_nullable_to_non_nullable
+                      as UnderTheHood?,
+            insurance: freezed == insurance
+                ? _value.insurance
+                : insurance // ignore: cast_nullable_to_non_nullable
+                      as Insurance?,
+            puc: freezed == puc
+                ? _value.puc
+                : puc // ignore: cast_nullable_to_non_nullable
+                      as Puc?,
+            isManualEntry: freezed == isManualEntry
+                ? _value.isManualEntry
+                : isManualEntry // ignore: cast_nullable_to_non_nullable
+                      as bool?,
+            emergencyContacts: freezed == emergencyContacts
+                ? _value.emergencyContacts
+                : emergencyContacts // ignore: cast_nullable_to_non_nullable
+                      as List<dynamic>?,
+            challanDetails: freezed == challanDetails
+                ? _value.challanDetails
+                : challanDetails // ignore: cast_nullable_to_non_nullable
+                      as List<dynamic>?,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            updatedAt: freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            qrId: freezed == qrId
+                ? _value.qrId
+                : qrId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
+  }
+
+  /// Create a copy of Vehicle
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UnderTheHoodCopyWith<$Res>? get underTheHood {
+    if (_value.underTheHood == null) {
+      return null;
+    }
+
+    return $UnderTheHoodCopyWith<$Res>(_value.underTheHood!, (value) {
+      return _then(_value.copyWith(underTheHood: value) as $Val);
+    });
+  }
+
+  /// Create a copy of Vehicle
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $InsuranceCopyWith<$Res>? get insurance {
+    if (_value.insurance == null) {
+      return null;
+    }
+
+    return $InsuranceCopyWith<$Res>(_value.insurance!, (value) {
+      return _then(_value.copyWith(insurance: value) as $Val);
+    });
+  }
+
+  /// Create a copy of Vehicle
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $PucCopyWith<$Res>? get puc {
+    if (_value.puc == null) {
+      return null;
+    }
+
+    return $PucCopyWith<$Res>(_value.puc!, (value) {
+      return _then(_value.copyWith(puc: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$VehicleImplCopyWith<$Res> implements $VehicleCopyWith<$Res> {
+  factory _$$VehicleImplCopyWith(
+    _$VehicleImpl value,
+    $Res Function(_$VehicleImpl) then,
+  ) = __$$VehicleImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    @JsonKey(name: '_id') String? id,
+    String? userId,
+    String? vehicleNumber,
+    String? vehicleType,
+    String? brand,
+    String? model,
+    String? color,
+    String? vehicleImage,
+    String? ownerName,
+    String? ownerNumber,
+    String? issueDate,
+    String? vehicleClass,
+    String? fuel,
+    String? unldWt,
+    String? manufDate,
+    String? wheelbase,
+    String? seatCap,
+    String? regAuthority,
+    String? rcStatus,
+    String? rcExpiry,
+    UnderTheHood? underTheHood,
+    Insurance? insurance,
+    Puc? puc,
+    bool? isManualEntry,
+    List<dynamic>? emergencyContacts,
+    List<dynamic>? challanDetails,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? qrId,
+  });
+
+  @override
+  $UnderTheHoodCopyWith<$Res>? get underTheHood;
+  @override
+  $InsuranceCopyWith<$Res>? get insurance;
+  @override
+  $PucCopyWith<$Res>? get puc;
+}
+
+/// @nodoc
+class __$$VehicleImplCopyWithImpl<$Res>
+    extends _$VehicleCopyWithImpl<$Res, _$VehicleImpl>
+    implements _$$VehicleImplCopyWith<$Res> {
+  __$$VehicleImplCopyWithImpl(
+    _$VehicleImpl _value,
+    $Res Function(_$VehicleImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of Vehicle
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? userId = freezed,
+    Object? vehicleNumber = freezed,
+    Object? vehicleType = freezed,
+    Object? brand = freezed,
+    Object? model = freezed,
+    Object? color = freezed,
+    Object? vehicleImage = freezed,
+    Object? ownerName = freezed,
+    Object? ownerNumber = freezed,
+    Object? issueDate = freezed,
+    Object? vehicleClass = freezed,
+    Object? fuel = freezed,
+    Object? unldWt = freezed,
+    Object? manufDate = freezed,
+    Object? wheelbase = freezed,
+    Object? seatCap = freezed,
+    Object? regAuthority = freezed,
+    Object? rcStatus = freezed,
+    Object? rcExpiry = freezed,
+    Object? underTheHood = freezed,
+    Object? insurance = freezed,
+    Object? puc = freezed,
+    Object? isManualEntry = freezed,
+    Object? emergencyContacts = freezed,
+    Object? challanDetails = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? qrId = freezed,
+  }) {
+    return _then(
+      _$VehicleImpl(
+        id: freezed == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        userId: freezed == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        vehicleNumber: freezed == vehicleNumber
+            ? _value.vehicleNumber
+            : vehicleNumber // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        vehicleType: freezed == vehicleType
+            ? _value.vehicleType
+            : vehicleType // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        brand: freezed == brand
+            ? _value.brand
+            : brand // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        model: freezed == model
+            ? _value.model
+            : model // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        color: freezed == color
+            ? _value.color
+            : color // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        vehicleImage: freezed == vehicleImage
+            ? _value.vehicleImage
+            : vehicleImage // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        ownerName: freezed == ownerName
+            ? _value.ownerName
+            : ownerName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        ownerNumber: freezed == ownerNumber
+            ? _value.ownerNumber
+            : ownerNumber // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        issueDate: freezed == issueDate
+            ? _value.issueDate
+            : issueDate // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        vehicleClass: freezed == vehicleClass
+            ? _value.vehicleClass
+            : vehicleClass // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        fuel: freezed == fuel
+            ? _value.fuel
+            : fuel // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        unldWt: freezed == unldWt
+            ? _value.unldWt
+            : unldWt // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        manufDate: freezed == manufDate
+            ? _value.manufDate
+            : manufDate // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        wheelbase: freezed == wheelbase
+            ? _value.wheelbase
+            : wheelbase // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        seatCap: freezed == seatCap
+            ? _value.seatCap
+            : seatCap // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        regAuthority: freezed == regAuthority
+            ? _value.regAuthority
+            : regAuthority // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        rcStatus: freezed == rcStatus
+            ? _value.rcStatus
+            : rcStatus // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        rcExpiry: freezed == rcExpiry
+            ? _value.rcExpiry
+            : rcExpiry // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        underTheHood: freezed == underTheHood
+            ? _value.underTheHood
+            : underTheHood // ignore: cast_nullable_to_non_nullable
+                  as UnderTheHood?,
+        insurance: freezed == insurance
+            ? _value.insurance
+            : insurance // ignore: cast_nullable_to_non_nullable
+                  as Insurance?,
+        puc: freezed == puc
+            ? _value.puc
+            : puc // ignore: cast_nullable_to_non_nullable
+                  as Puc?,
+        isManualEntry: freezed == isManualEntry
+            ? _value.isManualEntry
+            : isManualEntry // ignore: cast_nullable_to_non_nullable
+                  as bool?,
+        emergencyContacts: freezed == emergencyContacts
+            ? _value._emergencyContacts
+            : emergencyContacts // ignore: cast_nullable_to_non_nullable
+                  as List<dynamic>?,
+        challanDetails: freezed == challanDetails
+            ? _value._challanDetails
+            : challanDetails // ignore: cast_nullable_to_non_nullable
+                  as List<dynamic>?,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        updatedAt: freezed == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        qrId: freezed == qrId
+            ? _value.qrId
+            : qrId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$VehicleImpl implements _Vehicle {
+  const _$VehicleImpl({
+    @JsonKey(name: '_id') this.id,
+    this.userId,
+    this.vehicleNumber,
+    this.vehicleType,
+    this.brand,
+    this.model,
+    this.color,
+    this.vehicleImage,
+    this.ownerName,
+    this.ownerNumber,
+    this.issueDate,
+    this.vehicleClass,
+    this.fuel,
+    this.unldWt,
+    this.manufDate,
+    this.wheelbase,
+    this.seatCap,
+    this.regAuthority,
+    this.rcStatus,
+    this.rcExpiry,
+    this.underTheHood,
+    this.insurance,
+    this.puc,
+    this.isManualEntry,
+    final List<dynamic>? emergencyContacts,
+    final List<dynamic>? challanDetails,
+    this.createdAt,
+    this.updatedAt,
+    this.qrId,
+  }) : _emergencyContacts = emergencyContacts,
+       _challanDetails = challanDetails;
+
+  factory _$VehicleImpl.fromJson(Map<String, dynamic> json) =>
+      _$$VehicleImplFromJson(json);
+
+  @override
+  @JsonKey(name: '_id')
+  final String? id;
+  @override
+  final String? userId;
+  @override
+  final String? vehicleNumber;
+  @override
+  final String? vehicleType;
+  @override
+  final String? brand;
+  @override
+  final String? model;
+  @override
+  final String? color;
+  @override
+  final String? vehicleImage;
+  @override
+  final String? ownerName;
+  @override
+  final String? ownerNumber;
+  @override
+  final String? issueDate;
+  @override
+  final String? vehicleClass;
+  @override
+  final String? fuel;
+  @override
+  final String? unldWt;
+  @override
+  final String? manufDate;
+  @override
+  final String? wheelbase;
+  @override
+  final String? seatCap;
+  @override
+  final String? regAuthority;
+  @override
+  final String? rcStatus;
+  @override
+  final String? rcExpiry;
+  @override
+  final UnderTheHood? underTheHood;
+  @override
+  final Insurance? insurance;
+  @override
+  final Puc? puc;
+  @override
+  final bool? isManualEntry;
+  final List<dynamic>? _emergencyContacts;
+  @override
+  List<dynamic>? get emergencyContacts {
+    final value = _emergencyContacts;
+    if (value == null) return null;
+    if (_emergencyContacts is EqualUnmodifiableListView)
+      return _emergencyContacts;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<dynamic>? _challanDetails;
+  @override
+  List<dynamic>? get challanDetails {
+    final value = _challanDetails;
+    if (value == null) return null;
+    if (_challanDetails is EqualUnmodifiableListView) return _challanDetails;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final DateTime? createdAt;
+  @override
+  final DateTime? updatedAt;
+  @override
+  final String? qrId;
+
+  @override
+  String toString() {
+    return 'Vehicle(id: $id, userId: $userId, vehicleNumber: $vehicleNumber, vehicleType: $vehicleType, brand: $brand, model: $model, color: $color, vehicleImage: $vehicleImage, ownerName: $ownerName, ownerNumber: $ownerNumber, issueDate: $issueDate, vehicleClass: $vehicleClass, fuel: $fuel, unldWt: $unldWt, manufDate: $manufDate, wheelbase: $wheelbase, seatCap: $seatCap, regAuthority: $regAuthority, rcStatus: $rcStatus, rcExpiry: $rcExpiry, underTheHood: $underTheHood, insurance: $insurance, puc: $puc, isManualEntry: $isManualEntry, emergencyContacts: $emergencyContacts, challanDetails: $challanDetails, createdAt: $createdAt, updatedAt: $updatedAt, qrId: $qrId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$VehicleImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.vehicleNumber, vehicleNumber) ||
+                other.vehicleNumber == vehicleNumber) &&
+            (identical(other.vehicleType, vehicleType) ||
+                other.vehicleType == vehicleType) &&
+            (identical(other.brand, brand) || other.brand == brand) &&
+            (identical(other.model, model) || other.model == model) &&
+            (identical(other.color, color) || other.color == color) &&
+            (identical(other.vehicleImage, vehicleImage) ||
+                other.vehicleImage == vehicleImage) &&
+            (identical(other.ownerName, ownerName) ||
+                other.ownerName == ownerName) &&
+            (identical(other.ownerNumber, ownerNumber) ||
+                other.ownerNumber == ownerNumber) &&
+            (identical(other.issueDate, issueDate) ||
+                other.issueDate == issueDate) &&
+            (identical(other.vehicleClass, vehicleClass) ||
+                other.vehicleClass == vehicleClass) &&
+            (identical(other.fuel, fuel) || other.fuel == fuel) &&
+            (identical(other.unldWt, unldWt) || other.unldWt == unldWt) &&
+            (identical(other.manufDate, manufDate) ||
+                other.manufDate == manufDate) &&
+            (identical(other.wheelbase, wheelbase) ||
+                other.wheelbase == wheelbase) &&
+            (identical(other.seatCap, seatCap) || other.seatCap == seatCap) &&
+            (identical(other.regAuthority, regAuthority) ||
+                other.regAuthority == regAuthority) &&
+            (identical(other.rcStatus, rcStatus) ||
+                other.rcStatus == rcStatus) &&
+            (identical(other.rcExpiry, rcExpiry) ||
+                other.rcExpiry == rcExpiry) &&
+            (identical(other.underTheHood, underTheHood) ||
+                other.underTheHood == underTheHood) &&
+            (identical(other.insurance, insurance) ||
+                other.insurance == insurance) &&
+            (identical(other.puc, puc) || other.puc == puc) &&
+            (identical(other.isManualEntry, isManualEntry) ||
+                other.isManualEntry == isManualEntry) &&
+            const DeepCollectionEquality().equals(
+              other._emergencyContacts,
+              _emergencyContacts,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._challanDetails,
+              _challanDetails,
+            ) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            (identical(other.qrId, qrId) || other.qrId == qrId));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hashAll([
+    runtimeType,
+    id,
+    userId,
+    vehicleNumber,
+    vehicleType,
+    brand,
+    model,
+    color,
+    vehicleImage,
+    ownerName,
+    ownerNumber,
+    issueDate,
+    vehicleClass,
+    fuel,
+    unldWt,
+    manufDate,
+    wheelbase,
+    seatCap,
+    regAuthority,
+    rcStatus,
+    rcExpiry,
+    underTheHood,
+    insurance,
+    puc,
+    isManualEntry,
+    const DeepCollectionEquality().hash(_emergencyContacts),
+    const DeepCollectionEquality().hash(_challanDetails),
+    createdAt,
+    updatedAt,
+    qrId,
+  ]);
+
+  /// Create a copy of Vehicle
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$VehicleImplCopyWith<_$VehicleImpl> get copyWith =>
+      __$$VehicleImplCopyWithImpl<_$VehicleImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$VehicleImplToJson(this);
+  }
+}
+
+abstract class _Vehicle implements Vehicle {
+  const factory _Vehicle({
+    @JsonKey(name: '_id') final String? id,
+    final String? userId,
+    final String? vehicleNumber,
+    final String? vehicleType,
+    final String? brand,
+    final String? model,
+    final String? color,
+    final String? vehicleImage,
+    final String? ownerName,
+    final String? ownerNumber,
+    final String? issueDate,
+    final String? vehicleClass,
+    final String? fuel,
+    final String? unldWt,
+    final String? manufDate,
+    final String? wheelbase,
+    final String? seatCap,
+    final String? regAuthority,
+    final String? rcStatus,
+    final String? rcExpiry,
+    final UnderTheHood? underTheHood,
+    final Insurance? insurance,
+    final Puc? puc,
+    final bool? isManualEntry,
+    final List<dynamic>? emergencyContacts,
+    final List<dynamic>? challanDetails,
+    final DateTime? createdAt,
+    final DateTime? updatedAt,
+    final String? qrId,
+  }) = _$VehicleImpl;
+
+  factory _Vehicle.fromJson(Map<String, dynamic> json) = _$VehicleImpl.fromJson;
+
+  @override
+  @JsonKey(name: '_id')
+  String? get id;
+  @override
+  String? get userId;
+  @override
+  String? get vehicleNumber;
+  @override
+  String? get vehicleType;
+  @override
+  String? get brand;
+  @override
+  String? get model;
+  @override
+  String? get color;
+  @override
+  String? get vehicleImage;
+  @override
+  String? get ownerName;
+  @override
+  String? get ownerNumber;
+  @override
+  String? get issueDate;
+  @override
+  String? get vehicleClass;
+  @override
+  String? get fuel;
+  @override
+  String? get unldWt;
+  @override
+  String? get manufDate;
+  @override
+  String? get wheelbase;
+  @override
+  String? get seatCap;
+  @override
+  String? get regAuthority;
+  @override
+  String? get rcStatus;
+  @override
+  String? get rcExpiry;
+  @override
+  UnderTheHood? get underTheHood;
+  @override
+  Insurance? get insurance;
+  @override
+  Puc? get puc;
+  @override
+  bool? get isManualEntry;
+  @override
+  List<dynamic>? get emergencyContacts;
+  @override
+  List<dynamic>? get challanDetails;
+  @override
+  DateTime? get createdAt;
+  @override
+  DateTime? get updatedAt;
+  @override
+  String? get qrId;
+
+  /// Create a copy of Vehicle
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$VehicleImplCopyWith<_$VehicleImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+UnderTheHood _$UnderTheHoodFromJson(Map<String, dynamic> json) {
+  return _UnderTheHood.fromJson(json);
+}
+
+/// @nodoc
+mixin _$UnderTheHood {
+  String? get engineNo => throw _privateConstructorUsedError;
+  String? get cylinder => throw _privateConstructorUsedError;
+  String? get cc => throw _privateConstructorUsedError;
+  String? get chassisNumber => throw _privateConstructorUsedError;
+
+  /// Serializes this UnderTheHood to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of UnderTheHood
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $UnderTheHoodCopyWith<UnderTheHood> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UnderTheHoodCopyWith<$Res> {
+  factory $UnderTheHoodCopyWith(
+    UnderTheHood value,
+    $Res Function(UnderTheHood) then,
+  ) = _$UnderTheHoodCopyWithImpl<$Res, UnderTheHood>;
+  @useResult
+  $Res call({
+    String? engineNo,
+    String? cylinder,
+    String? cc,
+    String? chassisNumber,
+  });
+}
+
+/// @nodoc
+class _$UnderTheHoodCopyWithImpl<$Res, $Val extends UnderTheHood>
+    implements $UnderTheHoodCopyWith<$Res> {
+  _$UnderTheHoodCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of UnderTheHood
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? engineNo = freezed,
+    Object? cylinder = freezed,
+    Object? cc = freezed,
+    Object? chassisNumber = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            engineNo: freezed == engineNo
+                ? _value.engineNo
+                : engineNo // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            cylinder: freezed == cylinder
+                ? _value.cylinder
+                : cylinder // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            cc: freezed == cc
+                ? _value.cc
+                : cc // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            chassisNumber: freezed == chassisNumber
+                ? _value.chassisNumber
+                : chassisNumber // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$UnderTheHoodImplCopyWith<$Res>
+    implements $UnderTheHoodCopyWith<$Res> {
+  factory _$$UnderTheHoodImplCopyWith(
+    _$UnderTheHoodImpl value,
+    $Res Function(_$UnderTheHoodImpl) then,
+  ) = __$$UnderTheHoodImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    String? engineNo,
+    String? cylinder,
+    String? cc,
+    String? chassisNumber,
+  });
+}
+
+/// @nodoc
+class __$$UnderTheHoodImplCopyWithImpl<$Res>
+    extends _$UnderTheHoodCopyWithImpl<$Res, _$UnderTheHoodImpl>
+    implements _$$UnderTheHoodImplCopyWith<$Res> {
+  __$$UnderTheHoodImplCopyWithImpl(
+    _$UnderTheHoodImpl _value,
+    $Res Function(_$UnderTheHoodImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of UnderTheHood
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? engineNo = freezed,
+    Object? cylinder = freezed,
+    Object? cc = freezed,
+    Object? chassisNumber = freezed,
+  }) {
+    return _then(
+      _$UnderTheHoodImpl(
+        engineNo: freezed == engineNo
+            ? _value.engineNo
+            : engineNo // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        cylinder: freezed == cylinder
+            ? _value.cylinder
+            : cylinder // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        cc: freezed == cc
+            ? _value.cc
+            : cc // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        chassisNumber: freezed == chassisNumber
+            ? _value.chassisNumber
+            : chassisNumber // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$UnderTheHoodImpl implements _UnderTheHood {
+  const _$UnderTheHoodImpl({
+    this.engineNo,
+    this.cylinder,
+    this.cc,
+    this.chassisNumber,
+  });
+
+  factory _$UnderTheHoodImpl.fromJson(Map<String, dynamic> json) =>
+      _$$UnderTheHoodImplFromJson(json);
+
+  @override
+  final String? engineNo;
+  @override
+  final String? cylinder;
+  @override
+  final String? cc;
+  @override
+  final String? chassisNumber;
+
+  @override
+  String toString() {
+    return 'UnderTheHood(engineNo: $engineNo, cylinder: $cylinder, cc: $cc, chassisNumber: $chassisNumber)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UnderTheHoodImpl &&
+            (identical(other.engineNo, engineNo) ||
+                other.engineNo == engineNo) &&
+            (identical(other.cylinder, cylinder) ||
+                other.cylinder == cylinder) &&
+            (identical(other.cc, cc) || other.cc == cc) &&
+            (identical(other.chassisNumber, chassisNumber) ||
+                other.chassisNumber == chassisNumber));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, engineNo, cylinder, cc, chassisNumber);
+
+  /// Create a copy of UnderTheHood
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UnderTheHoodImplCopyWith<_$UnderTheHoodImpl> get copyWith =>
+      __$$UnderTheHoodImplCopyWithImpl<_$UnderTheHoodImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$UnderTheHoodImplToJson(this);
+  }
+}
+
+abstract class _UnderTheHood implements UnderTheHood {
+  const factory _UnderTheHood({
+    final String? engineNo,
+    final String? cylinder,
+    final String? cc,
+    final String? chassisNumber,
+  }) = _$UnderTheHoodImpl;
+
+  factory _UnderTheHood.fromJson(Map<String, dynamic> json) =
+      _$UnderTheHoodImpl.fromJson;
+
+  @override
+  String? get engineNo;
+  @override
+  String? get cylinder;
+  @override
+  String? get cc;
+  @override
+  String? get chassisNumber;
+
+  /// Create a copy of UnderTheHood
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UnderTheHoodImplCopyWith<_$UnderTheHoodImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Insurance _$InsuranceFromJson(Map<String, dynamic> json) {
+  return _Insurance.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Insurance {
+  String? get policyNo => throw _privateConstructorUsedError;
+  String? get validTill => throw _privateConstructorUsedError;
+  String? get companyName => throw _privateConstructorUsedError;
+  String? get status => throw _privateConstructorUsedError;
+
+  /// Serializes this Insurance to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of Insurance
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $InsuranceCopyWith<Insurance> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $InsuranceCopyWith<$Res> {
+  factory $InsuranceCopyWith(Insurance value, $Res Function(Insurance) then) =
+      _$InsuranceCopyWithImpl<$Res, Insurance>;
+  @useResult
+  $Res call({
+    String? policyNo,
+    String? validTill,
+    String? companyName,
+    String? status,
+  });
+}
+
+/// @nodoc
+class _$InsuranceCopyWithImpl<$Res, $Val extends Insurance>
+    implements $InsuranceCopyWith<$Res> {
+  _$InsuranceCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of Insurance
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? policyNo = freezed,
+    Object? validTill = freezed,
+    Object? companyName = freezed,
+    Object? status = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            policyNo: freezed == policyNo
+                ? _value.policyNo
+                : policyNo // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            validTill: freezed == validTill
+                ? _value.validTill
+                : validTill // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            companyName: freezed == companyName
+                ? _value.companyName
+                : companyName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            status: freezed == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$InsuranceImplCopyWith<$Res>
+    implements $InsuranceCopyWith<$Res> {
+  factory _$$InsuranceImplCopyWith(
+    _$InsuranceImpl value,
+    $Res Function(_$InsuranceImpl) then,
+  ) = __$$InsuranceImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    String? policyNo,
+    String? validTill,
+    String? companyName,
+    String? status,
+  });
+}
+
+/// @nodoc
+class __$$InsuranceImplCopyWithImpl<$Res>
+    extends _$InsuranceCopyWithImpl<$Res, _$InsuranceImpl>
+    implements _$$InsuranceImplCopyWith<$Res> {
+  __$$InsuranceImplCopyWithImpl(
+    _$InsuranceImpl _value,
+    $Res Function(_$InsuranceImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of Insurance
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? policyNo = freezed,
+    Object? validTill = freezed,
+    Object? companyName = freezed,
+    Object? status = freezed,
+  }) {
+    return _then(
+      _$InsuranceImpl(
+        policyNo: freezed == policyNo
+            ? _value.policyNo
+            : policyNo // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        validTill: freezed == validTill
+            ? _value.validTill
+            : validTill // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        companyName: freezed == companyName
+            ? _value.companyName
+            : companyName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        status: freezed == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$InsuranceImpl implements _Insurance {
+  const _$InsuranceImpl({
+    this.policyNo,
+    this.validTill,
+    this.companyName,
+    this.status,
+  });
+
+  factory _$InsuranceImpl.fromJson(Map<String, dynamic> json) =>
+      _$$InsuranceImplFromJson(json);
+
+  @override
+  final String? policyNo;
+  @override
+  final String? validTill;
+  @override
+  final String? companyName;
+  @override
+  final String? status;
+
+  @override
+  String toString() {
+    return 'Insurance(policyNo: $policyNo, validTill: $validTill, companyName: $companyName, status: $status)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$InsuranceImpl &&
+            (identical(other.policyNo, policyNo) ||
+                other.policyNo == policyNo) &&
+            (identical(other.validTill, validTill) ||
+                other.validTill == validTill) &&
+            (identical(other.companyName, companyName) ||
+                other.companyName == companyName) &&
+            (identical(other.status, status) || other.status == status));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, policyNo, validTill, companyName, status);
+
+  /// Create a copy of Insurance
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$InsuranceImplCopyWith<_$InsuranceImpl> get copyWith =>
+      __$$InsuranceImplCopyWithImpl<_$InsuranceImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$InsuranceImplToJson(this);
+  }
+}
+
+abstract class _Insurance implements Insurance {
+  const factory _Insurance({
+    final String? policyNo,
+    final String? validTill,
+    final String? companyName,
+    final String? status,
+  }) = _$InsuranceImpl;
+
+  factory _Insurance.fromJson(Map<String, dynamic> json) =
+      _$InsuranceImpl.fromJson;
+
+  @override
+  String? get policyNo;
+  @override
+  String? get validTill;
+  @override
+  String? get companyName;
+  @override
+  String? get status;
+
+  /// Create a copy of Insurance
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$InsuranceImplCopyWith<_$InsuranceImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Puc _$PucFromJson(Map<String, dynamic> json) {
+  return _Puc.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Puc {
+  String? get certificateNo => throw _privateConstructorUsedError;
+  String? get emmisionNorm => throw _privateConstructorUsedError;
+  String? get validTill => throw _privateConstructorUsedError;
+  String? get status => throw _privateConstructorUsedError;
+
+  /// Serializes this Puc to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of Puc
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $PucCopyWith<Puc> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PucCopyWith<$Res> {
+  factory $PucCopyWith(Puc value, $Res Function(Puc) then) =
+      _$PucCopyWithImpl<$Res, Puc>;
+  @useResult
+  $Res call({
+    String? certificateNo,
+    String? emmisionNorm,
+    String? validTill,
+    String? status,
+  });
+}
+
+/// @nodoc
+class _$PucCopyWithImpl<$Res, $Val extends Puc> implements $PucCopyWith<$Res> {
+  _$PucCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of Puc
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? certificateNo = freezed,
+    Object? emmisionNorm = freezed,
+    Object? validTill = freezed,
+    Object? status = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            certificateNo: freezed == certificateNo
+                ? _value.certificateNo
+                : certificateNo // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            emmisionNorm: freezed == emmisionNorm
+                ? _value.emmisionNorm
+                : emmisionNorm // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            validTill: freezed == validTill
+                ? _value.validTill
+                : validTill // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            status: freezed == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$PucImplCopyWith<$Res> implements $PucCopyWith<$Res> {
+  factory _$$PucImplCopyWith(_$PucImpl value, $Res Function(_$PucImpl) then) =
+      __$$PucImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    String? certificateNo,
+    String? emmisionNorm,
+    String? validTill,
+    String? status,
+  });
+}
+
+/// @nodoc
+class __$$PucImplCopyWithImpl<$Res> extends _$PucCopyWithImpl<$Res, _$PucImpl>
+    implements _$$PucImplCopyWith<$Res> {
+  __$$PucImplCopyWithImpl(_$PucImpl _value, $Res Function(_$PucImpl) _then)
+    : super(_value, _then);
+
+  /// Create a copy of Puc
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? certificateNo = freezed,
+    Object? emmisionNorm = freezed,
+    Object? validTill = freezed,
+    Object? status = freezed,
+  }) {
+    return _then(
+      _$PucImpl(
+        certificateNo: freezed == certificateNo
+            ? _value.certificateNo
+            : certificateNo // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        emmisionNorm: freezed == emmisionNorm
+            ? _value.emmisionNorm
+            : emmisionNorm // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        validTill: freezed == validTill
+            ? _value.validTill
+            : validTill // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        status: freezed == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$PucImpl implements _Puc {
+  const _$PucImpl({
+    this.certificateNo,
+    this.emmisionNorm,
+    this.validTill,
+    this.status,
+  });
+
+  factory _$PucImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PucImplFromJson(json);
+
+  @override
+  final String? certificateNo;
+  @override
+  final String? emmisionNorm;
+  @override
+  final String? validTill;
+  @override
+  final String? status;
+
+  @override
+  String toString() {
+    return 'Puc(certificateNo: $certificateNo, emmisionNorm: $emmisionNorm, validTill: $validTill, status: $status)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PucImpl &&
+            (identical(other.certificateNo, certificateNo) ||
+                other.certificateNo == certificateNo) &&
+            (identical(other.emmisionNorm, emmisionNorm) ||
+                other.emmisionNorm == emmisionNorm) &&
+            (identical(other.validTill, validTill) ||
+                other.validTill == validTill) &&
+            (identical(other.status, status) || other.status == status));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, certificateNo, emmisionNorm, validTill, status);
+
+  /// Create a copy of Puc
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PucImplCopyWith<_$PucImpl> get copyWith =>
+      __$$PucImplCopyWithImpl<_$PucImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PucImplToJson(this);
+  }
+}
+
+abstract class _Puc implements Puc {
+  const factory _Puc({
+    final String? certificateNo,
+    final String? emmisionNorm,
+    final String? validTill,
+    final String? status,
+  }) = _$PucImpl;
+
+  factory _Puc.fromJson(Map<String, dynamic> json) = _$PucImpl.fromJson;
+
+  @override
+  String? get certificateNo;
+  @override
+  String? get emmisionNorm;
+  @override
+  String? get validTill;
+  @override
+  String? get status;
+
+  /// Create a copy of Puc
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PucImplCopyWith<_$PucImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -685,7 +3089,7 @@ mixin _$Qr {
   String? get status => throw _privateConstructorUsedError;
   OwnerId? get ownerId => throw _privateConstructorUsedError;
   String? get moduleType => throw _privateConstructorUsedError;
-  String? get moduleProfileId => throw _privateConstructorUsedError;
+  String? get moduleDoorbellId => throw _privateConstructorUsedError;
   DateTime? get assignedAt => throw _privateConstructorUsedError;
   String? get planAtActivation => throw _privateConstructorUsedError;
   bool? get isTemporary => throw _privateConstructorUsedError;
@@ -717,7 +3121,7 @@ abstract class $QrCopyWith<$Res> {
     String? status,
     OwnerId? ownerId,
     String? moduleType,
-    String? moduleProfileId,
+    String? moduleDoorbellId,
     DateTime? assignedAt,
     String? planAtActivation,
     bool? isTemporary,
@@ -752,7 +3156,7 @@ class _$QrCopyWithImpl<$Res, $Val extends Qr> implements $QrCopyWith<$Res> {
     Object? status = freezed,
     Object? ownerId = freezed,
     Object? moduleType = freezed,
-    Object? moduleProfileId = freezed,
+    Object? moduleDoorbellId = freezed,
     Object? assignedAt = freezed,
     Object? planAtActivation = freezed,
     Object? isTemporary = freezed,
@@ -789,9 +3193,9 @@ class _$QrCopyWithImpl<$Res, $Val extends Qr> implements $QrCopyWith<$Res> {
                 ? _value.moduleType
                 : moduleType // ignore: cast_nullable_to_non_nullable
                       as String?,
-            moduleProfileId: freezed == moduleProfileId
-                ? _value.moduleProfileId
-                : moduleProfileId // ignore: cast_nullable_to_non_nullable
+            moduleDoorbellId: freezed == moduleDoorbellId
+                ? _value.moduleDoorbellId
+                : moduleDoorbellId // ignore: cast_nullable_to_non_nullable
                       as String?,
             assignedAt: freezed == assignedAt
                 ? _value.assignedAt
@@ -862,7 +3266,7 @@ abstract class _$$QrImplCopyWith<$Res> implements $QrCopyWith<$Res> {
     String? status,
     OwnerId? ownerId,
     String? moduleType,
-    String? moduleProfileId,
+    String? moduleDoorbellId,
     DateTime? assignedAt,
     String? planAtActivation,
     bool? isTemporary,
@@ -895,7 +3299,7 @@ class __$$QrImplCopyWithImpl<$Res> extends _$QrCopyWithImpl<$Res, _$QrImpl>
     Object? status = freezed,
     Object? ownerId = freezed,
     Object? moduleType = freezed,
-    Object? moduleProfileId = freezed,
+    Object? moduleDoorbellId = freezed,
     Object? assignedAt = freezed,
     Object? planAtActivation = freezed,
     Object? isTemporary = freezed,
@@ -932,9 +3336,9 @@ class __$$QrImplCopyWithImpl<$Res> extends _$QrCopyWithImpl<$Res, _$QrImpl>
             ? _value.moduleType
             : moduleType // ignore: cast_nullable_to_non_nullable
                   as String?,
-        moduleProfileId: freezed == moduleProfileId
-            ? _value.moduleProfileId
-            : moduleProfileId // ignore: cast_nullable_to_non_nullable
+        moduleDoorbellId: freezed == moduleDoorbellId
+            ? _value.moduleDoorbellId
+            : moduleDoorbellId // ignore: cast_nullable_to_non_nullable
                   as String?,
         assignedAt: freezed == assignedAt
             ? _value.assignedAt
@@ -987,7 +3391,7 @@ class _$QrImpl implements _Qr {
     this.status,
     this.ownerId,
     this.moduleType,
-    this.moduleProfileId,
+    this.moduleDoorbellId,
     this.assignedAt,
     this.planAtActivation,
     this.isTemporary,
@@ -1015,7 +3419,7 @@ class _$QrImpl implements _Qr {
   @override
   final String? moduleType;
   @override
-  final String? moduleProfileId;
+  final String? moduleDoorbellId;
   @override
   final DateTime? assignedAt;
   @override
@@ -1037,7 +3441,7 @@ class _$QrImpl implements _Qr {
 
   @override
   String toString() {
-    return 'Qr(id: $id, qrId: $qrId, qrType: $qrType, status: $status, ownerId: $ownerId, moduleType: $moduleType, moduleProfileId: $moduleProfileId, assignedAt: $assignedAt, planAtActivation: $planAtActivation, isTemporary: $isTemporary, expiresAt: $expiresAt, isFrozen: $isFrozen, scanCount: $scanCount, createdAt: $createdAt, updatedAt: $updatedAt, lastScannedAt: $lastScannedAt)';
+    return 'Qr(id: $id, qrId: $qrId, qrType: $qrType, status: $status, ownerId: $ownerId, moduleType: $moduleType, moduleDoorbellId: $moduleDoorbellId, assignedAt: $assignedAt, planAtActivation: $planAtActivation, isTemporary: $isTemporary, expiresAt: $expiresAt, isFrozen: $isFrozen, scanCount: $scanCount, createdAt: $createdAt, updatedAt: $updatedAt, lastScannedAt: $lastScannedAt)';
   }
 
   @override
@@ -1052,8 +3456,8 @@ class _$QrImpl implements _Qr {
             (identical(other.ownerId, ownerId) || other.ownerId == ownerId) &&
             (identical(other.moduleType, moduleType) ||
                 other.moduleType == moduleType) &&
-            (identical(other.moduleProfileId, moduleProfileId) ||
-                other.moduleProfileId == moduleProfileId) &&
+            (identical(other.moduleDoorbellId, moduleDoorbellId) ||
+                other.moduleDoorbellId == moduleDoorbellId) &&
             (identical(other.assignedAt, assignedAt) ||
                 other.assignedAt == assignedAt) &&
             (identical(other.planAtActivation, planAtActivation) ||
@@ -1084,7 +3488,7 @@ class _$QrImpl implements _Qr {
     status,
     ownerId,
     moduleType,
-    moduleProfileId,
+    moduleDoorbellId,
     assignedAt,
     planAtActivation,
     isTemporary,
@@ -1118,7 +3522,7 @@ abstract class _Qr implements Qr {
     final String? status,
     final OwnerId? ownerId,
     final String? moduleType,
-    final String? moduleProfileId,
+    final String? moduleDoorbellId,
     final DateTime? assignedAt,
     final String? planAtActivation,
     final bool? isTemporary,
@@ -1145,7 +3549,7 @@ abstract class _Qr implements Qr {
   @override
   String? get moduleType;
   @override
-  String? get moduleProfileId;
+  String? get moduleDoorbellId;
   @override
   DateTime? get assignedAt;
   @override

@@ -29,4 +29,12 @@ abstract class Assets {
   static const videoCall = 'assets/image/video_call.png';
   static const chat = 'assets/image/chat.png';
   static const String uploadIcon = 'assets/icon/document-upload.png';
+
+    static const fireService = 'assets/icon/fireservice.png';
+  static const ambulance = 'assets/icon/ambulance.png';
+  static const police = 'assets/icon/police.png';
+
+
+
+
 }

@@ -5,20 +5,26 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mysafety_web/core/model/agora/state/agora_state.dart';
+import 'package:mysafety_web/core/network/socket/web_socket.dart';
+import 'package:mysafety_web/route/route_name.dart';
 import 'package:mysafety_web/src/features/agora/presentation/provider/agora_provider.dart';
 import 'package:mysafety_web/src/features/agora/presentation/widgets/call_controls.dart';
 import 'package:mysafety_web/src/features/agora/presentation/widgets/video_grid_view.dart';
+import 'dart:async';
 
 class AgoraCallScreen extends ConsumerStatefulWidget {
   final String? bookingId;
   final String moduleType;
   final String callType;
   final String role;
+  final String visitorId;
 
   const AgoraCallScreen({
     super.key,
     this.bookingId,
+    this.visitorId = "",
     this.moduleType = 'DoorBell',
     this.callType = 'video',
     this.role = 'visitor',
@@ -29,19 +35,57 @@ class AgoraCallScreen extends ConsumerStatefulWidget {
 }
 
 class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
+  StreamSubscription? _callEndedSub;
+
   @override
   void initState() {
     super.initState();
+    debugPrint('🎬 AgoraCallScreen initState - Setting up listeners');
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final success = await ref.read(agoraProvider.notifier).startCall(
-        qrId: widget.bookingId ?? '',
-        callType: widget.callType,
-      );
+      final success = await ref
+          .read(agoraProvider.notifier)
+          .startCall(
+            visitorId: widget.visitorId,
+            qrId: widget.bookingId ?? '',
+            callType: widget.callType,
+          );
 
       if (!success && mounted) {
-        Navigator.of(context).pop();
+        context.pop();
       }
     });
+
+    // Listen for call ended event from WebSocket
+    debugPrint('🎧 Setting up WebSocket call_ended listener');
+    _callEndedSub = WebSocketService.callEndedStream.listen((data) {
+      debugPrint('📞 ========================================');
+      debugPrint('📞 CALL ENDED EVENT RECEIVED FROM WEBSOCKET');
+      debugPrint('📞 Data: $data');
+      debugPrint('📞 ========================================');
+
+      if (!mounted) {
+        debugPrint('⚠️ Widget not mounted, skipping');
+        return;
+      }
+
+      final notifier = ref.read(agoraProvider.notifier);
+      debugPrint('🔴 Calling endCall(skipApiCall: true)...');
+
+      notifier
+          .endCall(skipApiCall: true)
+          .then((_) {
+            debugPrint('✅ endCall completed');
+            if (mounted) {
+              debugPrint('🔙 Cannot pop, using go() instead');
+              context.pop();
+            }
+          })
+          .catchError((error) {
+            debugPrint('❌ Error in endCall: $error');
+          });
+    });
+    debugPrint('✅ WebSocket listener setup complete');
   }
 
   @override
@@ -55,25 +99,30 @@ class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
             next.error!.contains('Invalid') ||
             next.error!.contains('Failed')) {
           Future.delayed(const Duration(seconds: 2), () {
-            if (mounted) Navigator.of(context).pop();
+            if (mounted) context.pop();
           });
         }
       }
 
       if (previous?.isCallActive == true &&
           next.isCallActive == false &&
-          !next.isLoading &&
-          next.error == null) {
-        if (mounted) Navigator.of(context).pop();
+          !next.isLoading) {
+        Future.microtask(() {
+          if (mounted) {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go(RouteName.selectOptionScreen);
+            }
+          }
+        });
       }
     });
 
     if (agoraState.isLoading) {
       return const Scaffold(
         backgroundColor: Colors.black,
-        body: Center(
-          child: CircularProgressIndicator(color: Colors.white),
-        ),
+        body: Center(child: CircularProgressIndicator(color: Colors.white)),
       );
     }
 
@@ -96,7 +145,7 @@ class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () => context.pop(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.black,
@@ -114,7 +163,7 @@ class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
       onPopInvokedWithResult: (didPop, result) async {
         if (!didPop) {
           await notifier.endCall();
-          if (context.mounted) Navigator.of(context).pop();
+          if (context.mounted) context.pop();
         }
       },
       child: Scaffold(
@@ -126,7 +175,10 @@ class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
               top: 50,
               left: 20,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.black54,
                   borderRadius: BorderRadius.circular(20),
@@ -145,7 +197,9 @@ class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      agoraState.isRemoteUserJoined ? 'Connected' : 'Connecting...',
+                      agoraState.isRemoteUserJoined
+                          ? 'Connected'
+                          : 'Connecting...',
                       style: const TextStyle(color: Colors.white),
                     ),
                   ],
@@ -165,7 +219,9 @@ class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
                 onSwitchCamera: notifier.switchCamera,
                 onEndCall: () async {
                   await notifier.endCall();
-                  if (context.mounted) Navigator.of(context).pop();
+                  if (mounted && context.canPop()) {
+                    context.pop();
+                  }
                 },
               ),
             ),
@@ -177,6 +233,7 @@ class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
 
   @override
   void dispose() {
+    _callEndedSub?.cancel();
     super.dispose();
   }
 }

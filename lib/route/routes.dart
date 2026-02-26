@@ -14,6 +14,7 @@ import 'package:mysafety_web/src/features/chat/presentation/screen/one_to_one_ch
 import 'package:mysafety_web/src/features/profile/presentation/screens/fetch_location.dart';
 import 'package:mysafety_web/src/features/splash/presentation/screen/error_screen.dart';
 import 'package:mysafety_web/src/features/splash/presentation/screen/splash_screen.dart';
+import 'package:mysafety_web/src/features/vehicle/presentation/screens/report_accedent_screen.dart';
 
 final GoRouter routerConfig = GoRouter(
   navigatorKey: NavigationService.navigatorKey,
@@ -35,7 +36,14 @@ final GoRouter routerConfig = GoRouter(
       builder: (context, state) {
         final roomId = state.uri.queryParameters['roomId'];
         final qrId = state.uri.queryParameters['qrId'];
-        return OneToOneChatScreen(roomId: roomId, qrId: qrId);
+        final visitorName = state.uri.queryParameters['visitorName'];
+        final profileType = state.uri.queryParameters['profileType'];
+        return OneToOneChatScreen(
+          roomId: roomId,
+          qrId: qrId,
+          visitorName: visitorName,
+          profileType: profileType,
+        );
       },
     ),
     GoRoute(
@@ -43,11 +51,23 @@ final GoRouter routerConfig = GoRouter(
       builder: (context, state) => SelectLanguageScreen(),
     ),
     GoRoute(
+      path: RouteName.reportAccedent,
+      builder: (context, state) {
+        final qrId = state.uri.queryParameters['qrId'];
+        return ReportAccedentScreen(qrId: qrId);
+      },
+    ),
+    GoRoute(
       path: RouteName.selectOptionScreen,
       builder: (context, state) {
         final roomId = state.uri.queryParameters['roomId'];
         final qrId = state.uri.queryParameters['qrId'];
-        return SelectOptionScreen(roomId: roomId, qrId: qrId);
+        final visitorId = state.uri.queryParameters['visitorId'];
+        return SelectOptionScreen(
+          roomId: roomId,
+          qrId: qrId,
+          visitorId: visitorId,
+        );
       },
     ),
     GoRoute(
@@ -55,11 +75,13 @@ final GoRouter routerConfig = GoRouter(
       builder: (context, state) {
         final qrId = state.uri.queryParameters['qrId'];
         final role = state.uri.queryParameters['role'] ?? 'visitor';
+        final visitorId = state.uri.queryParameters['visitorId'];
         return AgoraCallScreen(
           bookingId: qrId,
           moduleType: 'DoorBell',
           callType: 'video',
           role: role,
+          visitorId: visitorId ?? '',
         );
       },
     ),
@@ -68,7 +90,12 @@ final GoRouter routerConfig = GoRouter(
       builder: (context, state) {
         final qrId = state.uri.queryParameters['qrId'];
         final callId = state.uri.queryParameters['callId'];
-        return AgoraAudioCallScreen(qrId: qrId, callId: callId);
+        final visitorId = state.uri.queryParameters['visitorId'];
+        return AgoraAudioCallScreen(
+          qrId: qrId,
+          callId: callId,
+          visitorId: visitorId,
+        );
       },
     ),
   ],

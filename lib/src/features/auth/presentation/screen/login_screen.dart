@@ -22,6 +22,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   late AuthNotifierProvider provider;
+  late ProfileNotifierProvider proprovider;
 
   final GlobalKey<FormState> formKey = GlobalKey();
 
@@ -29,7 +30,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   TextEditingController nameController = TextEditingController();
 
   Future<void> sendOtp() async {
-    // validate phone etc. if needed
     if (!(formKey.currentState?.validate() ?? false)) return;
 
     final profile = ref.read(profileProvider);
@@ -39,11 +39,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       phoneNo: phoneController.text,
       name: nameController.text,
       lang: lang,
+      qrId: profile.qrId ?? 'e984cacef7ac469118002759547df6a8',
     );
 
     if (!isSend) return;
 
-    // Always navigate to OTP screen for verification
     _goToOtpScreen();
   }
 

@@ -9,14 +9,25 @@ import 'package:mysafety_web/src/features/chat/presentation/provider/chat_provid
 import 'package:mysafety_web/src/features/chat/presentation/widget/chat_input_bar.dart';
 import 'package:mysafety_web/src/features/chat/presentation/widget/chat_screen_appbar.dart';
 import 'package:mysafety_web/src/features/chat/presentation/widget/chat_tile.dart';
+import 'package:mysafety_web/src/features/chat/presentation/widget/predefined_message_tile.dart';
 import 'package:mysafety_web/src/features/profile/presentation/provider/profile_provider.dart';
+import 'package:mysafety_web/src/features/vehicle/presentation/provider/vehicle_provider.dart';
 import 'package:mysafety_web/util/formator/date_formator.dart';
-import 'package:mysafety_web/core/network/socket/web_socket.dart';
 
 class OneToOneChatScreen extends ConsumerStatefulWidget {
   final String? roomId;
   final String? qrId;
-  const OneToOneChatScreen({super.key, this.roomId, this.qrId});
+  final String? visitorName;
+  final String? profileType;
+  final String? visitorId;
+  const OneToOneChatScreen({
+    super.key,
+    this.roomId,
+    this.qrId,
+    this.visitorName,
+    this.profileType,
+    this.visitorId,
+  });
 
   @override
   ConsumerState<OneToOneChatScreen> createState() => _OneToOneChatScreenState();
@@ -32,12 +43,16 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _connectToChat();
+      debugPrint('🔍 ProfileType: ${widget.profileType}');
+      debugPrint('🔍 IsVehicle: ${widget.profileType == 'vehicle'}');
     });
   }
 
   void _scrollToBottom() {
+    if (!mounted) return;
     if (_scrollController.hasClients) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!_scrollController.hasClients) return;
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
           duration: const Duration(milliseconds: 300),
@@ -67,16 +82,28 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen> {
     }
 
     notifier.setCallInitiated(true);
-    bool success = await notifier.startCall(qrId: qrId, callType: callType);
+    bool success = await notifier.startCall(
+      qrId: qrId,
+      callType: callType,
+      visitorId: widget.visitorId ?? '',
+    );
 
     if (success && mounted) {
       final roomId = widget.roomId;
       if (roomId != null) {
-        context.push('${RouteName.agoraAudioCall}?qrId=$qrId&roomId=$roomId');
+        context.push(
+          '${RouteName.agoraAudioCall}?qrId=$qrId&roomId=$roomId&visitorId=${widget.visitorId ?? ''}',
+        );
       } else {
-        context.push('${RouteName.agoraAudioCall}?qrId=$qrId');
+        context.push(
+          '${RouteName.agoraAudioCall}?qrId=$qrId&visitorId=${widget.visitorId ?? ''}',
+        );
       }
     }
+  }
+
+  void goToreportScreen(qrId) {
+    context.push('${RouteName.reportAccedent}?qrId=$qrId');
   }
 
   @override
@@ -84,9 +111,21 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen> {
     final messages = ref.watch(oneToOneChatControllerProvider);
     final controller = ref.read(oneToOneChatControllerProvider.notifier);
     final profile = ref.watch(profileProvider);
+    final selectedIndex = ref.watch(selectedMessageIndexProvider);
     final qrId = widget.qrId ?? profile.qrId;
+    final isVehicle = widget.profileType == 'vehicle';
+    final isLostFound = widget.profileType == 'lostfound';
+    final predefinedMessages = profile.predefinedMessages;
 
-    final visitorName = profile.resolveQrResponse?.qr?.ownerId?.name ?? '';
+    debugPrint('🚗 isVehicle: $isVehicle');
+    debugPrint('🔍 isLostFound: $isLostFound');
+    debugPrint('📋 predefinedMessages count: ${predefinedMessages.length}');
+    debugPrint('📋 predefinedMessages: $predefinedMessages');
+
+    final visitorName =
+        widget.visitorName ??
+        profile.resolveQrResponse?.qr?.ownerId?.name ??
+        'Visitor';
 
     // Auto-scroll when new messages arrive
     if (messages.length > _previousMessageCount) {
@@ -98,37 +137,76 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen> {
       canPop: true,
       backgroundColor: AppColors.primary,
       child: Expanded(
-        child: Scaffold(
-          backgroundColor: AppColors.primary,
-          body: Column(
-            children: [
-              ChatScreenAppBar(
-                avatarUrl: '',
-                userName: visitorName,
-                status: controller.isOtherTyping ? 'typing...' : 'online',
-                onAudioCall: () {
-                  startCall(qrId!, "audio");
-                },
-                onVideoCall: () {
-                  final roomId = widget.roomId;
-                  if (roomId != null) {
-                    context.go(
-                      '${RouteName.agoraVideoCall}?qrId=$qrId&roomId=$roomId',
-                    );
-                  } else {
-                    context.go('${RouteName.agoraVideoCall}?qrId=$qrId');
-                  }
-                },
-              ),
-              Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.all(16),
-                  itemCount: messages.length,
-                  itemBuilder: (_, index) {
-                    final msg = messages[index];
+        child: Column(
+          children: [
+            ChatScreenAppBar(
+              avatarUrl: '',
+              userName: visitorName,
+              status: controller.isOtherTyping ? 'typing...' : 'online',
+              onAudioCall: () {
+                startCall(qrId!, "audio");
+              },
+              onVideoCall: () {
+                final roomId = widget.roomId;
+                if (roomId != null) {
+                  context.go(
+                    '${RouteName.agoraVideoCall}?qrId=$qrId&roomId=$roomId',
+                  );
+                } else {
+                  context.go('${RouteName.agoraVideoCall}?qrId=$qrId');
+                }
+              },
+            ),
+            Expanded(
+              child: ListView(
+                controller: _scrollController,
+                padding: const EdgeInsets.all(16),
+                children: [
+                  if ((isVehicle || isLostFound) && predefinedMessages.isNotEmpty)
+                    ...predefinedMessages.asMap().entries.map(
+                      (entry) => PredefinedMessageTile(
+                        title: entry.value.title ?? '',
+                        isSelected: selectedIndex == entry.key,
+                        onTap: () async {
+                          if (!mounted) return;
+                          await controller.sendText(
+                            entry.value.message ?? '',
+                            messageIndex: entry.key,
+                          );
 
-                    return ChatTile(
+                          // Trigger auto call if audioId exists (only for vehicle)
+                          if (isVehicle && entry.value.audioId != null && qrId != null) {
+                            await ref
+                                .read(vehicleProvider.notifier)
+                                .initiateAutoCall(
+                                  qrId: qrId,
+                                  audioCode: entry.value.audioId!,
+                                );
+                          }
+
+                          _scrollToBottom();
+                        },
+                      ),
+                    ),
+                  if (isVehicle)
+                    PredefinedMessageTile(
+                      title: 'Report',
+                      backgroundColor: const Color(0xFFFDD1D2),
+                      borderColor: Colors.red,
+                      textColor: Colors.red,
+                      isSelected: false,
+                      onTap: () async {
+                        if (qrId != null) {
+                          // await ref
+                          //     .read(vehicleProvider.notifier)
+                          //     .initiateAutoCall(qrId: qrId, audioCode: "");
+                        }
+                        // Handle report action
+                        goToreportScreen(qrId);
+                      },
+                    ),
+                  ...messages.map(
+                    (msg) => ChatTile(
                       isIncoming: msg.senderType != "Visitor",
                       messages: msg.content ?? '',
                       timeStamp: msg.createdAt != null
@@ -138,26 +216,29 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen> {
                       name: msg.senderDetails?.name ?? '',
                       fileUrl: msg.messageType == 'Image' ? msg.mediaUrl : null,
                       imgUrl: '',
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                ],
               ),
-              ChatInputBar(
-                chatController: _controller,
-                onSend: () async {
-                  final text = _controller.text.trim();
-                  if (text.isEmpty) return;
-                  _controller.clear();
-                  await controller.sendText(text);
-                  _scrollToBottom();
-                },
-                onTyping: controller.sendTyping,
-                isOtherTyping: controller.isOtherTyping,
-                onAudioTap: () {},
-                onMediaTap: () {},
-              ),
-            ],
-          ),
+            ),
+            ChatInputBar(
+              chatController: _controller,
+              onSend: () async {
+                final text = _controller.text.trim();
+                if (text.isEmpty) return;
+                _controller.clear();
+                await controller.sendText(text);
+                if (!mounted) return;
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) _scrollToBottom();
+                });
+              },
+              onTyping: controller.sendTyping,
+              isOtherTyping: controller.isOtherTyping,
+              onAudioTap: () {},
+              onMediaTap: () {},
+            ),
+          ],
         ),
       ),
     );
