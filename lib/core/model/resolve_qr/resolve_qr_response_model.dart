@@ -44,15 +44,43 @@ class LostFound with _$LostFound {
 }
 
 @freezed
+class SocialLink with _$SocialLink {
+  const factory SocialLink({
+    SocialLinkType? type,
+    String? link,
+    bool? isActive,
+  }) = _SocialLink;
+
+  factory SocialLink.fromJson(Map<String, dynamic> json) =>
+      _$SocialLinkFromJson(json);
+}
+
+@freezed
+class SocialLinkType with _$SocialLinkType {
+  const factory SocialLinkType({
+    String? webSiteName,
+    String? logoUrl,
+  }) = _SocialLinkType;
+
+  factory SocialLinkType.fromJson(Map<String, dynamic> json) =>
+      _$SocialLinkTypeFromJson(json);
+}
+
+@freezed
 class Smartcard with _$Smartcard {
   const factory Smartcard({
     @JsonKey(name: '_id') String? id,
     String? userId,
     String? displayName,
-    List<dynamic>? activeSocialLinks,
+    List<SocialLink>? activeSocialLinks,
     DateTime? createdAt,
     DateTime? updatedAt,
     String? qrId,
+    String? bio,
+    String? businessName,
+    String? siteName,
+    String? siteUrl,
+    String? resumeUrl,
   }) = _Smartcard;
 
   factory Smartcard.fromJson(Map<String, dynamic> json) =>

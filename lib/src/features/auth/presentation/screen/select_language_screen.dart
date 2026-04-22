@@ -59,8 +59,8 @@ class _SelectLanguageScreenState extends ConsumerState<SelectLanguageScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
-            crossAxisAlignment: .center,
-            mainAxisAlignment: .spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 children: [
@@ -70,11 +70,11 @@ class _SelectLanguageScreenState extends ConsumerState<SelectLanguageScreen> {
                     BrandLoaderWidget(width: 55)
                   else if (provider.globalLanguages.isNotEmpty) ...[
                     Column(
-                      crossAxisAlignment: .start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         BrandText.white(
                           data: context.loc.international_language,
-                          fontWeight: .w500,
+                          fontWeight: FontWeight.w500,
                           fontFamily: BrandFontFamily.inter,
                         ),
                         BrandVSpace.gap10(),
@@ -101,11 +101,11 @@ class _SelectLanguageScreenState extends ConsumerState<SelectLanguageScreen> {
                   ],
                   if (provider.localLanguages.isNotEmpty) ...[
                     Column(
-                      crossAxisAlignment: .start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         BrandText.white(
                           data: context.loc.regional_language,
-                          fontWeight: .w500,
+                          fontWeight: FontWeight.w500,
                           fontFamily: BrandFontFamily.inter,
                         ),
                         BrandVSpace.gap10(),
@@ -133,7 +133,7 @@ class _SelectLanguageScreenState extends ConsumerState<SelectLanguageScreen> {
               Column(
                 children: [
                   Align(
-                    alignment: .centerRight,
+                    alignment: Alignment.centerRight,
                     child: BrandIconButton.next(
                       onTap: () {
                         if (provider.selectedLanguages != null) {

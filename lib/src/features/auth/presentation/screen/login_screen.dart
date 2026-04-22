@@ -39,7 +39,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       phoneNo: phoneController.text,
       name: nameController.text,
       lang: lang,
-      qrId: profile.qrId ?? '',
+      qrId: profile.qrId ?? '1833db932dde41c5cbd39e1930330caf',
     );
 
     if (!isSend) return;

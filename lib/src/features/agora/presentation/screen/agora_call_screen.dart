@@ -16,6 +16,7 @@ import 'dart:async';
 
 class AgoraCallScreen extends ConsumerStatefulWidget {
   final String? bookingId;
+  final String? callId;
   final String moduleType;
   final String callType;
   final String role;
@@ -24,6 +25,7 @@ class AgoraCallScreen extends ConsumerStatefulWidget {
   const AgoraCallScreen({
     super.key,
     this.bookingId,
+    this.callId,
     this.visitorId = "",
     this.moduleType = 'DoorBell',
     this.callType = 'video',
@@ -36,33 +38,40 @@ class AgoraCallScreen extends ConsumerStatefulWidget {
 
 class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
   StreamSubscription? _callEndedSub;
+  bool _hasNavigated = false;
 
   @override
   void initState() {
     super.initState();
-    debugPrint('🎬 AgoraCallScreen initState - Setting up listeners');
+    debugPrint('AgoraCallScreen initState - Setting up listeners');
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final success = await ref
-          .read(agoraProvider.notifier)
-          .startCall(
-            visitorId: widget.visitorId,
-            qrId: widget.bookingId ?? '',
-            callType: widget.callType,
-          );
-
-      if (!success && mounted) {
-        context.pop();
+      final notifier = ref.read(agoraProvider.notifier);
+      
+      if (widget.callId != null) {
+        await notifier.joinCall(
+          role: 'visitor',
+          callId: widget.callId!,
+          visitorId: widget.visitorId,
+        );
+      } else if (widget.bookingId != null && !notifier.isCallInitiated) {
+        final success = await notifier.startCall(
+          visitorId: widget.visitorId,
+          qrId: widget.bookingId!,
+          callType: widget.callType,
+        );
+        if (!success && mounted) {
+          _navigateBack();
+        }
       }
     });
 
-    // Listen for call ended event from WebSocket
-    debugPrint('🎧 Setting up WebSocket call_ended listener');
+    debugPrint('Setting up WebSocket call_ended listener');
     _callEndedSub = WebSocketService.callEndedStream.listen((data) {
-      debugPrint('📞 ========================================');
-      debugPrint('📞 CALL ENDED EVENT RECEIVED FROM WEBSOCKET');
-      debugPrint('📞 Data: $data');
-      debugPrint('📞 ========================================');
+      debugPrint('========================================');
+      debugPrint('CALL ENDED EVENT RECEIVED FROM WEBSOCKET');
+      debugPrint('Data: $data');
+      debugPrint('========================================');
 
       if (!mounted) {
         debugPrint('⚠️ Widget not mounted, skipping');
@@ -70,22 +79,47 @@ class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
       }
 
       final notifier = ref.read(agoraProvider.notifier);
-      debugPrint('🔴 Calling endCall(skipApiCall: true)...');
+      debugPrint(' Calling endCall(skipApiCall: true)...');
 
       notifier
           .endCall(skipApiCall: true)
           .then((_) {
-            debugPrint('✅ endCall completed');
-            if (mounted) {
-              debugPrint('🔙 Cannot pop, using go() instead');
-              context.pop();
-            }
+            debugPrint(
+              ' endCall completed, waiting for state change to navigate',
+            );
           })
           .catchError((error) {
-            debugPrint('❌ Error in endCall: $error');
+            debugPrint('Error in endCall: $error');
           });
     });
-    debugPrint('✅ WebSocket listener setup complete');
+    debugPrint(' WebSocket listener setup complete');
+  }
+
+  void _navigateBack() {
+    if (_hasNavigated || !mounted) {
+      debugPrint('⏭️ Navigation skipped - hasNavigated: $_hasNavigated, mounted: $mounted');
+      return;
+    }
+    _hasNavigated = true;
+    debugPrint('🔙 EXECUTING NAVIGATION BACK');
+    debugPrint('   canPop: ${context.canPop()}');
+    if (context.canPop()) {
+      debugPrint('   Using context.pop()');
+      context.pop();
+    } else {
+      debugPrint('   Using context.go() with query params');
+      // Fallback: rebuild the full URL with query params so they are preserved
+      final qrId = widget.bookingId;
+      final visitorId = widget.visitorId;
+      final params = <String, String>{};
+      if (qrId != null && qrId.isNotEmpty) params['qrId'] = qrId;
+      if (visitorId.isNotEmpty) params['visitorId'] = visitorId;
+      final query = params.entries.map((e) => '${e.key}=${e.value}').join('&');
+      final path = query.isNotEmpty
+          ? '${RouteName.selectOptionScreen}?$query'
+          : RouteName.selectOptionScreen;
+      context.go(path);
+    }
   }
 
   @override
@@ -94,12 +128,20 @@ class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
     final notifier = ref.read(agoraProvider.notifier);
 
     ref.listen<AgoraState>(agoraProvider, (previous, next) {
+      debugPrint('🔄 STATE CHANGE DETECTED:');
+      debugPrint('   Previous isCallActive: ${previous?.isCallActive}');
+      debugPrint('   Next isCallActive: ${next.isCallActive}');
+      debugPrint('   Next isLoading: ${next.isLoading}');
+      debugPrint('   Next error: ${next.error}');
+
       if (next.error != null) {
+        debugPrint('⚠️ Error detected in state: ${next.error}');
         if (next.error!.contains('Permission') ||
             next.error!.contains('Invalid') ||
             next.error!.contains('Failed')) {
+          debugPrint('🔙 Scheduling navigation due to error');
           Future.delayed(const Duration(seconds: 2), () {
-            if (mounted) context.pop();
+            _navigateBack();
           });
         }
       }
@@ -107,14 +149,10 @@ class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
       if (previous?.isCallActive == true &&
           next.isCallActive == false &&
           !next.isLoading) {
+        debugPrint('📞 CALL ENDED - isCallActive changed from true to false');
+        debugPrint('🔙 Triggering navigation back to select option screen');
         Future.microtask(() {
-          if (mounted) {
-            if (context.canPop()) {
-              context.pop();
-            } else {
-              context.go(RouteName.selectOptionScreen);
-            }
-          }
+          _navigateBack();
         });
       }
     });
@@ -163,7 +201,7 @@ class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
       onPopInvokedWithResult: (didPop, result) async {
         if (!didPop) {
           await notifier.endCall();
-          if (context.mounted) context.pop();
+          _navigateBack();
         }
       },
       child: Scaffold(
@@ -219,9 +257,7 @@ class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
                 onSwitchCamera: notifier.switchCamera,
                 onEndCall: () async {
                   await notifier.endCall();
-                  if (mounted && context.canPop()) {
-                    context.pop();
-                  }
+                  _navigateBack();
                 },
               ),
             ),

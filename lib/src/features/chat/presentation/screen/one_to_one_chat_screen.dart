@@ -33,7 +33,7 @@ class OneToOneChatScreen extends ConsumerStatefulWidget {
   ConsumerState<OneToOneChatScreen> createState() => _OneToOneChatScreenState();
 }
 
-class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen> {
+class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen> with WidgetsBindingObserver {
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
   int _previousMessageCount = 0;
@@ -41,11 +41,28 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _connectToChat();
+      _markMessagesAsSeen();
       debugPrint('🔍 ProfileType: ${widget.profileType}');
       debugPrint('🔍 IsVehicle: ${widget.profileType == 'vehicle'}');
     });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _markMessagesAsSeen();
+    }
+  }
+
+  void _markMessagesAsSeen() {
+    final controller = ref.read(oneToOneChatControllerProvider.notifier);
+    final roomId = widget.roomId;
+    if (roomId != null) {
+      controller.markAllAsSeen(roomId);
+    }
   }
 
   void _scrollToBottom() {
@@ -246,6 +263,7 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _controller.dispose();
     _scrollController.dispose();
     super.dispose();

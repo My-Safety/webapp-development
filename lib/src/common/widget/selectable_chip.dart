@@ -42,7 +42,7 @@ class SelectableChip extends StatelessWidget {
           ),
         ),
         child: Row(
-          mainAxisSize: .min,
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isSelected) ...[

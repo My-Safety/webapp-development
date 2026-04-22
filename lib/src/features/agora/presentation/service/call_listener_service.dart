@@ -28,7 +28,9 @@ class CallListenerService {
     _callEndedSubscription?.cancel();
 
     // Listen for incoming calls
-    _callStartedSubscription = WebSocketService.callStartedStream.listen((data) {
+    _callStartedSubscription = WebSocketService.callStartedStream.listen((
+      data,
+    ) {
       print('📞 Call Started Event Received');
       print('Payload: $data');
 
@@ -98,15 +100,19 @@ class CallListenerService {
     final visitorId = _pendingCallData?['visitorId'] as String? ?? '';
 
     if (callType.toLowerCase() == 'video') {
-      context.push('${RouteName.agoraVideoCall}?callId=$callId&visitorId=$visitorId');
+      context.push(
+        '${RouteName.agoraVideoCall}?callId=$callId&visitorId=$visitorId',
+      );
     } else {
-      context.push('${RouteName.agoraAudioCall}?callId=$callId&visitorId=$visitorId');
+      context.push(
+        '${RouteName.agoraAudioCall}?callId=$callId&visitorId=$visitorId',
+      );
     }
   }
 
   Future<void> _endCall(String callId) async {
     try {
-      await ref.read(agoraProvider.notifier).endCall();
+      await ref.read(agoraProvider.notifier).declineCall(callId);
       print('✅ Call declined: $callId');
     } catch (e) {
       print('⚠️ Error declining call: $e');

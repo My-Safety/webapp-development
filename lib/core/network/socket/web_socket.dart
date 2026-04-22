@@ -313,6 +313,8 @@ abstract class WebSocketService {
   }
 
   static void messageSeen(String roomId, List<String> messageIds) {
+    debugPrint('👁️ Emitting message_seen for room $roomId with ${messageIds.length} messages');
+    debugPrint('👁️ Message IDs: $messageIds');
     socket?.emit('message_seen', {'roomId': roomId, 'messageIds': messageIds});
   }
 

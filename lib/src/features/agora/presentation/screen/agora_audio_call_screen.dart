@@ -30,11 +30,15 @@ class AgoraAudioCallScreen extends ConsumerStatefulWidget {
 
 class _AgoraAudioCallScreenState extends ConsumerState<AgoraAudioCallScreen> {
   StreamSubscription? _callEndedSub;
+  bool _hasNavigated = false;
 
   @override
   void initState() {
     super.initState();
+    // Only cleanup Agora resources — navigation is handled by ref.listen
     _callEndedSub = WebSocketService.callEndedStream.listen((data) {
+      debugPrint('📞 Audio call ended event from WebSocket');
+      if (!mounted) return;
       final notifier = ref.read(agoraProvider.notifier);
       notifier.endCall(skipApiCall: true);
     });
@@ -52,13 +56,36 @@ class _AgoraAudioCallScreenState extends ConsumerState<AgoraAudioCallScreen> {
         final success = await notifier.startCall(
           qrId: widget.qrId!,
           callType: 'audio',
-          visitorId: widget.visitorId ?? "" ,
+          visitorId: widget.visitorId ?? "",
         );
         if (!success && mounted) {
-          context.pop();
+          _navigateBack();
         }
       }
     });
+  }
+
+  /// Single point of navigation back — uses pop() to preserve URL params
+  void _navigateBack() {
+    if (_hasNavigated || !mounted) return;
+    _hasNavigated = true;
+    debugPrint('🔙 Audio call: Navigating back via pop()');
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      // Fallback: rebuild the full URL with query params
+      final qrId = widget.qrId;
+      final visitorId = widget.visitorId;
+      final params = <String, String>{};
+      if (qrId != null && qrId.isNotEmpty) params['qrId'] = qrId;
+      if (visitorId != null && visitorId.isNotEmpty)
+        params['visitorId'] = visitorId;
+      final query = params.entries.map((e) => '${e.key}=${e.value}').join('&');
+      final path = query.isNotEmpty
+          ? '${RouteName.selectOptionScreen}?$query'
+          : RouteName.selectOptionScreen;
+      context.go(path);
+    }
   }
 
   @override
@@ -77,13 +104,7 @@ class _AgoraAudioCallScreenState extends ConsumerState<AgoraAudioCallScreen> {
           next.isCallActive == false &&
           !next.isLoading) {
         Future.microtask(() {
-          if (mounted) {
-            if (context.canPop()) {
-              context.pop();
-            } else {
-              context.go(RouteName.selectOptionScreen);
-            }
-          }
+          _navigateBack();
         });
       }
     });

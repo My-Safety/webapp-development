@@ -26,6 +26,7 @@ mixin _$AuthState {
   bool get isTermsAccepted => throw _privateConstructorUsedError;
   bool get isEnteredPhoneNo => throw _privateConstructorUsedError;
   bool get isExisting => throw _privateConstructorUsedError;
+  bool get isOtpComplete => throw _privateConstructorUsedError;
   User? get user => throw _privateConstructorUsedError;
   LoginResponseModel? get loginResponse => throw _privateConstructorUsedError;
   Country get selectedCountry => throw _privateConstructorUsedError;
@@ -58,6 +59,7 @@ abstract class $AuthStateCopyWith<$Res> {
     bool isTermsAccepted,
     bool isEnteredPhoneNo,
     bool isExisting,
+    bool isOtpComplete,
     User? user,
     LoginResponseModel? loginResponse,
     Country selectedCountry,
@@ -97,6 +99,7 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
     Object? isTermsAccepted = null,
     Object? isEnteredPhoneNo = null,
     Object? isExisting = null,
+    Object? isOtpComplete = null,
     Object? user = freezed,
     Object? loginResponse = freezed,
     Object? selectedCountry = null,
@@ -144,6 +147,10 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
             isExisting: null == isExisting
                 ? _value.isExisting
                 : isExisting // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            isOtpComplete: null == isOtpComplete
+                ? _value.isOtpComplete
+                : isOtpComplete // ignore: cast_nullable_to_non_nullable
                       as bool,
             user: freezed == user
                 ? _value.user
@@ -234,6 +241,7 @@ abstract class _$$AuthStateImplCopyWith<$Res>
     bool isTermsAccepted,
     bool isEnteredPhoneNo,
     bool isExisting,
+    bool isOtpComplete,
     User? user,
     LoginResponseModel? loginResponse,
     Country selectedCountry,
@@ -274,6 +282,7 @@ class __$$AuthStateImplCopyWithImpl<$Res>
     Object? isTermsAccepted = null,
     Object? isEnteredPhoneNo = null,
     Object? isExisting = null,
+    Object? isOtpComplete = null,
     Object? user = freezed,
     Object? loginResponse = freezed,
     Object? selectedCountry = null,
@@ -321,6 +330,10 @@ class __$$AuthStateImplCopyWithImpl<$Res>
         isExisting: null == isExisting
             ? _value.isExisting
             : isExisting // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        isOtpComplete: null == isOtpComplete
+            ? _value.isOtpComplete
+            : isOtpComplete // ignore: cast_nullable_to_non_nullable
                   as bool,
         user: freezed == user
             ? _value.user
@@ -376,6 +389,7 @@ class _$AuthStateImpl implements _AuthState {
     this.isTermsAccepted = false,
     this.isEnteredPhoneNo = false,
     this.isExisting = false,
+    this.isOtpComplete = false,
     this.user = null,
     this.loginResponse = null,
     this.selectedCountry = const Country(
@@ -424,6 +438,9 @@ class _$AuthStateImpl implements _AuthState {
   final bool isExisting;
   @override
   @JsonKey()
+  final bool isOtpComplete;
+  @override
+  @JsonKey()
   final User? user;
   @override
   @JsonKey()
@@ -446,7 +463,7 @@ class _$AuthStateImpl implements _AuthState {
 
   @override
   String toString() {
-    return 'AuthState(isSendOtpLoading: $isSendOtpLoading, isEmailValid: $isEmailValid, isPhoneValid: $isPhoneValid, isError: $isError, isVerifyOtpLoading: $isVerifyOtpLoading, enableLoginButton: $enableLoginButton, isTermsAccepted: $isTermsAccepted, isEnteredPhoneNo: $isEnteredPhoneNo, isExisting: $isExisting, user: $user, loginResponse: $loginResponse, selectedCountry: $selectedCountry, phoneNo: $phoneNo, email: $email, name: $name, fullAddress: $fullAddress, pinCode: $pinCode, landmark: $landmark)';
+    return 'AuthState(isSendOtpLoading: $isSendOtpLoading, isEmailValid: $isEmailValid, isPhoneValid: $isPhoneValid, isError: $isError, isVerifyOtpLoading: $isVerifyOtpLoading, enableLoginButton: $enableLoginButton, isTermsAccepted: $isTermsAccepted, isEnteredPhoneNo: $isEnteredPhoneNo, isExisting: $isExisting, isOtpComplete: $isOtpComplete, user: $user, loginResponse: $loginResponse, selectedCountry: $selectedCountry, phoneNo: $phoneNo, email: $email, name: $name, fullAddress: $fullAddress, pinCode: $pinCode, landmark: $landmark)';
   }
 
   @override
@@ -471,6 +488,8 @@ class _$AuthStateImpl implements _AuthState {
                 other.isEnteredPhoneNo == isEnteredPhoneNo) &&
             (identical(other.isExisting, isExisting) ||
                 other.isExisting == isExisting) &&
+            (identical(other.isOtpComplete, isOtpComplete) ||
+                other.isOtpComplete == isOtpComplete) &&
             (identical(other.user, user) || other.user == user) &&
             (identical(other.loginResponse, loginResponse) ||
                 other.loginResponse == loginResponse) &&
@@ -487,7 +506,7 @@ class _$AuthStateImpl implements _AuthState {
   }
 
   @override
-  int get hashCode => Object.hash(
+  int get hashCode => Object.hashAll([
     runtimeType,
     isSendOtpLoading,
     isEmailValid,
@@ -498,6 +517,7 @@ class _$AuthStateImpl implements _AuthState {
     isTermsAccepted,
     isEnteredPhoneNo,
     isExisting,
+    isOtpComplete,
     user,
     loginResponse,
     selectedCountry,
@@ -507,7 +527,7 @@ class _$AuthStateImpl implements _AuthState {
     fullAddress,
     pinCode,
     landmark,
-  );
+  ]);
 
   /// Create a copy of AuthState
   /// with the given fields replaced by the non-null parameter values.
@@ -529,6 +549,7 @@ abstract class _AuthState implements AuthState {
     final bool isTermsAccepted,
     final bool isEnteredPhoneNo,
     final bool isExisting,
+    final bool isOtpComplete,
     final User? user,
     final LoginResponseModel? loginResponse,
     final Country selectedCountry,
@@ -558,6 +579,8 @@ abstract class _AuthState implements AuthState {
   bool get isEnteredPhoneNo;
   @override
   bool get isExisting;
+  @override
+  bool get isOtpComplete;
   @override
   User? get user;
   @override

@@ -58,7 +58,6 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
 
   Future<bool> requestPermissions() async {
     if (_isWeb) {
-      debugPrint(' Web permissions granted automatically');
       return true;
     }
 
@@ -79,12 +78,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
     state = state.copyWith(isLoading: true, isCallInitiated: true);
     // Request permissions
     if (!await requestPermissions()) {
-      debugPrint(' Permissions denied');
-      state = state.copyWith(
-        isLoading: false,
-        isCallInitiated: false,
-        error: 'Camera and microphone permissions required',
-      );
+      state = state.copyWith(isLoading: false, isCallInitiated: false);
       return false;
     }
     var response = await ref
@@ -94,8 +88,6 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
         );
     if (response.success == ActionStatus.success.code) {
       state = state.copyWith(isLoading: false, startCallData: response.data);
-
-      debugPrint(' Call started: ${state.startCallData!.callId}');
 
       await joinCall(
         role: "visitor",
@@ -114,6 +106,15 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
     }
   }
 
+  Future<void> declineCall(String callId) async {
+    try {
+      await ref.read(agoraRemoteRepoProvider).endCall(callId: callId);
+      state = state.copyWith(isCallInitiated: false);
+    } catch (e) {
+      // debugPrint(' Error declining call: $e');
+    }
+  }
+
   Future<bool> joinCall({
     required String role,
     required String callId,
@@ -121,8 +122,6 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
   }) async {
     try {
       state = state.copyWith(isLoading: true);
-
-      debugPrint(' Joining call: $callId');
 
       final response = await ref
           .read(agoraRemoteRepoProvider)
@@ -140,8 +139,6 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
           joinCallData: response.data,
           tokenData: response.data,
         );
-
-        debugPrint(' Token data set: AppId=${state.tokenData?.appId}');
 
         await _initializeAgoraEngine();
 
@@ -161,7 +158,6 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
       );
       return false;
     } catch (e) {
-      debugPrint(' Error in joinCall: $e');
       state = state.copyWith(
         isLoading: false,
         error: 'Failed to initialize call: $e',
@@ -187,17 +183,11 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
 
   Future<void> _initializeWebEngine() async {
     try {
-      debugPrint('Initializing Agora Web SDK...');
-
       await _loadAgoraWebSdk();
-
-      debugPrint(' Agora Web SDK loaded');
-
-      debugPrint('Initializing with AppId: ${state.tokenData!.appId}');
 
       state = state.copyWith(isWebSdkLoaded: true);
     } catch (e) {
-      debugPrint(' Web SDK initialization error: $e');
+      // debugPrint(' Web SDK initialization error: $e');
       rethrow;
     }
   }
@@ -211,12 +201,10 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
     script.async = true;
 
     script.onload = ((JSAny event) {
-      debugPrint(' Agora Web SDK script loaded');
       completer.complete();
     }).toJS;
 
     script.onerror = ((JSAny event) {
-      debugPrint(' Failed to load Agora Web SDK');
       completer.completeError('Failed to load Agora Web SDK');
     }).toJS;
 
@@ -226,7 +214,6 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
 
   Future<void> _initializeMobileEngine() async {
     _engine = createAgoraRtcEngine();
-    debugPrint('Initializing with AppId: ${state.tokenData!.appId}');
     await _engine!.initialize(
       RtcEngineContext(
         appId: state.tokenData!.appId,
@@ -238,11 +225,9 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
     _engine!.registerEventHandler(
       RtcEngineEventHandler(
         onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
-          debugPrint(' Local user joined: ${connection.localUid}');
           state = state.copyWith(isCallActive: true);
         },
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
-          debugPrint(' Remote user joined: $remoteUid');
           state = state.copyWith(
             remoteUsers: [...state.remoteUsers, remoteUid],
             isRemoteUserJoined: true,
@@ -254,7 +239,6 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
               int remoteUid,
               UserOfflineReasonType reason,
             ) {
-              debugPrint(' Remote user left: $remoteUid');
               final updatedUsers = state.remoteUsers
                   .where((uid) => uid != remoteUid)
                   .toList();
@@ -264,11 +248,9 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
               );
             },
         onTokenPrivilegeWillExpire: (RtcConnection connection, String token) {
-          debugPrint(' Token expiring, refreshing...');
           _refreshToken();
         },
         onError: (ErrorCodeType err, String msg) {
-          debugPrint(' Agora Error: $err - $msg');
           state = state.copyWith(error: 'Connection error: $msg');
         },
       ),
@@ -312,7 +294,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
         await _joinChannelMobile(appId, token, channel, uid);
       }
     } catch (e) {
-      debugPrint('🔴 Join channel error: $e');
+      // debugPrint('Join channel error: $e');
       rethrow;
     }
   }
@@ -324,40 +306,17 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
     int uid,
   ) async {
     try {
-      debugPrint('═══════════════════════════════════════');
-      debugPrint('🌐 WEB CALL - REAL CONNECTION');
-      debugPrint('═══════════════════════════════════════');
-      debugPrint('Channel: $channel');
-      debugPrint('My UID: $uid');
-      debugPrint('AppId: $appId');
-      debugPrint('🎵 INCOMING VOICE CHECK: Starting audio connection...');
-      debugPrint('═══════════════════════════════════════');
-
-      // Reset disposed flag
       _isDisposed = false;
-      debugPrint('🎵 INCOMING VOICE CHECK: Reset disposed flag to false');
 
       // Create Agora client
       _webClient =
           agoraRTC.createClient(ClientConfig(mode: 'rtc', codec: 'vp8'))
               as IAgoraRTCClient;
 
-      debugPrint('✅ Web client created');
-      debugPrint('🎵 INCOMING VOICE CHECK: Client ready for audio');
-
-      // Set up event listeners
-      debugPrint('🎵 INCOMING VOICE CHECK: Setting up event listeners...');
-
       _webClient!.on(
         'user-published',
         ((JSAny user, JSAny mediaType) {
-          debugPrint(
-            '🎵 INCOMING VOICE CHECK: user-published event triggered!',
-          );
           if (_isDisposed || _webClient == null) {
-            debugPrint(
-              '🔴 INCOMING VOICE CHECK: Disposed or no client, ignoring event',
-            );
             return;
           }
           try {
@@ -365,34 +324,19 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
             final remoteUser = user as IAgoraRTCRemoteUser;
             final uid = (remoteUser.uid as JSNumber).toDartInt;
 
-            debugPrint('✅ Remote user $uid published: $type');
-            debugPrint('🎵 INCOMING VOICE CHECK: Remote user audio published!');
-
             // Automatically subscribe to audio
             Future(() async {
               if (_isDisposed || _webClient == null) return;
               try {
-                debugPrint(
-                  '🎵 INCOMING VOICE CHECK: Auto-subscribing to $type from UID $uid',
-                );
                 await _webClient!.subscribe(user, mediaType).toDart;
-                debugPrint('✅ Subscribed to $type from UID $uid');
-                debugPrint(
-                  '🎵 INCOMING VOICE CHECK: Successfully subscribed to remote audio!',
-                );
 
                 // Play remote audio track
                 if (type == 'audio') {
                   final audioTrack = remoteUser.audioTrack;
                   if (audioTrack != null) {
                     audioTrack.play();
-                    debugPrint('🔊 Remote audio track playing from UID $uid');
                   }
                 }
-
-                debugPrint(
-                  '🎵 INCOMING VOICE CHECK: You should now hear incoming voice!',
-                );
 
                 if (_isDisposed) return;
 
@@ -403,7 +347,6 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
                   final videoTrack = remoteUser.videoTrack;
                   if (videoTrack != null) {
                     _remoteVideoTracks[uid] = videoTrack;
-                    debugPrint('✅ Video track stored for uid: $uid');
                     // Force UI rebuild
                     if (!_isDisposed) {
                       state = state.copyWith(
@@ -418,27 +361,16 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
                     isRemoteUserJoined: true,
                     remoteUsers: [...state.remoteUsers, uid],
                   );
-                  debugPrint(
-                    '🎵 INCOMING VOICE CHECK: Remote user $uid added to state',
-                  );
                 }
               } catch (e) {
-                debugPrint('⚠️ Error in subscribe: $e');
-                debugPrint(
-                  '🔴 INCOMING VOICE CHECK: Failed to subscribe to audio!',
-                );
+                // debugPrint('Error in subscribe: $e');
               }
             });
           } catch (e) {
-            debugPrint('⚠️ Error handling user-published: $e');
-            debugPrint(
-              '🔴 INCOMING VOICE CHECK: Error handling audio publish!',
-            );
+            // debugPrint('⚠️ Error handling user-published: $e');
           }
         }).toJS,
       );
-
-      debugPrint('🎵 INCOMING VOICE CHECK: Event listeners set up complete');
 
       _webClient!.on(
         'user-unpublished',
@@ -449,8 +381,6 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
             final uid = (remoteUser.uid as JSNumber).toDartInt;
             final type = (mediaType as JSString).toDart;
 
-            debugPrint('👋 Remote user $uid unpublished: $type');
-
             if (type == 'video') {
               _remoteVideoTracks.remove(uid);
               if (!_isDisposed) {
@@ -459,7 +389,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
               }
             }
           } catch (e) {
-            debugPrint('⚠️ Error handling user-unpublished: $e');
+            // debugPrint('Error handling user-unpublished: $e');
           }
         }).toJS,
       );
@@ -472,8 +402,6 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
             final remoteUser = user as IAgoraRTCRemoteUser;
             final uid = (remoteUser.uid as JSNumber).toDartInt;
 
-            debugPrint('👋 Remote user $uid left');
-
             _remoteVideoTracks.remove(uid);
             if (!_isDisposed) {
               final updatedUsers = state.remoteUsers
@@ -485,25 +413,20 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
               );
             }
           } catch (e) {
-            debugPrint('⚠️ Error handling user-left: $e');
+            // debugPrint('Error handling user-left: $e');
           }
         }).toJS,
       );
 
       final isVideoCall = state.startCallData?.callType == 'video';
 
-      // Create tracks BEFORE joining channel
-      debugPrint('🎥 Creating media tracks...');
-
       // Create audio track
       final audioTrack = await agoraRTC.createMicrophoneAudioTrack().toDart;
       _localAudioTrack = audioTrack as ILocalAudioTrack?;
 
       if (_localAudioTrack == null) {
-        debugPrint('🔴 Failed to create local audio track!');
         throw Exception('Failed to create audio track');
       }
-      debugPrint('✅ Audio track created');
 
       // Create video track for video calls
       if (isVideoCall) {
@@ -511,43 +434,27 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
         _localVideoTrack = videoTrack as ILocalVideoTrack?;
 
         if (_localVideoTrack == null) {
-          debugPrint('🔴 Failed to create local video track!');
           throw Exception('Failed to create video track');
         }
-        debugPrint('✅ Video track created');
         state = state.copyWith(isVideoEnabled: true);
       }
 
       // Join channel
       await _webClient!.join(appId, channel, token, uid.toJS).toDart;
-      debugPrint('✅ Joined web channel');
 
       state = state.copyWith(isCallActive: true);
 
       // Publish audio track
       final audioJS = (_localAudioTrack as JSAny);
       await _webClient!.publish(audioJS).toDart;
-      debugPrint('✅ Audio track published');
-      debugPrint('🎵 Local microphone is now active!');
 
       // Publish video track for video calls
       if (isVideoCall && _localVideoTrack != null) {
         final videoJS = (_localVideoTrack as JSAny);
         await _webClient!.publish(videoJS).toDart;
-        debugPrint('✅ Video track published');
-        debugPrint('🎥 Local camera is now active!');
       }
-
-      debugPrint(
-        '🎵 REAL ${isVideoCall ? "video" : "audio"} connection established!',
-      );
-      debugPrint('🎵 INCOMING VOICE CHECK: Audio connection is LIVE!');
-      debugPrint(
-        '🎵 INCOMING VOICE CHECK: If you can\'t hear audio, check browser permissions!',
-      );
     } catch (e) {
-      debugPrint('🔴 Web join error: $e');
-      debugPrint('🔴 INCOMING VOICE CHECK: Audio connection FAILED!');
+      // debugPrint('Web join error: $e');
       state = state.copyWith(error: 'Failed to join web call: $e');
       rethrow;
     }
@@ -561,15 +468,6 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
   ) async {
     final isAudioCall = state.startCallData?.callType == 'audio';
 
-    debugPrint('═══════════════════════════════════════');
-    debugPrint('📱 MOBILE CALL - REAL CONNECTION');
-    debugPrint('═══════════════════════════════════════');
-    debugPrint('Channel: $channel');
-    debugPrint('My UID: $uid');
-    debugPrint('Call Type: ${isAudioCall ? "Audio" : "Video"}');
-    debugPrint('✅ This will establish REAL audio connection');
-    debugPrint('═══════════════════════════════════════');
-
     await _engine!.joinChannel(
       token: token,
       channelId: channel,
@@ -582,14 +480,12 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
         autoSubscribeVideo: !isAudioCall,
       ),
     );
-
-    debugPrint('✅ Mobile joined channel successfully');
-    debugPrint('🎵 Audio should now be working!');
   }
 
   void _startTokenRefreshTimer() {
     _tokenRefreshTimer?.cancel();
-    _tokenRefreshTimer = Timer.periodic(const Duration(minutes: 14), (timer) {
+    // Refresh token every 5 minutes (before 10-minute dev token expiration)
+    _tokenRefreshTimer = Timer.periodic(const Duration(minutes: 5), (timer) {
       _refreshToken();
     });
   }
@@ -628,7 +524,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
         await _engine!.renewToken(tokenResult.data!.agoraToken);
       }
     } catch (e) {
-      debugPrint('Token refresh failed: $e');
+      // debugPrint('Token refresh failed: $e');
     }
   }
 
@@ -639,7 +535,6 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
       if (_isWeb) {
         if (_localAudioTrack != null) {
           _localAudioTrack!.setEnabled(!newMuteState);
-          debugPrint('✅ Web mute toggled: $newMuteState');
         }
       } else {
         if (_engine == null) return;
@@ -648,7 +543,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
 
       state = state.copyWith(isMuted: newMuteState);
     } catch (e) {
-      debugPrint('Error toggling mute: $e');
+      // debugPrint('Error toggling mute: $e');
     }
   }
 
@@ -666,17 +561,14 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
             if (_localVideoTrack != null && _webClient != null) {
               final videoJS = (_localVideoTrack as JSAny);
               await _webClient!.publish(videoJS).toDart;
-              debugPrint('✅ Video track created and published');
             }
           } else {
             _localVideoTrack!.setEnabled(true);
-            debugPrint('✅ Video track enabled');
           }
         } else {
           // Disable video
           if (_localVideoTrack != null) {
             _localVideoTrack!.setEnabled(false);
-            debugPrint('✅ Video track disabled');
           }
         }
 
@@ -691,14 +583,14 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
         state = state.copyWith(isVideoEnabled: newVideoState);
       }
     } catch (e) {
-      debugPrint('Error toggling video: $e');
+      // debugPrint('Error toggling video: $e');
     }
   }
 
   Future<void> switchCamera() async {
     try {
       if (_isWeb) {
-        debugPrint('Camera switching not available on Web');
+        // debugPrint('Camera switching not available on Web');
         return;
       }
 
@@ -706,7 +598,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
       await _engine!.switchCamera();
       state = state.copyWith(isFrontCamera: !state.isFrontCamera);
     } catch (e) {
-      debugPrint('Error switching camera: $e');
+      // debugPrint('Error switching camera: $e');
     }
   }
 
@@ -715,7 +607,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
       final newSpeakerState = !state.isSpeakerOn;
 
       if (_isWeb) {
-        debugPrint('Speaker toggle not needed on Web');
+        // debugPrint('Speaker toggle not needed on Web');
       } else {
         if (_engine == null) return;
         await _engine!.setEnableSpeakerphone(newSpeakerState);
@@ -723,13 +615,12 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
 
       state = state.copyWith(isSpeakerOn: newSpeakerState);
     } catch (e) {
-      debugPrint('Error toggling speaker: $e');
+      // debugPrint('Error toggling speaker: $e');
     }
   }
 
   Future<void> endCall({bool skipApiCall = false}) async {
     try {
-      debugPrint(' Starting endCall...');
       _isDisposed = true;
       _tokenRefreshTimer?.cancel();
       _callDurationTimer?.cancel();
@@ -740,15 +631,13 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
           if (_webClient != null) {
             if (_localAudioTrack != null) {
               await _webClient!.unpublish(_localAudioTrack as JSAny).toDart;
-              debugPrint(' Audio track unpublished');
             }
             if (_localVideoTrack != null) {
               await _webClient!.unpublish(_localVideoTrack as JSAny).toDart;
-              debugPrint(' Video track unpublished');
             }
           }
         } catch (e) {
-          debugPrint('Error unpublishing tracks: $e');
+          // debugPrint('Error unpublishing tracks: $e');
         }
 
         // Close tracks
@@ -761,7 +650,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
           }
         } catch (e) {
           _localAudioTrack = null;
-          debugPrint(' Error closing audio track: $e');
+          // debugPrint(' Error closing audio track: $e');
         }
 
         try {
@@ -769,11 +658,11 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
             final closePromise = _localVideoTrack!.close();
             await closePromise.toDart;
             _localVideoTrack = null;
-            debugPrint(' Video track closed');
+            // debugPrint(' Video track closed');
           }
         } catch (e) {
           _localVideoTrack = null;
-          debugPrint(' Error closing video track: $e');
+          // debugPrint(' Error closing video track: $e');
         }
 
         _remoteVideoTracks.clear();
@@ -783,19 +672,15 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
           if (_webClient != null) {
             await _webClient!.leave().toDart;
             _webClient = null;
-            debugPrint('✅ Left web channel');
           }
         } catch (e) {
-          debugPrint('⚠️ Error leaving channel: $e');
+          // debugPrint(' Error leaving channel: $e');
         }
-
-        debugPrint('✅ Web channel cleanup completed');
       } else {
         if (_engine != null) {
           await _engine!.leaveChannel();
           await _engine!.release();
           _engine = null;
-          debugPrint('✅ Mobile engine released');
         }
       }
 
@@ -805,18 +690,16 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
           await ref
               .read(agoraRemoteRepoProvider)
               .endCall(callId: state.startCallData!.callId);
-          debugPrint('✅ End call API called');
         } catch (e) {
-          debugPrint('⚠️ Error calling endCall API: $e');
+          // debugPrint(' Error calling endCall API: $e');
         }
       } else if (skipApiCall) {
-        debugPrint('⏭️ Skipped end call API (remote user ended)');
+        // debugPrint('⏭Skipped end call API (remote user ended)');
       }
 
       state = const AgoraState();
-      debugPrint('✅ Call ended successfully');
     } catch (e) {
-      debugPrint('🔴 Error ending call: $e');
+      // debugPrint(' Error ending call: $e');
       _isDisposed = true;
       state = const AgoraState();
     }
@@ -840,7 +723,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
           _engine!.release();
         }
       } catch (e) {
-        debugPrint('⚠️ Error in dispose: $e');
+        // debugPrint('Error in dispose: $e');
       }
     }
     super.dispose();

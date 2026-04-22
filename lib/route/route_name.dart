@@ -15,5 +15,5 @@ abstract class RouteName {
   static String agoraVideoCall = '/agoraVideoCall';
   static String agoraAudioCall = '/agoraAudioCall';
   static String reportAccedent = '/reportAccedent';
-  
+  static String smartcardscreen = '/SmartCardScreen';
 }

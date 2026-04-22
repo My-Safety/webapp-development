@@ -1,6 +1,7 @@
 // Copyright (c) 2025, Indo-Sakura Software Pvt Ltd. All rights reserved.
 // Created By Adwaith c, 04/12/2025
 
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mysafety_web/route/navigation_service.dart';
 import 'package:mysafety_web/route/route_name.dart';
@@ -12,6 +13,7 @@ import 'package:mysafety_web/src/features/auth/presentation/screen/select_langua
 import 'package:mysafety_web/src/features/auth/presentation/screen/select_option_screen.dart';
 import 'package:mysafety_web/src/features/chat/presentation/screen/one_to_one_chat_screen.dart';
 import 'package:mysafety_web/src/features/profile/presentation/screens/fetch_location.dart';
+import 'package:mysafety_web/src/features/smartcard/presentation/screen/smart_card_screen.dart';
 import 'package:mysafety_web/src/features/splash/presentation/screen/error_screen.dart';
 import 'package:mysafety_web/src/features/splash/presentation/screen/splash_screen.dart';
 import 'package:mysafety_web/src/features/vehicle/presentation/screens/report_accedent_screen.dart';
@@ -19,8 +21,28 @@ import 'package:mysafety_web/src/features/vehicle/presentation/screens/report_ac
 final GoRouter routerConfig = GoRouter(
   navigatorKey: NavigationService.navigatorKey,
   initialLocation: '/',
+  redirect: (context, state) {
+    final currentPath = state.uri.path;
+    debugPrint('🔀 Redirect check - path: $currentPath');
+    
+    if (currentPath == RouteName.smartcardscreen) {
+      final qrId = state.uri.queryParameters['qrId'];
+      if (qrId == null || qrId.isEmpty || qrId == 'null') {
+        debugPrint('⚠️ Invalid qrId, redirecting to splash');
+        return '/';
+      }
+    }
+    
+    return null;
+  },
   routes: [
-    GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
+    GoRoute(
+      path: '/',
+      builder: (context, state) {
+        final qrId = state.uri.queryParameters['qrId'];
+        return SplashScreen(qrId: qrId);
+      },
+    ),
 
     GoRoute(path: RouteName.error, builder: (context, state) => ErrorScreen()),
 
@@ -74,10 +96,12 @@ final GoRouter routerConfig = GoRouter(
       path: RouteName.agoraVideoCall,
       builder: (context, state) {
         final qrId = state.uri.queryParameters['qrId'];
+        final callId = state.uri.queryParameters['callId'];
         final role = state.uri.queryParameters['role'] ?? 'visitor';
         final visitorId = state.uri.queryParameters['visitorId'];
         return AgoraCallScreen(
           bookingId: qrId,
+          callId: callId,
           moduleType: 'DoorBell',
           callType: 'video',
           role: role,
@@ -96,6 +120,13 @@ final GoRouter routerConfig = GoRouter(
           callId: callId,
           visitorId: visitorId,
         );
+      },
+    ),
+    GoRoute(
+      path: RouteName.smartcardscreen,
+      builder: (context, state) {
+        final qrId = state.uri.queryParameters['qrId'];
+        return SmartCardScreen(qrId: qrId);
       },
     ),
   ],

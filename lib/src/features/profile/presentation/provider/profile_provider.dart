@@ -166,16 +166,20 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
     }
   }
 
-  Future<void> resolveQr({
-    required String qrId,
-    required String latitude,
-    required String longitude,
-  }) async {
+  Future<void> resolveQr({required String qrId, LatLng? location}) async {
+    debugPrint('🔵 resolveQr called with qrId: $qrId');
     state = state.copyWith(isHandleDoorBellLoading: true);
 
     var result = await ref
         .read(profileRemoteRepoProvider)
-        .resolveQr(qrId: qrId, latitude: latitude, longitude: longitude);
+        .resolveQr(
+          qrId: qrId,
+          latitude: location?.latitude.toString(),
+          longitude: location?.longitude.toString(),
+        );
+
+    debugPrint('🔵 API Response - success: ${result.success}');
+    debugPrint('🔵 API Response - data: ${result.data}');
 
     if (result.success == ActionStatus.success.code) {
       state = state.copyWith(
@@ -183,27 +187,33 @@ class ProfileNotifierProvider extends StateNotifier<ProfileState> {
         resolveQrResponse: result.data,
       );
 
+      debugPrint('🔵 Doorbell: ${result.data?.doorbell}');
+      debugPrint('🔵 Vehicle: ${result.data?.vehicle}');
+      debugPrint('🔵 Lostfound: ${result.data?.lostfound}');
+      debugPrint('🔵 Smartcard: ${result.data?.smartcard}');
+
       // Set active profile type
       if (result.data?.doorbell != null) {
-        state = state.copyWith(activeProfileType:'doorbell');
+        state = state.copyWith(activeProfileType: 'doorbell');
+        debugPrint('✅ Active profile type set to: doorbell');
       } else if (result.data?.vehicle != null) {
-        state = state.copyWith(activeProfileType:'vehicle');
+        state = state.copyWith(activeProfileType: 'vehicle');
+        debugPrint('✅ Active profile type set to: vehicle');
       } else if (result.data?.lostfound != null) {
         state = state.copyWith(activeProfileType: 'lostfound');
+        debugPrint('✅ Active profile type set to: lostfound');
       } else if (result.data?.smartcard != null) {
         state = state.copyWith(activeProfileType: 'smartcard');
+        debugPrint('✅ Active profile type set to: smartcard');
       }
 
-      debugPrint('QR resolved: ${state.resolveQrResponse!.qr!.ownerId}');
-
-      // f profile exists (house is assigned), create chat room
       if (state.resolveQrResponse?.qr?.ownerId != null) {
-        debugPrint('House assigned - creating chat room');
-        // await handleDoorBellScan();
+        debugPrint('✅ QR resolved - Owner ID: ${state.resolveQrResponse!.qr!.ownerId}');
       } else {
-        debugPrint('House not assigned yet');
+        debugPrint('⚠️ House not assigned yet');
       }
     } else {
+      debugPrint('❌ API failed with status: ${result.success}');
       state = state.copyWith(
         isHandleDoorBellLoading: false,
         resolveQrResponse: null,

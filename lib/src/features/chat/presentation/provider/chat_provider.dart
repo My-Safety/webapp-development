@@ -88,11 +88,12 @@ class OneToOneChatController
       debugPrint('📥 New message received: ${message.content}');
       state = [...state, message];
 
-      if (message.senderType != "Visitor" && message.id != null) {
+      // Mark incoming messages as delivered and seen immediately
+      if (message.senderType != "Visitor" && message.id != null && roomId != null) {
         WebSocketService.messageDelivered([message.id!]);
+        debugPrint('👁️ Auto-marking message as seen: ${message.id}');
+        WebSocketService.messageSeen(roomId!, [message.id!]);
       }
-
-      _markSeen();
     }, onError: (error) => debugPrint('🔴 Message stream error: $error'));
     debugPrint('👂 Message listener active');
   }
@@ -177,6 +178,21 @@ class OneToOneChatController
 
     if (unseen.isNotEmpty && roomId != null) {
       WebSocketService.messageSeen(roomId!, unseen);
+    }
+  }
+
+  void markAllAsSeen(String room) {
+    final unseen = state
+        .where(
+          (m) =>
+              m.senderType != "Visitor" && m.status != 'seen' && m.id != null,
+        )
+        .map((m) => m.id!)
+        .toList();
+
+    if (unseen.isNotEmpty) {
+      debugPrint('✅ Marking ${unseen.length} messages as seen');
+      WebSocketService.messageSeen(room, unseen);
     }
   }
 

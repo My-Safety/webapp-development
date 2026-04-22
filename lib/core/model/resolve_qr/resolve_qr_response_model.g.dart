@@ -74,12 +74,43 @@ Map<String, dynamic> _$$LostFoundImplToJson(_$LostFoundImpl instance) =>
       'qrId': instance.qrId,
     };
 
+_$SocialLinkImpl _$$SocialLinkImplFromJson(Map<String, dynamic> json) =>
+    _$SocialLinkImpl(
+      type: json['type'] == null
+          ? null
+          : SocialLinkType.fromJson(json['type'] as Map<String, dynamic>),
+      link: json['link'] as String?,
+      isActive: json['isActive'] as bool?,
+    );
+
+Map<String, dynamic> _$$SocialLinkImplToJson(_$SocialLinkImpl instance) =>
+    <String, dynamic>{
+      'type': instance.type,
+      'link': instance.link,
+      'isActive': instance.isActive,
+    };
+
+_$SocialLinkTypeImpl _$$SocialLinkTypeImplFromJson(Map<String, dynamic> json) =>
+    _$SocialLinkTypeImpl(
+      webSiteName: json['webSiteName'] as String?,
+      logoUrl: json['logoUrl'] as String?,
+    );
+
+Map<String, dynamic> _$$SocialLinkTypeImplToJson(
+  _$SocialLinkTypeImpl instance,
+) => <String, dynamic>{
+  'webSiteName': instance.webSiteName,
+  'logoUrl': instance.logoUrl,
+};
+
 _$SmartcardImpl _$$SmartcardImplFromJson(Map<String, dynamic> json) =>
     _$SmartcardImpl(
       id: json['_id'] as String?,
       userId: json['userId'] as String?,
       displayName: json['displayName'] as String?,
-      activeSocialLinks: json['activeSocialLinks'] as List<dynamic>?,
+      activeSocialLinks: (json['activeSocialLinks'] as List<dynamic>?)
+          ?.map((e) => SocialLink.fromJson(e as Map<String, dynamic>))
+          .toList(),
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
@@ -87,6 +118,11 @@ _$SmartcardImpl _$$SmartcardImplFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['updatedAt'] as String),
       qrId: json['qrId'] as String?,
+      bio: json['bio'] as String?,
+      businessName: json['businessName'] as String?,
+      siteName: json['siteName'] as String?,
+      siteUrl: json['siteUrl'] as String?,
+      resumeUrl: json['resumeUrl'] as String?,
     );
 
 Map<String, dynamic> _$$SmartcardImplToJson(_$SmartcardImpl instance) =>
@@ -98,6 +134,11 @@ Map<String, dynamic> _$$SmartcardImplToJson(_$SmartcardImpl instance) =>
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'qrId': instance.qrId,
+      'bio': instance.bio,
+      'businessName': instance.businessName,
+      'siteName': instance.siteName,
+      'siteUrl': instance.siteUrl,
+      'resumeUrl': instance.resumeUrl,
     };
 
 _$DoorbellImpl _$$DoorbellImplFromJson(Map<String, dynamic> json) =>

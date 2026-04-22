@@ -19,6 +19,7 @@ class AuthState with _$AuthState {
     @Default(false) bool isTermsAccepted,
     @Default(false) bool isEnteredPhoneNo,
     @Default(false) bool isExisting,
+    @Default(false) bool isOtpComplete,
     @Default(null) User? user,
     @Default(null) LoginResponseModel? loginResponse,
 

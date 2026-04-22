@@ -115,7 +115,7 @@ class AgoraRemoteRepo implements AgoraRepo {
     try {
       var response = await NetworkClient.post(
         endPoint: AgoraEndPoints.endCall(callId),
-        body: {'callId': callId},
+        body: {'role': 'visitor'},
       );
 
       if (response?.statusCode == NetworkStatus.status200.statusCode) {

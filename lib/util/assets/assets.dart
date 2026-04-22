@@ -33,6 +33,7 @@ abstract class Assets {
     static const fireService = 'assets/icon/fireservice.png';
   static const ambulance = 'assets/icon/ambulance.png';
   static const police = 'assets/icon/police.png';
+  static const logoprimery = 'assets/image/logoprimery.png';
 
 
 

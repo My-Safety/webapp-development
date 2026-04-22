@@ -808,6 +808,389 @@ abstract class _LostFound implements LostFound {
       throw _privateConstructorUsedError;
 }
 
+SocialLink _$SocialLinkFromJson(Map<String, dynamic> json) {
+  return _SocialLink.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SocialLink {
+  SocialLinkType? get type => throw _privateConstructorUsedError;
+  String? get link => throw _privateConstructorUsedError;
+  bool? get isActive => throw _privateConstructorUsedError;
+
+  /// Serializes this SocialLink to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SocialLink
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SocialLinkCopyWith<SocialLink> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SocialLinkCopyWith<$Res> {
+  factory $SocialLinkCopyWith(
+    SocialLink value,
+    $Res Function(SocialLink) then,
+  ) = _$SocialLinkCopyWithImpl<$Res, SocialLink>;
+  @useResult
+  $Res call({SocialLinkType? type, String? link, bool? isActive});
+
+  $SocialLinkTypeCopyWith<$Res>? get type;
+}
+
+/// @nodoc
+class _$SocialLinkCopyWithImpl<$Res, $Val extends SocialLink>
+    implements $SocialLinkCopyWith<$Res> {
+  _$SocialLinkCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SocialLink
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? type = freezed,
+    Object? link = freezed,
+    Object? isActive = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            type: freezed == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as SocialLinkType?,
+            link: freezed == link
+                ? _value.link
+                : link // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            isActive: freezed == isActive
+                ? _value.isActive
+                : isActive // ignore: cast_nullable_to_non_nullable
+                      as bool?,
+          )
+          as $Val,
+    );
+  }
+
+  /// Create a copy of SocialLink
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SocialLinkTypeCopyWith<$Res>? get type {
+    if (_value.type == null) {
+      return null;
+    }
+
+    return $SocialLinkTypeCopyWith<$Res>(_value.type!, (value) {
+      return _then(_value.copyWith(type: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$SocialLinkImplCopyWith<$Res>
+    implements $SocialLinkCopyWith<$Res> {
+  factory _$$SocialLinkImplCopyWith(
+    _$SocialLinkImpl value,
+    $Res Function(_$SocialLinkImpl) then,
+  ) = __$$SocialLinkImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({SocialLinkType? type, String? link, bool? isActive});
+
+  @override
+  $SocialLinkTypeCopyWith<$Res>? get type;
+}
+
+/// @nodoc
+class __$$SocialLinkImplCopyWithImpl<$Res>
+    extends _$SocialLinkCopyWithImpl<$Res, _$SocialLinkImpl>
+    implements _$$SocialLinkImplCopyWith<$Res> {
+  __$$SocialLinkImplCopyWithImpl(
+    _$SocialLinkImpl _value,
+    $Res Function(_$SocialLinkImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of SocialLink
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? type = freezed,
+    Object? link = freezed,
+    Object? isActive = freezed,
+  }) {
+    return _then(
+      _$SocialLinkImpl(
+        type: freezed == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as SocialLinkType?,
+        link: freezed == link
+            ? _value.link
+            : link // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        isActive: freezed == isActive
+            ? _value.isActive
+            : isActive // ignore: cast_nullable_to_non_nullable
+                  as bool?,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SocialLinkImpl implements _SocialLink {
+  const _$SocialLinkImpl({this.type, this.link, this.isActive});
+
+  factory _$SocialLinkImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SocialLinkImplFromJson(json);
+
+  @override
+  final SocialLinkType? type;
+  @override
+  final String? link;
+  @override
+  final bool? isActive;
+
+  @override
+  String toString() {
+    return 'SocialLink(type: $type, link: $link, isActive: $isActive)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SocialLinkImpl &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.link, link) || other.link == link) &&
+            (identical(other.isActive, isActive) ||
+                other.isActive == isActive));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, type, link, isActive);
+
+  /// Create a copy of SocialLink
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SocialLinkImplCopyWith<_$SocialLinkImpl> get copyWith =>
+      __$$SocialLinkImplCopyWithImpl<_$SocialLinkImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SocialLinkImplToJson(this);
+  }
+}
+
+abstract class _SocialLink implements SocialLink {
+  const factory _SocialLink({
+    final SocialLinkType? type,
+    final String? link,
+    final bool? isActive,
+  }) = _$SocialLinkImpl;
+
+  factory _SocialLink.fromJson(Map<String, dynamic> json) =
+      _$SocialLinkImpl.fromJson;
+
+  @override
+  SocialLinkType? get type;
+  @override
+  String? get link;
+  @override
+  bool? get isActive;
+
+  /// Create a copy of SocialLink
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SocialLinkImplCopyWith<_$SocialLinkImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+SocialLinkType _$SocialLinkTypeFromJson(Map<String, dynamic> json) {
+  return _SocialLinkType.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SocialLinkType {
+  String? get webSiteName => throw _privateConstructorUsedError;
+  String? get logoUrl => throw _privateConstructorUsedError;
+
+  /// Serializes this SocialLinkType to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of SocialLinkType
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $SocialLinkTypeCopyWith<SocialLinkType> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SocialLinkTypeCopyWith<$Res> {
+  factory $SocialLinkTypeCopyWith(
+    SocialLinkType value,
+    $Res Function(SocialLinkType) then,
+  ) = _$SocialLinkTypeCopyWithImpl<$Res, SocialLinkType>;
+  @useResult
+  $Res call({String? webSiteName, String? logoUrl});
+}
+
+/// @nodoc
+class _$SocialLinkTypeCopyWithImpl<$Res, $Val extends SocialLinkType>
+    implements $SocialLinkTypeCopyWith<$Res> {
+  _$SocialLinkTypeCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of SocialLinkType
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? webSiteName = freezed, Object? logoUrl = freezed}) {
+    return _then(
+      _value.copyWith(
+            webSiteName: freezed == webSiteName
+                ? _value.webSiteName
+                : webSiteName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            logoUrl: freezed == logoUrl
+                ? _value.logoUrl
+                : logoUrl // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$SocialLinkTypeImplCopyWith<$Res>
+    implements $SocialLinkTypeCopyWith<$Res> {
+  factory _$$SocialLinkTypeImplCopyWith(
+    _$SocialLinkTypeImpl value,
+    $Res Function(_$SocialLinkTypeImpl) then,
+  ) = __$$SocialLinkTypeImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String? webSiteName, String? logoUrl});
+}
+
+/// @nodoc
+class __$$SocialLinkTypeImplCopyWithImpl<$Res>
+    extends _$SocialLinkTypeCopyWithImpl<$Res, _$SocialLinkTypeImpl>
+    implements _$$SocialLinkTypeImplCopyWith<$Res> {
+  __$$SocialLinkTypeImplCopyWithImpl(
+    _$SocialLinkTypeImpl _value,
+    $Res Function(_$SocialLinkTypeImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of SocialLinkType
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? webSiteName = freezed, Object? logoUrl = freezed}) {
+    return _then(
+      _$SocialLinkTypeImpl(
+        webSiteName: freezed == webSiteName
+            ? _value.webSiteName
+            : webSiteName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        logoUrl: freezed == logoUrl
+            ? _value.logoUrl
+            : logoUrl // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SocialLinkTypeImpl implements _SocialLinkType {
+  const _$SocialLinkTypeImpl({this.webSiteName, this.logoUrl});
+
+  factory _$SocialLinkTypeImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SocialLinkTypeImplFromJson(json);
+
+  @override
+  final String? webSiteName;
+  @override
+  final String? logoUrl;
+
+  @override
+  String toString() {
+    return 'SocialLinkType(webSiteName: $webSiteName, logoUrl: $logoUrl)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SocialLinkTypeImpl &&
+            (identical(other.webSiteName, webSiteName) ||
+                other.webSiteName == webSiteName) &&
+            (identical(other.logoUrl, logoUrl) || other.logoUrl == logoUrl));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, webSiteName, logoUrl);
+
+  /// Create a copy of SocialLinkType
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SocialLinkTypeImplCopyWith<_$SocialLinkTypeImpl> get copyWith =>
+      __$$SocialLinkTypeImplCopyWithImpl<_$SocialLinkTypeImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SocialLinkTypeImplToJson(this);
+  }
+}
+
+abstract class _SocialLinkType implements SocialLinkType {
+  const factory _SocialLinkType({
+    final String? webSiteName,
+    final String? logoUrl,
+  }) = _$SocialLinkTypeImpl;
+
+  factory _SocialLinkType.fromJson(Map<String, dynamic> json) =
+      _$SocialLinkTypeImpl.fromJson;
+
+  @override
+  String? get webSiteName;
+  @override
+  String? get logoUrl;
+
+  /// Create a copy of SocialLinkType
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SocialLinkTypeImplCopyWith<_$SocialLinkTypeImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 Smartcard _$SmartcardFromJson(Map<String, dynamic> json) {
   return _Smartcard.fromJson(json);
 }
@@ -818,10 +1201,15 @@ mixin _$Smartcard {
   String? get id => throw _privateConstructorUsedError;
   String? get userId => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
-  List<dynamic>? get activeSocialLinks => throw _privateConstructorUsedError;
+  List<SocialLink>? get activeSocialLinks => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   String? get qrId => throw _privateConstructorUsedError;
+  String? get bio => throw _privateConstructorUsedError;
+  String? get businessName => throw _privateConstructorUsedError;
+  String? get siteName => throw _privateConstructorUsedError;
+  String? get siteUrl => throw _privateConstructorUsedError;
+  String? get resumeUrl => throw _privateConstructorUsedError;
 
   /// Serializes this Smartcard to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -842,10 +1230,15 @@ abstract class $SmartcardCopyWith<$Res> {
     @JsonKey(name: '_id') String? id,
     String? userId,
     String? displayName,
-    List<dynamic>? activeSocialLinks,
+    List<SocialLink>? activeSocialLinks,
     DateTime? createdAt,
     DateTime? updatedAt,
     String? qrId,
+    String? bio,
+    String? businessName,
+    String? siteName,
+    String? siteUrl,
+    String? resumeUrl,
   });
 }
 
@@ -871,6 +1264,11 @@ class _$SmartcardCopyWithImpl<$Res, $Val extends Smartcard>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? qrId = freezed,
+    Object? bio = freezed,
+    Object? businessName = freezed,
+    Object? siteName = freezed,
+    Object? siteUrl = freezed,
+    Object? resumeUrl = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -889,7 +1287,7 @@ class _$SmartcardCopyWithImpl<$Res, $Val extends Smartcard>
             activeSocialLinks: freezed == activeSocialLinks
                 ? _value.activeSocialLinks
                 : activeSocialLinks // ignore: cast_nullable_to_non_nullable
-                      as List<dynamic>?,
+                      as List<SocialLink>?,
             createdAt: freezed == createdAt
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
@@ -901,6 +1299,26 @@ class _$SmartcardCopyWithImpl<$Res, $Val extends Smartcard>
             qrId: freezed == qrId
                 ? _value.qrId
                 : qrId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            bio: freezed == bio
+                ? _value.bio
+                : bio // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            businessName: freezed == businessName
+                ? _value.businessName
+                : businessName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            siteName: freezed == siteName
+                ? _value.siteName
+                : siteName // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            siteUrl: freezed == siteUrl
+                ? _value.siteUrl
+                : siteUrl // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            resumeUrl: freezed == resumeUrl
+                ? _value.resumeUrl
+                : resumeUrl // ignore: cast_nullable_to_non_nullable
                       as String?,
           )
           as $Val,
@@ -921,10 +1339,15 @@ abstract class _$$SmartcardImplCopyWith<$Res>
     @JsonKey(name: '_id') String? id,
     String? userId,
     String? displayName,
-    List<dynamic>? activeSocialLinks,
+    List<SocialLink>? activeSocialLinks,
     DateTime? createdAt,
     DateTime? updatedAt,
     String? qrId,
+    String? bio,
+    String? businessName,
+    String? siteName,
+    String? siteUrl,
+    String? resumeUrl,
   });
 }
 
@@ -949,6 +1372,11 @@ class __$$SmartcardImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? qrId = freezed,
+    Object? bio = freezed,
+    Object? businessName = freezed,
+    Object? siteName = freezed,
+    Object? siteUrl = freezed,
+    Object? resumeUrl = freezed,
   }) {
     return _then(
       _$SmartcardImpl(
@@ -967,7 +1395,7 @@ class __$$SmartcardImplCopyWithImpl<$Res>
         activeSocialLinks: freezed == activeSocialLinks
             ? _value._activeSocialLinks
             : activeSocialLinks // ignore: cast_nullable_to_non_nullable
-                  as List<dynamic>?,
+                  as List<SocialLink>?,
         createdAt: freezed == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
@@ -979,6 +1407,26 @@ class __$$SmartcardImplCopyWithImpl<$Res>
         qrId: freezed == qrId
             ? _value.qrId
             : qrId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        bio: freezed == bio
+            ? _value.bio
+            : bio // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        businessName: freezed == businessName
+            ? _value.businessName
+            : businessName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        siteName: freezed == siteName
+            ? _value.siteName
+            : siteName // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        siteUrl: freezed == siteUrl
+            ? _value.siteUrl
+            : siteUrl // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        resumeUrl: freezed == resumeUrl
+            ? _value.resumeUrl
+            : resumeUrl // ignore: cast_nullable_to_non_nullable
                   as String?,
       ),
     );
@@ -992,10 +1440,15 @@ class _$SmartcardImpl implements _Smartcard {
     @JsonKey(name: '_id') this.id,
     this.userId,
     this.displayName,
-    final List<dynamic>? activeSocialLinks,
+    final List<SocialLink>? activeSocialLinks,
     this.createdAt,
     this.updatedAt,
     this.qrId,
+    this.bio,
+    this.businessName,
+    this.siteName,
+    this.siteUrl,
+    this.resumeUrl,
   }) : _activeSocialLinks = activeSocialLinks;
 
   factory _$SmartcardImpl.fromJson(Map<String, dynamic> json) =>
@@ -1008,9 +1461,9 @@ class _$SmartcardImpl implements _Smartcard {
   final String? userId;
   @override
   final String? displayName;
-  final List<dynamic>? _activeSocialLinks;
+  final List<SocialLink>? _activeSocialLinks;
   @override
-  List<dynamic>? get activeSocialLinks {
+  List<SocialLink>? get activeSocialLinks {
     final value = _activeSocialLinks;
     if (value == null) return null;
     if (_activeSocialLinks is EqualUnmodifiableListView)
@@ -1025,10 +1478,20 @@ class _$SmartcardImpl implements _Smartcard {
   final DateTime? updatedAt;
   @override
   final String? qrId;
+  @override
+  final String? bio;
+  @override
+  final String? businessName;
+  @override
+  final String? siteName;
+  @override
+  final String? siteUrl;
+  @override
+  final String? resumeUrl;
 
   @override
   String toString() {
-    return 'Smartcard(id: $id, userId: $userId, displayName: $displayName, activeSocialLinks: $activeSocialLinks, createdAt: $createdAt, updatedAt: $updatedAt, qrId: $qrId)';
+    return 'Smartcard(id: $id, userId: $userId, displayName: $displayName, activeSocialLinks: $activeSocialLinks, createdAt: $createdAt, updatedAt: $updatedAt, qrId: $qrId, bio: $bio, businessName: $businessName, siteName: $siteName, siteUrl: $siteUrl, resumeUrl: $resumeUrl)';
   }
 
   @override
@@ -1048,7 +1511,15 @@ class _$SmartcardImpl implements _Smartcard {
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
-            (identical(other.qrId, qrId) || other.qrId == qrId));
+            (identical(other.qrId, qrId) || other.qrId == qrId) &&
+            (identical(other.bio, bio) || other.bio == bio) &&
+            (identical(other.businessName, businessName) ||
+                other.businessName == businessName) &&
+            (identical(other.siteName, siteName) ||
+                other.siteName == siteName) &&
+            (identical(other.siteUrl, siteUrl) || other.siteUrl == siteUrl) &&
+            (identical(other.resumeUrl, resumeUrl) ||
+                other.resumeUrl == resumeUrl));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1062,6 +1533,11 @@ class _$SmartcardImpl implements _Smartcard {
     createdAt,
     updatedAt,
     qrId,
+    bio,
+    businessName,
+    siteName,
+    siteUrl,
+    resumeUrl,
   );
 
   /// Create a copy of Smartcard
@@ -1083,10 +1559,15 @@ abstract class _Smartcard implements Smartcard {
     @JsonKey(name: '_id') final String? id,
     final String? userId,
     final String? displayName,
-    final List<dynamic>? activeSocialLinks,
+    final List<SocialLink>? activeSocialLinks,
     final DateTime? createdAt,
     final DateTime? updatedAt,
     final String? qrId,
+    final String? bio,
+    final String? businessName,
+    final String? siteName,
+    final String? siteUrl,
+    final String? resumeUrl,
   }) = _$SmartcardImpl;
 
   factory _Smartcard.fromJson(Map<String, dynamic> json) =
@@ -1100,13 +1581,23 @@ abstract class _Smartcard implements Smartcard {
   @override
   String? get displayName;
   @override
-  List<dynamic>? get activeSocialLinks;
+  List<SocialLink>? get activeSocialLinks;
   @override
   DateTime? get createdAt;
   @override
   DateTime? get updatedAt;
   @override
   String? get qrId;
+  @override
+  String? get bio;
+  @override
+  String? get businessName;
+  @override
+  String? get siteName;
+  @override
+  String? get siteUrl;
+  @override
+  String? get resumeUrl;
 
   /// Create a copy of Smartcard
   /// with the given fields replaced by the non-null parameter values.

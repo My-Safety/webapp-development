@@ -33,6 +33,12 @@ class AuthNotifierProvider extends StateNotifier<AuthState> {
 
   bool get isVerifyOtpLoading => state.isVerifyOtpLoading;
 
+  bool get isOtpComplete => state.isOtpComplete;
+
+  set setOtpComplete(bool value) {
+    state = state.copyWith(isOtpComplete: value);
+  }
+
   bool get isExistingUser => state.isExisting;
 
   User? get user => state.user;
@@ -80,8 +86,7 @@ class AuthNotifierProvider extends StateNotifier<AuthState> {
   Future<bool> verifyOtp({required String otp, required String qrId}) async {
     if (phoneNo == null) return false;
 
-    state = state.copyWith(isVerifyOtpLoading: true);
-  
+    state = state.copyWith(isVerifyOtpLoading: true, isOtpComplete: false);
 
     var result = await ref
         .read(authRemoteRepoProvider)
@@ -89,10 +94,14 @@ class AuthNotifierProvider extends StateNotifier<AuthState> {
 
     if (result.success == ActionStatus.success.code) {
       debugPrint('✅ Verify OTP Success - User ID: ${result.data?.id}');
-      state = state.copyWith(isVerifyOtpLoading: false, user: result.data);
+      state = state.copyWith(
+        isVerifyOtpLoading: false,
+        isOtpComplete: false,
+        user: result.data,
+      );
       return true;
     } else {
-      state = state.copyWith(isVerifyOtpLoading: false, user: null);
+      state = state.copyWith(isVerifyOtpLoading: false, isOtpComplete: true);
       return false;
     }
   }

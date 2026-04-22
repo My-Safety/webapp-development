@@ -12,7 +12,8 @@ part of 'sos_response_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 SosResponseModel _$SosResponseModelFromJson(Map<String, dynamic> json) {
   return _SosResponseModel.fromJson(json);
@@ -24,8 +25,12 @@ mixin _$SosResponseModel {
   String? get number => throw _privateConstructorUsedError;
   String? get icon => throw _privateConstructorUsedError;
 
+  /// Serializes this SosResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SosResponseModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SosResponseModelCopyWith<SosResponseModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -33,8 +38,9 @@ mixin _$SosResponseModel {
 /// @nodoc
 abstract class $SosResponseModelCopyWith<$Res> {
   factory $SosResponseModelCopyWith(
-          SosResponseModel value, $Res Function(SosResponseModel) then) =
-      _$SosResponseModelCopyWithImpl<$Res, SosResponseModel>;
+    SosResponseModel value,
+    $Res Function(SosResponseModel) then,
+  ) = _$SosResponseModelCopyWithImpl<$Res, SosResponseModel>;
   @useResult
   $Res call({String? title, String? number, String? icon});
 }
@@ -49,6 +55,8 @@ class _$SosResponseModelCopyWithImpl<$Res, $Val extends SosResponseModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SosResponseModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -56,29 +64,33 @@ class _$SosResponseModelCopyWithImpl<$Res, $Val extends SosResponseModel>
     Object? number = freezed,
     Object? icon = freezed,
   }) {
-    return _then(_value.copyWith(
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
-      number: freezed == number
-          ? _value.number
-          : number // ignore: cast_nullable_to_non_nullable
-              as String?,
-      icon: freezed == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            title: freezed == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            number: freezed == number
+                ? _value.number
+                : number // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            icon: freezed == icon
+                ? _value.icon
+                : icon // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$SosResponseModelImplCopyWith<$Res>
     implements $SosResponseModelCopyWith<$Res> {
-  factory _$$SosResponseModelImplCopyWith(_$SosResponseModelImpl value,
-          $Res Function(_$SosResponseModelImpl) then) =
-      __$$SosResponseModelImplCopyWithImpl<$Res>;
+  factory _$$SosResponseModelImplCopyWith(
+    _$SosResponseModelImpl value,
+    $Res Function(_$SosResponseModelImpl) then,
+  ) = __$$SosResponseModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? title, String? number, String? icon});
@@ -88,10 +100,13 @@ abstract class _$$SosResponseModelImplCopyWith<$Res>
 class __$$SosResponseModelImplCopyWithImpl<$Res>
     extends _$SosResponseModelCopyWithImpl<$Res, _$SosResponseModelImpl>
     implements _$$SosResponseModelImplCopyWith<$Res> {
-  __$$SosResponseModelImplCopyWithImpl(_$SosResponseModelImpl _value,
-      $Res Function(_$SosResponseModelImpl) _then)
-      : super(_value, _then);
+  __$$SosResponseModelImplCopyWithImpl(
+    _$SosResponseModelImpl _value,
+    $Res Function(_$SosResponseModelImpl) _then,
+  ) : super(_value, _then);
 
+  /// Create a copy of SosResponseModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -99,20 +114,22 @@ class __$$SosResponseModelImplCopyWithImpl<$Res>
     Object? number = freezed,
     Object? icon = freezed,
   }) {
-    return _then(_$SosResponseModelImpl(
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
-      number: freezed == number
-          ? _value.number
-          : number // ignore: cast_nullable_to_non_nullable
-              as String?,
-      icon: freezed == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$SosResponseModelImpl(
+        title: freezed == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        number: freezed == number
+            ? _value.number
+            : number // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        icon: freezed == icon
+            ? _value.icon
+            : icon // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -146,30 +163,33 @@ class _$SosResponseModelImpl implements _SosResponseModel {
             (identical(other.icon, icon) || other.icon == icon));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, title, number, icon);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SosResponseModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SosResponseModelImplCopyWith<_$SosResponseModelImpl> get copyWith =>
       __$$SosResponseModelImplCopyWithImpl<_$SosResponseModelImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SosResponseModelImplToJson(
-      this,
-    );
+    return _$$SosResponseModelImplToJson(this);
   }
 }
 
 abstract class _SosResponseModel implements SosResponseModel {
-  const factory _SosResponseModel(
-      {final String? title,
-      final String? number,
-      final String? icon}) = _$SosResponseModelImpl;
+  const factory _SosResponseModel({
+    final String? title,
+    final String? number,
+    final String? icon,
+  }) = _$SosResponseModelImpl;
 
   factory _SosResponseModel.fromJson(Map<String, dynamic> json) =
       _$SosResponseModelImpl.fromJson;
@@ -180,8 +200,11 @@ abstract class _SosResponseModel implements SosResponseModel {
   String? get number;
   @override
   String? get icon;
+
+  /// Create a copy of SosResponseModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SosResponseModelImplCopyWith<_$SosResponseModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -24,29 +24,26 @@ class OtpScreen extends ConsumerStatefulWidget {
 }
 
 class _OtpScreenState extends ConsumerState<OtpScreen> {
-  late AuthNotifierProvider provider;
-  late ProfileNotifierProvider profileprovider;
-
   GlobalKey<FormState> formKey = GlobalKey();
-
   TextEditingController otpController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
+  // Convenience getters — no setState, state lives in provider
+  AuthNotifierProvider get _auth => ref.read(authProvider.notifier);
+  ProfileNotifierProvider get _profile => ref.read(profileProvider.notifier);
 
-    _initialize();
+  @override
+  void dispose() {
+    otpController.dispose();
+    super.dispose();
   }
 
-  Future<void> _initialize() async {}
-
   Future<void> verifyOtp() async {
-    if (!_validateOtp()) return;
+    if (otpController.text.length < 4) return;
 
     try {
-      final isVerify = await provider.verifyOtp(
+      final isVerify = await _auth.verifyOtp(
         otp: otpController.text,
-        qrId: profileprovider.qrId ?? '',
+        qrId: _profile.qrId ?? '1833db932dde41c5cbd39e1930330caf',
       );
 
       if (isVerify) {
@@ -60,30 +57,22 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     }
   }
 
-  bool _validateOtp() {
-    if (otpController.text.isEmpty) {
-      return false;
-    }
-    return true;
-  }
-
   Future<void> _handlePostVerification() async {
     await _handleDoorBellScan();
-    _navigateToSelectOption();
   }
 
   Future<void> _handleDoorBellScan() async {
     try {
-      // Step 1: Get lat/long
       var location = await LocationManager.getCurrentLocation();
       if (location == null) {
         debugPrint('🔴 Unable to get location');
         return;
       }
-      await profileprovider.handleDoorBellScan(
+      await _profile.handleDoorBellScan(
         location: LatLng(location.latitude, location.longitude),
-        qrId: profileprovider.qrId ?? "",
+        qrId: _profile.qrId ?? '1833db932dde41c5cbd39e1930330caf',
       );
+      _navigateToSelectOption();
     } catch (e) {
       debugPrint('Doorbell scan error: $e');
     }
@@ -94,16 +83,16 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       final profile = ref.read(profileProvider);
       final lang = profile.selectedLanguages?.code?.toString() ?? 'en';
 
-      if (provider.phoneNo == null) {
+      if (_auth.phoneNo == null) {
         debugPrint('Phone number not available');
         return;
       }
 
-      await provider.sendOtp(
-        phoneNo: provider.phoneNo!,
-        name: provider.name!,
+      await _auth.sendOtp(
+        phoneNo: _auth.phoneNo!,
+        name: _auth.name!,
         lang: lang,
-        qrId: profileprovider.qrId ?? '',
+        qrId: _profile.qrId ?? '1833db932dde41c5cbd39e1930330caf',
       );
     } catch (e) {
       debugPrint('Resend OTP error: $e');
@@ -112,17 +101,17 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
   void _navigateToSelectOption() {
     final authState = ref.read(authProvider);
-    final roomId = profileprovider.qrScanResponse?.chatRoom?.id;
+    final roomId = _profile.qrScanResponse?.chatRoom?.id;
     final visitorId = authState.user?.id;
 
     debugPrint('🔍 Auth State User: ${authState.user}');
     debugPrint('🔍 Visitor ID: $visitorId');
 
     // ignore: avoid_print
-   print(
+    print(
       'Navigating to SelectOptionScreen with roomId: $roomId, visitorId: $visitorId',
     );
-    final qrId = profileprovider.qrId ?? "e984cacef7ac469118002759547df6a8";
+    final qrId = _profile.qrId ?? '1833db932dde41c5cbd39e1930330caf';
     if (roomId != null) {
       context.go(
         '${RouteName.selectOptionScreen}?roomId=$roomId&qrId=$qrId&visitorId=$visitorId',
@@ -131,14 +120,17 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       context.go(RouteName.selectOptionScreen);
     }
   }
+
   void gotoBack() {
     context.pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    provider = ref.read(authProvider.notifier);
-    profileprovider = ref.read(profileProvider.notifier);
+    // Watch provider state — widget rebuilds automatically when these change
+    final isLoading = ref.watch(authProvider).isVerifyOtpLoading;
+    final isOtpComplete = ref.watch(authProvider).isOtpComplete;
+
     return BaseLayout(
       appBar: BrandAppBar(title: context.loc.enter_otp, centerTitle: false),
       child: Expanded(
@@ -151,9 +143,18 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                 child: Pinput(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   autofocus: true,
+                  length: 4,
                   controller: otpController,
-                  onCompleted: (value) {},
-                  onChanged: (value) {},
+                  onCompleted: (value) {
+                    // Use provider setter — no setState
+                    ref.read(authProvider.notifier).setOtpComplete = true;
+                    verifyOtp();
+                  },
+                  onChanged: (value) {
+                    // Use provider setter — no setState
+                    ref.read(authProvider.notifier).setOtpComplete =
+                        value.length == 4;
+                  },
                   defaultPinTheme: PinPutTheme.defaultTheme,
                   focusedPinTheme: PinPutTheme.focusedTheme,
                 ),
@@ -171,17 +172,29 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                 ],
               ),
               BrandVSpace.gap100(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  BrandIconButton.next(
-                    height: 60,
-                    width: 60,
-                    isLoading: provider.isVerifyOtpLoading,
-                    onTap: verifyOtp,
+              if (isLoading)
+                const SizedBox(
+                  height: 60,
+                  width: 60,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.white,
+                      strokeWidth: 3,
+                    ),
                   ),
-                ],
-              ),
+                )
+              else if (isOtpComplete)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    BrandIconButton.next(
+                      height: 60,
+                      width: 60,
+                      isLoading: false,
+                      onTap: verifyOtp,
+                    ),
+                  ],
+                ),
             ],
           ),
         ),

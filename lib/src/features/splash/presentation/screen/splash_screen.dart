@@ -20,7 +20,9 @@ import 'package:mysafety_design_system/design_system/design_system.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
-  const SplashScreen({super.key});
+  const SplashScreen({super.key, this.qrId});
+
+  final String? qrId;
 
   @override
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
@@ -32,61 +34,88 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    debugPrint('🚀 SplashScreen initState - qrId: ${widget.qrId}');
     _loadInit();
   }
 
   Future<void> _loadInit() async {
+    debugPrint('⏱️ Starting delay...');
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
 
     provider = ref.read(profileProvider.notifier);
-    final qrId = _getQrIdFromUrl();
+    final qrId = widget.qrId ?? _getQrIdFromUrl();
 
-    if (qrId.isNotEmpty) {
-      provider.setQrId = qrId;
-      debugPrint('qrId set: $qrId');
-    } else {
-      debugPrint('qrId is empty');
-    }
+    debugPrint('🔑 Final QR ID: $qrId');
 
-    // Step 1: Get lat/long
-    var location = await LocationManager.getCurrentLocation();
-    if (location == null) {
-      debugPrint('Unable to get location');
+    if (qrId.isEmpty) {
+      debugPrint('❌ qrId is empty - cannot proceed');
+      NavigationService.showErrorSnackbar(
+        message: "QR code not found. Please scan a valid QR code.",
+      );
       return;
     }
 
-    debugPrint(' Lat: ${location.latitude}, Long: ${location.longitude}');
+    provider.setQrId = qrId;
+    debugPrint('✅ qrId set: $qrId');
 
-    // Step 2: Get address
+    var location = await LocationManager.getCurrentLocation();
+    if (location == null) {
+      debugPrint('❌ Unable to get location');
+      return;
+    }
+
+    debugPrint('📍 Lat: ${location.latitude}, Long: ${location.longitude}');
+
     await provider.getAddressFromLatLng(
       latlng: LatLng(location.latitude, location.longitude),
     );
 
-    // Step 3: Resolve QR
     await provider.resolveQr(
-      qrId: provider.qrId ?? '',
-      latitude: location.latitude.toString(),
-      longitude: location.longitude.toString(),
+      qrId: qrId,
+      location: LatLng(location.latitude, location.longitude),
     );
 
     if (!mounted) return;
 
-    // Step 4: Check profile - if null show error, else navigate to fetch address
+    debugPrint('🔍 Active Profile Type: ${provider.activeProfileType}');
+    debugPrint('🔍 Has Profile: ${provider.hasProfile}');
+
+    if (provider.activeProfileType == 'smartcard') {
+      debugPrint('✅ Smartcard - navigating with qrId: $qrId');
+      context.go('${RouteName.smartcardscreen}?qrId=$qrId');
+      return;
+    }
+
     if (provider.hasProfile) {
       context.go(RouteName.fetchLocation);
-      debugPrint('Profile  found house  assigned');
+      debugPrint('✅ Profile found');
     } else {
+      debugPrint('❌ No profile found');
       NavigationService.showErrorSnackbar(
         message: "Profile not found house not assigned",
       );
     }
   }
 
+  // Future<void> _resolveQrData(LatLng? location, String? qrId) async {
+  //   if (qrId != null) {
+  //     await provider.resolveQr(qrId: qrId, location: location);
+
+  //     debugPrint('🔍 Active Profile Type: ${provider.activeProfileType}');
+
+  //     if (provider.activeProfileType == 'smartcard') {
+  //       debugPrint(' smartcard navigate...');
+  //       debugPrint(
+  //         '📋 Messages fetched: ${provider.predefinedMessages.length}',
+  //       );
+  //     }
+  //   }
+  // }
+
   String _getQrIdFromUrl() {
     final uri = Uri.parse(window.location.href);
-    final qrId =
-        uri.queryParameters['qrId']??"";
+    final qrId = uri.queryParameters['qrId'] ?? "";
     debugPrint(' URL qrId extracted: $qrId');
     return qrId;
   }

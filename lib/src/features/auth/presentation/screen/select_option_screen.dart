@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mysafety_design_system/design_system/design_system.dart';
 import 'package:mysafety_web/route/route_name.dart';
 import 'package:mysafety_web/src/features/auth/presentation/widgets/action_box.dart';
@@ -33,21 +34,17 @@ class _SelectOptionScreenState extends ConsumerState<SelectOptionScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_hasInitialized) {
         _hasInitialized = true;
-        _resolveQrData();
+        _resolveQrData(null);
         _initializeChatConnection();
       }
     });
   }
 
   /// Resolve QR data to get profile information
-  Future<void> _resolveQrData() async {
+  Future<void> _resolveQrData(LatLng? location) async {
     final qrId = widget.qrId ?? profileprovider.qrId;
     if (qrId != null) {
-      await profileprovider.resolveQr(
-        qrId: qrId,
-        latitude: "25.59",
-        longitude: "85.13",
-      );
+      await profileprovider.resolveQr(qrId: qrId, location: location);
 
       debugPrint(
         '🔍 Active Profile Type: ${profileprovider.activeProfileType}',
