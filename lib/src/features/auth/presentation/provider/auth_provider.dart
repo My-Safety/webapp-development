@@ -39,6 +39,10 @@ class AuthNotifierProvider extends StateNotifier<AuthState> {
     state = state.copyWith(isOtpComplete: value);
   }
 
+  set setVerifyOtpLoading(bool value) {
+    state = state.copyWith(isVerifyOtpLoading: value);
+  }
+
   bool get isExistingUser => state.isExisting;
 
   User? get user => state.user;

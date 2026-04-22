@@ -63,17 +63,21 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
   Future<void> _handleDoorBellScan() async {
     try {
+      ref.read(authProvider.notifier).setVerifyOtpLoading = true;
       var location = await LocationManager.getCurrentLocation();
       if (location == null) {
         debugPrint('🔴 Unable to get location');
+        ref.read(authProvider.notifier).setVerifyOtpLoading = false;
         return;
       }
       await _profile.handleDoorBellScan(
         location: LatLng(location.latitude, location.longitude),
         qrId: _profile.qrId ?? '1833db932dde41c5cbd39e1930330caf',
       );
+      ref.read(authProvider.notifier).setVerifyOtpLoading = false;
       _navigateToSelectOption();
     } catch (e) {
+      ref.read(authProvider.notifier).setVerifyOtpLoading = false;
       debugPrint('Doorbell scan error: $e');
     }
   }
@@ -128,7 +132,9 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     // Watch provider state — widget rebuilds automatically when these change
-    final isLoading = ref.watch(authProvider).isVerifyOtpLoading;
+    final isVerifyOtpLoading = ref.watch(authProvider).isVerifyOtpLoading;
+    final isDoorBellLoading = ref.watch(profileProvider).isHandleDoorBellLoading;
+    final isLoading = isVerifyOtpLoading || isDoorBellLoading;
     final isOtpComplete = ref.watch(authProvider).isOtpComplete;
 
     return BaseLayout(
