@@ -20,6 +20,7 @@ class VehicleRemoteRepo implements VehicleRepo {
       var response = await NetworkClient.post(
         endPoint: VehicleEndpoint.autoCall,
         body: body,
+        showError:true
       );
 
       if (response?.statusCode == NetworkStatus.status200.statusCode) {

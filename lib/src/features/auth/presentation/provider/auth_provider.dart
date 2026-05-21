@@ -8,6 +8,7 @@ import 'package:mysafety_web/core/model/auth/state/auth_state.dart';
 import 'package:mysafety_web/core/model/user/user_model.dart';
 import 'package:mysafety_web/core/network/network_status.dart';
 import 'package:mysafety_web/src/features/auth/data/auth_remote_repo.dart';
+import 'package:mysafety_web/util/enum/otp_loading_enum.dart';
 import 'package:mysafety_web/util/utils.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifierProvider, AuthState>(
@@ -30,8 +31,13 @@ class AuthNotifierProvider extends StateNotifier<AuthState> {
   String? get name => state.name;
 
   String? get email => state.email;
+  OtpLoadingStep get loadingStep => state.loadingStep;
 
-  bool get isVerifyOtpLoading => state.isVerifyOtpLoading;
+  set setLoadingStep(OtpLoadingStep step) {
+    state = state.copyWith(loadingStep: step);
+  }
+
+  bool get isLoading => state.loadingStep != OtpLoadingStep.none;
 
   bool get isOtpComplete => state.isOtpComplete;
 
@@ -39,9 +45,7 @@ class AuthNotifierProvider extends StateNotifier<AuthState> {
     state = state.copyWith(isOtpComplete: value);
   }
 
-  set setVerifyOtpLoading(bool value) {
-    state = state.copyWith(isVerifyOtpLoading: value);
-  }
+  
 
   bool get isExistingUser => state.isExisting;
 
@@ -87,28 +91,31 @@ class AuthNotifierProvider extends StateNotifier<AuthState> {
     }
   }
 
-  Future<bool> verifyOtp({required String otp, required String qrId}) async {
-    if (phoneNo == null) return false;
+Future<bool> verifyOtp({required String otp, required String qrId}) async {
+  if (phoneNo == null) return false;
 
-    state = state.copyWith(isVerifyOtpLoading: true, isOtpComplete: false);
+  // Was: state.copyWith(isVerifyOtpLoading: true, ...)
+  state = state.copyWith(loadingStep: OtpLoadingStep.verifying, isOtpComplete: false);
 
-    var result = await ref
-        .read(authRemoteRepoProvider)
-        .verifyOtp(phoneNo: phoneNo!, otp: otp, qrId: qrId);
+  var result = await ref
+      .read(authRemoteRepoProvider)
+      .verifyOtp(phoneNo: phoneNo!, otp: otp, qrId: qrId);
 
-    if (result.success == ActionStatus.success.code) {
-      debugPrint('✅ Verify OTP Success - User ID: ${result.data?.id}');
-      state = state.copyWith(
-        isVerifyOtpLoading: false,
-        isOtpComplete: false,
-        user: result.data,
-      );
-      return true;
-    } else {
-      state = state.copyWith(isVerifyOtpLoading: false, isOtpComplete: true);
-      return false;
-    }
+  if (result.success == ActionStatus.success.code) {
+    state = state.copyWith(
+      loadingStep: OtpLoadingStep.none,   // was: isVerifyOtpLoading: false
+      isOtpComplete: false,
+      user: result.data,
+    );
+    return true;
+  } else {
+    state = state.copyWith(
+      loadingStep: OtpLoadingStep.none,   // was: isVerifyOtpLoading: false
+      isOtpComplete: true,
+    );
+    return false;
   }
+}
 
   set setIsTermsAccepted(bool value) {
     state = state.copyWith(isTermsAccepted: value);

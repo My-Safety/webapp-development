@@ -38,6 +38,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
   final Map<int, IRemoteVideoTrack> _remoteVideoTracks = {};
   Timer? _tokenRefreshTimer;
   Timer? _callDurationTimer;
+  String _currentCallType = 'audio';
   bool _isDisposed = false;
   bool get isCallInitiated => state.isCallInitiated;
   AgoraStartCallResponseModel? get startCallData => state.startCallData;
@@ -75,6 +76,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
     required String callType,
     required String visitorId,
   }) async {
+    _currentCallType = callType.trim().toLowerCase();
     state = state.copyWith(isLoading: true, isCallInitiated: true);
     // Request permissions
     if (!await requestPermissions()) {
@@ -87,16 +89,21 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
           request: AgoraStartCallRequestModel(callType: callType, qrId: qrId),
         );
     if (response.success == ActionStatus.success.code) {
-      state = state.copyWith(isLoading: false, startCallData: response.data);
+      state = state.copyWith(
+        startCallData: response.data,
+        isVideoEnabled: _isVideoCall,
+      );
 
       await joinCall(
         role: "visitor",
         callId: state.startCallData!.callId,
         visitorId: visitorId,
+        callType: callType,
       );
 
       return true;
     } else {
+      _currentCallType = 'audio';
       state = state.copyWith(
         isLoading: false,
         startCallData: null,
@@ -119,9 +126,14 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
     required String role,
     required String callId,
     required String visitorId,
+    String? callType,
   }) async {
     try {
-      state = state.copyWith(isLoading: true);
+      _currentCallType =
+          (callType ?? state.startCallData?.callType ?? _currentCallType)
+              .trim()
+              .toLowerCase();
+      state = state.copyWith(isLoading: true, isVideoEnabled: _isVideoCall);
 
       final response = await ref
           .read(agoraRemoteRepoProvider)
@@ -259,8 +271,9 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
     await _engine!.enableAudio();
 
     // Only enable video for video calls
-    if (state.startCallData?.callType == 'video') {
+    if (_isVideoCall) {
       await _engine!.enableVideo();
+      state = state.copyWith(isVideoEnabled: true);
     } else {
       await _engine!.disableVideo();
     }
@@ -307,6 +320,10 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
   ) async {
     try {
       _isDisposed = false;
+
+      final isVideoCall = _isVideoCall;
+      debugPrint('Video call enabled: $isVideoCall');
+      debugPrint('Call type: $_currentCallType');
 
       // Create Agora client
       _webClient =
@@ -418,8 +435,6 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
         }).toJS,
       );
 
-      final isVideoCall = state.startCallData?.callType == 'video';
-
       // Create audio track
       final audioTrack = await agoraRTC.createMicrophoneAudioTrack().toDart;
       _localAudioTrack = audioTrack as ILocalAudioTrack?;
@@ -430,28 +445,36 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
 
       // Create video track for video calls
       if (isVideoCall) {
+        debugPrint('Creating video track...');
         final videoTrack = await agoraRTC.createCameraVideoTrack().toDart;
         _localVideoTrack = videoTrack as ILocalVideoTrack?;
 
         if (_localVideoTrack == null) {
           throw Exception('Failed to create video track');
         }
-        state = state.copyWith(isVideoEnabled: true);
+        debugPrint('Video track created successfully');
       }
 
       // Join channel
       await _webClient!.join(appId, channel, token, uid.toJS).toDart;
+      debugPrint('Joined channel, setting state...');
 
-      state = state.copyWith(isCallActive: true);
+      state = state.copyWith(
+        isCallActive: true,
+        isVideoEnabled: isVideoCall,
+      );
+      debugPrint('State updated: isVideoEnabled = ${state.isVideoEnabled}');
 
       // Publish audio track
       final audioJS = (_localAudioTrack as JSAny);
       await _webClient!.publish(audioJS).toDart;
+      debugPrint('Audio track published');
 
       // Publish video track for video calls
       if (isVideoCall && _localVideoTrack != null) {
         final videoJS = (_localVideoTrack as JSAny);
         await _webClient!.publish(videoJS).toDart;
+        debugPrint('Video track published');
       }
     } catch (e) {
       // debugPrint('Web join error: $e');
@@ -466,7 +489,7 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
     String channel,
     int uid,
   ) async {
-    final isAudioCall = state.startCallData?.callType == 'audio';
+    final isVideoCall = _isVideoCall;
 
     await _engine!.joinChannel(
       token: token,
@@ -475,9 +498,9 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
       options: ChannelMediaOptions(
         clientRoleType: ClientRoleType.clientRoleBroadcaster,
         publishMicrophoneTrack: true,
-        publishCameraTrack: !isAudioCall,
+        publishCameraTrack: isVideoCall,
         autoSubscribeAudio: true,
-        autoSubscribeVideo: !isAudioCall,
+        autoSubscribeVideo: isVideoCall,
       ),
     );
   }
@@ -619,6 +642,8 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
     }
   }
 
+  bool get _isVideoCall => _currentCallType == 'video';
+
   Future<void> endCall({bool skipApiCall = false}) async {
     try {
       _isDisposed = true;
@@ -697,10 +722,12 @@ class AgoraNotifierProvider extends StateNotifier<AgoraState> {
         // debugPrint('⏭Skipped end call API (remote user ended)');
       }
 
+      _currentCallType = 'audio';
       state = const AgoraState();
     } catch (e) {
       // debugPrint(' Error ending call: $e');
       _isDisposed = true;
+      _currentCallType = 'audio';
       state = const AgoraState();
     }
   }

@@ -5,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl_phone_field/countries.dart';
 import 'package:mysafety_web/core/model/auth/login_response_model.dart';
 import 'package:mysafety_web/core/model/user/user_model.dart';
+import 'package:mysafety_web/util/enum/otp_loading_enum.dart';
 part 'auth_state.freezed.dart';
 
 @freezed
@@ -14,7 +15,7 @@ class AuthState with _$AuthState {
     @Default(false) bool isEmailValid,
     @Default(false) bool isPhoneValid,
     @Default(false) bool isError,
-    @Default(false) bool isVerifyOtpLoading,
+    @Default(OtpLoadingStep.none) OtpLoadingStep loadingStep,
     @Default(false) bool enableLoginButton,
     @Default(false) bool isTermsAccepted,
     @Default(false) bool isEnteredPhoneNo,

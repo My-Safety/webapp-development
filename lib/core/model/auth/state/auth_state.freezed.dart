@@ -21,7 +21,7 @@ mixin _$AuthState {
   bool get isEmailValid => throw _privateConstructorUsedError;
   bool get isPhoneValid => throw _privateConstructorUsedError;
   bool get isError => throw _privateConstructorUsedError;
-  bool get isVerifyOtpLoading => throw _privateConstructorUsedError;
+  OtpLoadingStep get loadingStep => throw _privateConstructorUsedError;
   bool get enableLoginButton => throw _privateConstructorUsedError;
   bool get isTermsAccepted => throw _privateConstructorUsedError;
   bool get isEnteredPhoneNo => throw _privateConstructorUsedError;
@@ -54,7 +54,7 @@ abstract class $AuthStateCopyWith<$Res> {
     bool isEmailValid,
     bool isPhoneValid,
     bool isError,
-    bool isVerifyOtpLoading,
+    OtpLoadingStep loadingStep,
     bool enableLoginButton,
     bool isTermsAccepted,
     bool isEnteredPhoneNo,
@@ -94,7 +94,7 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
     Object? isEmailValid = null,
     Object? isPhoneValid = null,
     Object? isError = null,
-    Object? isVerifyOtpLoading = null,
+    Object? loadingStep = null,
     Object? enableLoginButton = null,
     Object? isTermsAccepted = null,
     Object? isEnteredPhoneNo = null,
@@ -128,10 +128,10 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
                 ? _value.isError
                 : isError // ignore: cast_nullable_to_non_nullable
                       as bool,
-            isVerifyOtpLoading: null == isVerifyOtpLoading
-                ? _value.isVerifyOtpLoading
-                : isVerifyOtpLoading // ignore: cast_nullable_to_non_nullable
-                      as bool,
+            loadingStep: null == loadingStep
+                ? _value.loadingStep
+                : loadingStep // ignore: cast_nullable_to_non_nullable
+                      as OtpLoadingStep,
             enableLoginButton: null == enableLoginButton
                 ? _value.enableLoginButton
                 : enableLoginButton // ignore: cast_nullable_to_non_nullable
@@ -236,7 +236,7 @@ abstract class _$$AuthStateImplCopyWith<$Res>
     bool isEmailValid,
     bool isPhoneValid,
     bool isError,
-    bool isVerifyOtpLoading,
+    OtpLoadingStep loadingStep,
     bool enableLoginButton,
     bool isTermsAccepted,
     bool isEnteredPhoneNo,
@@ -277,7 +277,7 @@ class __$$AuthStateImplCopyWithImpl<$Res>
     Object? isEmailValid = null,
     Object? isPhoneValid = null,
     Object? isError = null,
-    Object? isVerifyOtpLoading = null,
+    Object? loadingStep = null,
     Object? enableLoginButton = null,
     Object? isTermsAccepted = null,
     Object? isEnteredPhoneNo = null,
@@ -311,10 +311,10 @@ class __$$AuthStateImplCopyWithImpl<$Res>
             ? _value.isError
             : isError // ignore: cast_nullable_to_non_nullable
                   as bool,
-        isVerifyOtpLoading: null == isVerifyOtpLoading
-            ? _value.isVerifyOtpLoading
-            : isVerifyOtpLoading // ignore: cast_nullable_to_non_nullable
-                  as bool,
+        loadingStep: null == loadingStep
+            ? _value.loadingStep
+            : loadingStep // ignore: cast_nullable_to_non_nullable
+                  as OtpLoadingStep,
         enableLoginButton: null == enableLoginButton
             ? _value.enableLoginButton
             : enableLoginButton // ignore: cast_nullable_to_non_nullable
@@ -384,7 +384,7 @@ class _$AuthStateImpl implements _AuthState {
     this.isEmailValid = false,
     this.isPhoneValid = false,
     this.isError = false,
-    this.isVerifyOtpLoading = false,
+    this.loadingStep = OtpLoadingStep.none,
     this.enableLoginButton = false,
     this.isTermsAccepted = false,
     this.isEnteredPhoneNo = false,
@@ -423,7 +423,7 @@ class _$AuthStateImpl implements _AuthState {
   final bool isError;
   @override
   @JsonKey()
-  final bool isVerifyOtpLoading;
+  final OtpLoadingStep loadingStep;
   @override
   @JsonKey()
   final bool enableLoginButton;
@@ -463,7 +463,7 @@ class _$AuthStateImpl implements _AuthState {
 
   @override
   String toString() {
-    return 'AuthState(isSendOtpLoading: $isSendOtpLoading, isEmailValid: $isEmailValid, isPhoneValid: $isPhoneValid, isError: $isError, isVerifyOtpLoading: $isVerifyOtpLoading, enableLoginButton: $enableLoginButton, isTermsAccepted: $isTermsAccepted, isEnteredPhoneNo: $isEnteredPhoneNo, isExisting: $isExisting, isOtpComplete: $isOtpComplete, user: $user, loginResponse: $loginResponse, selectedCountry: $selectedCountry, phoneNo: $phoneNo, email: $email, name: $name, fullAddress: $fullAddress, pinCode: $pinCode, landmark: $landmark)';
+    return 'AuthState(isSendOtpLoading: $isSendOtpLoading, isEmailValid: $isEmailValid, isPhoneValid: $isPhoneValid, isError: $isError, loadingStep: $loadingStep, enableLoginButton: $enableLoginButton, isTermsAccepted: $isTermsAccepted, isEnteredPhoneNo: $isEnteredPhoneNo, isExisting: $isExisting, isOtpComplete: $isOtpComplete, user: $user, loginResponse: $loginResponse, selectedCountry: $selectedCountry, phoneNo: $phoneNo, email: $email, name: $name, fullAddress: $fullAddress, pinCode: $pinCode, landmark: $landmark)';
   }
 
   @override
@@ -478,8 +478,8 @@ class _$AuthStateImpl implements _AuthState {
             (identical(other.isPhoneValid, isPhoneValid) ||
                 other.isPhoneValid == isPhoneValid) &&
             (identical(other.isError, isError) || other.isError == isError) &&
-            (identical(other.isVerifyOtpLoading, isVerifyOtpLoading) ||
-                other.isVerifyOtpLoading == isVerifyOtpLoading) &&
+            (identical(other.loadingStep, loadingStep) ||
+                other.loadingStep == loadingStep) &&
             (identical(other.enableLoginButton, enableLoginButton) ||
                 other.enableLoginButton == enableLoginButton) &&
             (identical(other.isTermsAccepted, isTermsAccepted) ||
@@ -512,7 +512,7 @@ class _$AuthStateImpl implements _AuthState {
     isEmailValid,
     isPhoneValid,
     isError,
-    isVerifyOtpLoading,
+    loadingStep,
     enableLoginButton,
     isTermsAccepted,
     isEnteredPhoneNo,
@@ -544,7 +544,7 @@ abstract class _AuthState implements AuthState {
     final bool isEmailValid,
     final bool isPhoneValid,
     final bool isError,
-    final bool isVerifyOtpLoading,
+    final OtpLoadingStep loadingStep,
     final bool enableLoginButton,
     final bool isTermsAccepted,
     final bool isEnteredPhoneNo,
@@ -570,7 +570,7 @@ abstract class _AuthState implements AuthState {
   @override
   bool get isError;
   @override
-  bool get isVerifyOtpLoading;
+  OtpLoadingStep get loadingStep;
   @override
   bool get enableLoginButton;
   @override

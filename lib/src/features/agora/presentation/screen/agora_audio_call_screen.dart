@@ -51,6 +51,7 @@ class _AgoraAudioCallScreenState extends ConsumerState<AgoraAudioCallScreen> {
           role: 'visitor',
           callId: widget.callId!,
           visitorId: widget.visitorId!,
+          callType: 'audio',
         );
       } else if (widget.qrId != null && !notifier.isCallInitiated) {
         final success = await notifier.startCall(

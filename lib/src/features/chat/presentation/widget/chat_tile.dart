@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mysafety_design_system/design_system/design_system.dart';
 import 'package:mysafety_web/src/features/chat/presentation/widget/audio_bubble.dart';
+import 'package:mysafety_web/src/features/chat/presentation/widget/image_viewer.dart';
 
 class ChatTile extends StatelessWidget {
   final bool isIncoming;
@@ -12,6 +13,7 @@ class ChatTile extends StatelessWidget {
   final String? status;
   final String? name;
   final String? messageType;
+  final int? mediaDuration;
 
   const ChatTile({
     super.key,
@@ -23,6 +25,7 @@ class ChatTile extends StatelessWidget {
     this.messageType,
     this.status,
     this.name,
+    this.mediaDuration,
   });
 
   @override
@@ -103,35 +106,56 @@ class ChatTile extends StatelessWidget {
                         ),
 
                       if (fileUrl != null) ...[
-                        const SizedBox(height: 6),
+                        if (messages.isNotEmpty) const SizedBox(height: 6),
 
                         /// IMAGE MESSAGE
                         if (messageType == 'Image')
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: CachedNetworkImage(
-                              imageUrl: fileUrl!,
-                              width: 220,
-                              height: 260,
-                              fit: BoxFit.cover,
-                              errorWidget: (_, _, _) => Container(
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ImageViewer(
+                                    imageUrl: fileUrl!,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(
+                                imageUrl: fileUrl!,
                                 width: 220,
                                 height: 260,
-                                color: AppColors.greyCF,
-                                child: Icon(
-                                  Icons.broken_image,
-                                  size: 40,
-                                  color: AppColors.grey8B,
+                                fit: BoxFit.cover,
+                                placeholder: (_, __) => Container(
+                                  width: 220,
+                                  height: 260,
+                                  color: AppColors.greyCF,
+                                  child: const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                ),
+                                errorWidget: (_, _, _) => Container(
+                                  width: 220,
+                                  height: 260,
+                                  color: AppColors.greyCF,
+                                  child: Icon(
+                                    Icons.broken_image,
+                                    size: 40,
+                                    color: AppColors.grey8B,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
 
                         /// AUDIO MESSAGE
-                        if (messageType == 'Audio')
+                        if (messageType == 'Voice' || messageType == 'Audio')
                           AudioBubble(
                             audioUrl: fileUrl!,
                             isIncoming: isIncoming,
+                            duration: mediaDuration,
                           ),
                       ],
                     ],

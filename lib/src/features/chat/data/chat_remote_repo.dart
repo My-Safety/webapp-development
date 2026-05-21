@@ -36,4 +36,5 @@ class ChatRemoteRepo implements ChatRepo {
     }
     return BaseDynamicResponse.error();
   }
+  
 }

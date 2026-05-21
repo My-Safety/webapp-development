@@ -84,7 +84,8 @@ class _WebVideoPlayerState extends State<WebVideoPlayer> {
 
     try {
       if (widget.localTrack != null) {
-        final isEnabled = widget.isEnabled ?? widget.localTrack!.enabled;
+        final isEnabled = widget.isEnabled ?? true; // Default to true!
+        debugPrint('🎥 _playVideo: isEnabled = $isEnabled, viewId = ${widget.viewId}');
         if (isEnabled) {
           widget.localTrack!.play(div as JSAny);
           debugPrint('✅ Local video playing: ${widget.viewId}');

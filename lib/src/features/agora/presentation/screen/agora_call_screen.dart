@@ -53,6 +53,7 @@ class _AgoraCallScreenState extends ConsumerState<AgoraCallScreen> {
           role: 'visitor',
           callId: widget.callId!,
           visitorId: widget.visitorId,
+          callType: widget.callType,
         );
       } else if (widget.bookingId != null && !notifier.isCallInitiated) {
         final success = await notifier.startCall(

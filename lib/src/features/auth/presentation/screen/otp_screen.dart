@@ -11,6 +11,7 @@ import 'package:mysafety_web/route/route_name.dart';
 import 'package:mysafety_web/src/features/auth/presentation/provider/auth_provider.dart';
 import 'package:mysafety_web/src/features/profile/presentation/provider/profile_provider.dart';
 import 'package:mysafety_web/src/theme/pin_put_theme.dart';
+import 'package:mysafety_web/util/enum/otp_loading_enum.dart';
 import 'package:mysafety_web/util/extension/extension.dart';
 import 'package:mysafety_web/util/location/location_manager.dart';
 import 'package:pinput/pinput.dart';
@@ -27,7 +28,6 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   GlobalKey<FormState> formKey = GlobalKey();
   TextEditingController otpController = TextEditingController();
 
-  // Convenience getters — no setState, state lives in provider
   AuthNotifierProvider get _auth => ref.read(authProvider.notifier);
   ProfileNotifierProvider get _profile => ref.read(profileProvider.notifier);
 
@@ -47,37 +47,36 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       );
 
       if (isVerify) {
-        debugPrint(
-          '🟢 OTP Verified - User ID: ${ref.read(authProvider).user?.id}',
-        );
-        await _handlePostVerification();
+        debugPrint('🟢 OTP Verified - User ID: ${ref.read(authProvider).user?.id}');
+        await _handleDoorBellScan();
       }
     } catch (e) {
       debugPrint('OTP verification error: $e');
     }
   }
 
-  Future<void> _handlePostVerification() async {
-    await _handleDoorBellScan();
-  }
-
   Future<void> _handleDoorBellScan() async {
     try {
-      ref.read(authProvider.notifier).setVerifyOtpLoading = true;
-      var location = await LocationManager.getCurrentLocation();
+      ref.read(authProvider.notifier).setLoadingStep = OtpLoadingStep.fetchingLocation;
+
+      final location = await LocationManager.getCurrentLocation();
       if (location == null) {
         debugPrint('🔴 Unable to get location');
-        ref.read(authProvider.notifier).setVerifyOtpLoading = false;
+        ref.read(authProvider.notifier).setLoadingStep = OtpLoadingStep.none;
         return;
       }
+
+      ref.read(authProvider.notifier).setLoadingStep = OtpLoadingStep.scanning;
+
       await _profile.handleDoorBellScan(
         location: LatLng(location.latitude, location.longitude),
         qrId: _profile.qrId ?? '1833db932dde41c5cbd39e1930330caf',
       );
-      ref.read(authProvider.notifier).setVerifyOtpLoading = false;
+
+      ref.read(authProvider.notifier).setLoadingStep = OtpLoadingStep.none;
       _navigateToSelectOption();
     } catch (e) {
-      ref.read(authProvider.notifier).setVerifyOtpLoading = false;
+      ref.read(authProvider.notifier).setLoadingStep = OtpLoadingStep.none;
       debugPrint('Doorbell scan error: $e');
     }
   }
@@ -111,10 +110,6 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     debugPrint('🔍 Auth State User: ${authState.user}');
     debugPrint('🔍 Visitor ID: $visitorId');
 
-    // ignore: avoid_print
-    print(
-      'Navigating to SelectOptionScreen with roomId: $roomId, visitorId: $visitorId',
-    );
     final qrId = _profile.qrId ?? '1833db932dde41c5cbd39e1930330caf';
     if (roomId != null) {
       context.go(
@@ -129,12 +124,19 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     context.pop();
   }
 
+  String _loadingMessage(OtpLoadingStep step) {
+    return switch (step) {
+      OtpLoadingStep.verifying        => 'Verifying OTP...',
+      OtpLoadingStep.fetchingLocation => 'Getting your location...',
+      OtpLoadingStep.scanning         => 'Checking in...',
+      OtpLoadingStep.none             => '',
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Watch provider state — widget rebuilds automatically when these change
-    final isVerifyOtpLoading = ref.watch(authProvider).isVerifyOtpLoading;
-    final isDoorBellLoading = ref.watch(profileProvider).isHandleDoorBellLoading;
-    final isLoading = isVerifyOtpLoading || isDoorBellLoading;
+    final loadingStep = ref.watch(authProvider).loadingStep;
+    final isLoading = loadingStep != OtpLoadingStep.none;
     final isOtpComplete = ref.watch(authProvider).isOtpComplete;
 
     return BaseLayout(
@@ -152,12 +154,10 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                   length: 4,
                   controller: otpController,
                   onCompleted: (value) {
-                    // Use provider setter — no setState
                     ref.read(authProvider.notifier).setOtpComplete = true;
                     verifyOtp();
                   },
                   onChanged: (value) {
-                    // Use provider setter — no setState
                     ref.read(authProvider.notifier).setOtpComplete =
                         value.length == 4;
                   },
@@ -179,15 +179,28 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
               ),
               BrandVSpace.gap100(),
               if (isLoading)
-                const SizedBox(
-                  height: 60,
-                  width: 60,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.white,
-                      strokeWidth: 3,
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(
+                      height: 60,
+                      width: 60,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.white,
+                          strokeWidth: 3,
+                        ),
+                      ),
                     ),
-                  ),
+                    BrandVSpace.gap12(),
+                    Text(
+                      _loadingMessage(loadingStep),
+                      style: const TextStyle(
+                        color: AppColors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
                 )
               else if (isOtpComplete)
                 Row(

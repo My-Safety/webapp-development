@@ -98,9 +98,12 @@ class _SelectOptionScreenState extends ConsumerState<SelectOptionScreen> {
 
   /// Navigate to video call
   void _goToVideoCall() {
+    debugPrint('🎥 VIDEO CALL BUTTON CLICKED');
     final qrId = widget.qrId;
     final roomId = widget.roomId;
     final visitorId = widget.visitorId ?? profileprovider.visitorId;
+    debugPrint('🎥 Navigating to: ${RouteName.agoraVideoCall}');
+    debugPrint('🎥 qrId: $qrId, roomId: $roomId, visitorId: $visitorId');
     if (roomId != null) {
       context.push(
         '${RouteName.agoraVideoCall}?qrId=$qrId&roomId=$roomId&visitorId=$visitorId',

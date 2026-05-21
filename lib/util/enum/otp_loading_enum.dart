@@ -1,0 +1,1 @@
+enum OtpLoadingStep { none, verifying, fetchingLocation, scanning }

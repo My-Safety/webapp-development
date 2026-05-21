@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mysafety_design_system/design_system/design_system.dart';
+import 'package:mysafety_web/route/navigation_service.dart';
 import 'package:mysafety_web/src/features/profile/presentation/provider/profile_provider.dart';
 import 'package:mysafety_web/src/features/vehicle/presentation/provider/vehicle_provider.dart';
 import 'package:mysafety_web/src/features/vehicle/presentation/widgets/insurence_card.dart';
@@ -24,6 +25,19 @@ class _ReportAccedentScreenState extends ConsumerState<ReportAccedentScreen> {
     provider.makePhoneCall(phoneNumber);
   }
 
+  Future<void> handleEmergencyCall() async {
+    if (widget.qrId != null) {
+      await ref
+          .read(vehicleProvider.notifier)
+          .initiateAutoCall(qrId: widget.qrId!, audioCode: null);
+      if (mounted) {
+        NavigationService.showSuccessSnackbar(
+          message: "Emergency call initiated successfully",
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.watch(vehicleProvider);
@@ -41,8 +55,16 @@ class _ReportAccedentScreenState extends ConsumerState<ReportAccedentScreen> {
             children: [
               InsurenceCard(
                 title: "Policies",
-                insuranceName:profile.resolveQrResponse?.vehicle?.insurance?.companyName??"",
-                policyNumber: profile.resolveQrResponse?.vehicle?.insurance?.policyNo??"",
+                insuranceName:
+                    profile
+                        .resolveQrResponse
+                        ?.vehicle
+                        ?.insurance
+                        ?.companyName ??
+                    "",
+                policyNumber:
+                    profile.resolveQrResponse?.vehicle?.insurance?.policyNo ??
+                    "",
               ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -50,13 +72,7 @@ class _ReportAccedentScreenState extends ConsumerState<ReportAccedentScreen> {
               ),
               SosItemWidget(
                 title: "Emergency contact",
-                onTap: () async {
-                  if (widget.qrId != null) {
-                    await ref
-                        .read(vehicleProvider.notifier)
-                        .initiateAutoCall(qrId: widget.qrId!, audioCode: "");
-                  }
-                },
+                onTap: handleEmergencyCall,
               ),
               Padding(
                 padding: const EdgeInsets.all(20.0),

@@ -173,9 +173,12 @@ abstract class WebSocketService {
 
     socket!.on('new_message', (data) {
       try {
-        debugPrint('Received new message: $data');
+        debugPrint('📥 Received new_message event');
+        debugPrint('📦 Raw data: $data');
         final mapData = Map<String, dynamic>.from(data as Map);
+        debugPrint('📦 Parsed mapData: $mapData');
         final message = ChatHistoryResponseModel.fromJson(mapData);
+        debugPrint('✅ Message parsed - Type: ${message.messageType}, Content: ${message.content}, MediaUrl: ${message.mediaUrl}');
         _newMessageController.add(message);
       } catch (e) {
         debugPrint('⚠️ Error parsing new_message: $e');
@@ -281,7 +284,6 @@ abstract class WebSocketService {
   }) async {
     if (socket?.connected != true) {
       debugPrint('🔴 Cannot send - socket not connected');
-      // Try to reconnect
       try {
         await connect();
       } catch (e) {
@@ -290,13 +292,33 @@ abstract class WebSocketService {
       }
     }
 
-    final data = {'roomId': roomId, 'messageType': messageType};
-    if (content != null && content.isNotEmpty) data['content'] = content;
-    if (mediaUrl != null) data['mediaUrl'] = mediaUrl;
+    final data = <String, dynamic>{
+      'roomId': roomId,
+      'messageType': messageType,
+    };
+    
+    if (content != null && content.isNotEmpty) {
+      data['content'] = content;
+      debugPrint('📝 Adding content: $content');
+    }
+    
+    if (mediaUrl != null && mediaUrl.isNotEmpty) {
+      data['mediaUrl'] = mediaUrl;
+      debugPrint('🖼️ Adding mediaUrl: $mediaUrl');
+    }
+    
+    if (mediaDuration != null) {
+      data['mediaDuration'] = mediaDuration;
+    }
+
+    debugPrint('📦 Sending socket message:');
+    debugPrint('   Room: $roomId');
+    debugPrint('   Type: $messageType');
+    debugPrint('   Data: $data');
 
     try {
       socket?.emit('send_message', data);
-      debugPrint('📤 Message sent: $content');
+      debugPrint('✅ Socket emit successful');
       return true;
     } catch (e) {
       debugPrint('🔴 Send message error: $e');

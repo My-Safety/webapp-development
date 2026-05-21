@@ -1,4 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +5,7 @@ import 'package:mysafety_design_system/design_system/design_system.dart';
 import 'package:mysafety_web/route/route_name.dart';
 import 'package:mysafety_web/src/features/agora/presentation/provider/agora_provider.dart';
 import 'package:mysafety_web/src/features/chat/presentation/provider/chat_provider.dart';
+import 'package:mysafety_web/src/features/chat/presentation/provider/recording_provider.dart';
 import 'package:mysafety_web/src/features/chat/presentation/widget/chat_input_bar.dart';
 import 'package:mysafety_web/src/features/chat/presentation/widget/chat_screen_appbar.dart';
 import 'package:mysafety_web/src/features/chat/presentation/widget/chat_tile.dart';
@@ -129,11 +129,18 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen> with Wi
     final controller = ref.read(oneToOneChatControllerProvider.notifier);
     final profile = ref.watch(profileProvider);
     final selectedIndex = ref.watch(selectedMessageIndexProvider);
+    final isRecording = ref.watch(isRecordingProvider);
+    final recordingDuration = ref.watch(recordingDurationProvider);
     final qrId = widget.qrId ?? profile.qrId;
     final isVehicle = widget.profileType == 'vehicle';
     final isLostFound = widget.profileType == 'lostfound';
     final predefinedMessages = profile.predefinedMessages;
+    final planAtActivation = profile.resolveQrResponse?.qr?.planAtActivation;
+    final isPremium = planAtActivation == 'Premium';
 
+    debugPrint('💎 Plan at activation: $planAtActivation');
+    debugPrint('💎 Is Premium: $isPremium');
+    debugPrint('💎 Show media button: $isPremium');
     debugPrint('🚗 isVehicle: $isVehicle');
     debugPrint('🔍 isLostFound: $isLostFound');
     debugPrint('📋 predefinedMessages count: ${predefinedMessages.length}');
@@ -231,7 +238,9 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen> with Wi
                           : null,
                       status: msg.status,
                       name: msg.senderDetails?.name ?? '',
-                      fileUrl: msg.messageType == 'Image' ? msg.mediaUrl : null,
+                      messageType: msg.messageType,
+                      fileUrl: (msg.messageType == 'Image' || msg.messageType == 'Voice') ? msg.mediaUrl : null,
+                      mediaDuration: msg.mediaDuration,
                       imgUrl: '',
                     ),
                   ),
@@ -240,6 +249,32 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen> with Wi
             ),
             ChatInputBar(
               chatController: _controller,
+              isUploading: controller.isUploading,
+              showMediaButton: isPremium,
+              isRecording: isRecording,
+              recordingDuration: recordingDuration,
+              onStartRecording: () async {
+                await controller.startRecording();
+              },
+              onStopRecording: () async {
+                debugPrint('🔴 Stop recording button pressed');
+                debugPrint('🔴 Controller instance: $controller');
+                debugPrint('🔴 Calling stopAndSendRecording...');
+                try {
+                  await controller.stopAndSendRecording();
+                  debugPrint('✅ Stop recording completed');
+                } catch (e, stackTrace) {
+                  debugPrint('🔴 Error in stopAndSendRecording: $e');
+                  debugPrint('🔴 Stack trace: $stackTrace');
+                }
+                if (!mounted) return;
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) _scrollToBottom();
+                });
+              },
+              onCancelRecording: () async {
+                await controller.cancelRecording();
+              },
               onSend: () async {
                 final text = _controller.text.trim();
                 if (text.isEmpty) return;
@@ -253,7 +288,24 @@ class _OneToOneChatScreenState extends ConsumerState<OneToOneChatScreen> with Wi
               onTyping: controller.sendTyping,
               isOtherTyping: controller.isOtherTyping,
               onAudioTap: () {},
-              onMediaTap: () {},
+              onMediaTap: (file) async {
+                debugPrint('📎 Media tap - File: ${file.name}');
+                final mediaUrl = await controller.uploadFile(file);
+                debugPrint('📦 Upload result - URL: $mediaUrl');
+                
+                if (mediaUrl != null && mediaUrl.isNotEmpty) {
+                  debugPrint('✅ Valid media URL, sending image...');
+                  await controller.sendImage(mediaUrl);
+                  debugPrint('✅ Send image completed');
+                  
+                  if (!mounted) return;
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (mounted) _scrollToBottom();
+                  });
+                } else {
+                  debugPrint('🔴 Media URL is null or empty, cannot send');
+                }
+              },
             ),
           ],
         ),
