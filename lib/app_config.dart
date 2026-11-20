@@ -2,8 +2,10 @@
 // Created By Adwaith c, 16/12/2025
 
 // const String appDomain = 'http://192.168.0.120:4000/api/';
-const String appDomain = 'https://mysafety24x7.in/api/';
-const String webSocket = 'https://mysafety24x7.in';
+const String appDomain =
+    'https://pct-comment-entertainment-vehicles.trycloudflare.com/api/';
+const String webSocket =
+    'https://pct-comment-entertainment-vehicles.trycloudflare.com';
 // const String appDomain = 'http://192.168.0.122:4000/api/';
 // const String webSocket = 'http://192.168.0.122:4000';
 const String googleMapKey = 'AIzaSyCI-T5kfFDaBGWiLZPAJXzbQa9v7miTYuE';
