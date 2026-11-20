@@ -16,58 +16,68 @@ class InsurenceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 6),
       child: BrandRoundedContainer(
         borderColor: AppColors.white.withAlpha(40),
         borderRadius: 8,
-        color: AppColors.primary,
-
+        color: const Color(0xFF101526),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 12),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: BrandText.white(data: title),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: BrandText.white(data: title, fontWeight: FontWeight.w600),
             ),
-
-            Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    color: AppColors.white,
-                  ),
-                  padding: EdgeInsets.all(10),
-                  margin: EdgeInsets.all(10),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            BrandText(data: "Insurance"),
-                            BrandText(data: insuranceName ,textStyle: TextStyle(fontWeight: FontWeight.bold)),
-                          ],
+            Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                color: AppColors.white,
+              ),
+              padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.all(10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const BrandText(data: 'Insurance'),
+                        const SizedBox(height: 4),
+                        BrandText(
+                          data: insuranceName.trim().isEmpty
+                              ? '--'
+                              : insuranceName,
+                          maxLines: 2,
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-
-                      BrandHSpace.gap18(),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                        
-                          children: [
-                            BrandText(data: "Policy No."),
-                        
-                            BrandText(data: policyNumber,textStyle: TextStyle(fontWeight: FontWeight.bold),),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 18),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const BrandText(data: 'Policy No.'),
+                        const SizedBox(height: 4),
+                        BrandText(
+                          data: policyNumber.trim().isEmpty
+                              ? '--'
+                              : policyNumber,
+                          maxLines: 2,
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

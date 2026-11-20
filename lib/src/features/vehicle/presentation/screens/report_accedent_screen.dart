@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mysafety_design_system/design_system/design_system.dart';
 import 'package:mysafety_web/route/navigation_service.dart';
@@ -7,7 +6,7 @@ import 'package:mysafety_web/src/features/profile/presentation/provider/profile_
 import 'package:mysafety_web/src/features/vehicle/presentation/provider/vehicle_provider.dart';
 import 'package:mysafety_web/src/features/vehicle/presentation/widgets/insurence_card.dart';
 import 'package:mysafety_web/src/features/vehicle/presentation/widgets/sos_item_widget.dart';
-import 'package:mysafety_web/util/extension/extension.dart';
+import 'package:mysafety_web/util/assets/assets.dart';
 
 class ReportAccedentScreen extends ConsumerStatefulWidget {
   final String? qrId;
@@ -20,22 +19,89 @@ class ReportAccedentScreen extends ConsumerStatefulWidget {
 
 class _ReportAccedentScreenState extends ConsumerState<ReportAccedentScreen> {
   late VehicleNotifier provider;
+  String? _callingContactKey;
 
-  void onTap(String phoneNumber) async {
-    provider.makePhoneCall(phoneNumber);
+  Future<void> _makeSosCall(String phoneNumber) async {
+    await provider.makePhoneCall(phoneNumber);
   }
 
-  Future<void> handleEmergencyCall() async {
-    if (widget.qrId != null) {
-      await ref
-          .read(vehicleProvider.notifier)
-          .initiateAutoCall(qrId: widget.qrId!, audioCode: null);
-      if (mounted) {
-        NavigationService.showSuccessSnackbar(
-          message: "Emergency call initiated successfully",
-        );
-      }
+  Future<void> _handleEmergencyCall(String contactKey) async {
+    if (_callingContactKey != null) return;
+
+    final profile = ref.read(profileProvider);
+    final qrId = widget.qrId ?? profile.qrId;
+
+    if (qrId == null || qrId.isEmpty) {
+      NavigationService.showErrorSnackbar(
+        message: 'Unable to identify this vehicle QR.',
+      );
+      return;
     }
+
+    setState(() => _callingContactKey = contactKey);
+
+    final isSuccess = await ref
+        .read(vehicleProvider.notifier)
+        .initiateAutoCall(qrId: qrId, audioCode: null);
+
+    if (!mounted) return;
+    setState(() => _callingContactKey = null);
+
+    if (isSuccess) {
+      NavigationService.showSuccessSnackbar(
+        message: 'Emergency call initiated successfully',
+      );
+    } else {
+      NavigationService.showErrorSnackbar(
+        message: 'Unable to initiate the emergency call. Please try again.',
+      );
+    }
+  }
+
+  String _maskedMobile(String? value) {
+    final digits = value?.replaceAll(RegExp(r'\D'), '') ?? '';
+    if (digits.isEmpty) return 'Number unavailable';
+
+    final localNumber = digits.length > 10
+        ? digits.substring(digits.length - 10)
+        : digits;
+    final visibleCount = localNumber.length >= 4 ? 4 : 0;
+    final maskCount = localNumber.length - visibleCount;
+    final maskedPart = List.filled(maskCount, '*').join();
+    final visiblePart = localNumber.substring(maskCount);
+    final countryCode = localNumber.length == 10 ? '+91-' : '';
+
+    return '$countryCode$maskedPart$visiblePart';
+  }
+
+  Widget _sectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
+      child: BrandText.white(data: title, fontWeight: FontWeight.w600),
+    );
+  }
+
+  Widget _emptyContacts() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      child: BrandRoundedContainer(
+        borderColor: AppColors.white.withAlpha(38),
+        borderRadius: 8,
+        color: AppColors.darkBlue,
+        child: const Padding(
+          padding: EdgeInsets.all(14),
+          child: Row(
+            children: [
+              Image(image: AssetImage(Assets.user), width: 28, height: 28),
+              SizedBox(width: 12),
+              Expanded(
+                child: BrandText.white(data: 'No emergency contacts available'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -43,55 +109,61 @@ class _ReportAccedentScreenState extends ConsumerState<ReportAccedentScreen> {
     ref.watch(vehicleProvider);
     provider = ref.read(vehicleProvider.notifier);
     final profile = ref.watch(profileProvider);
+    final vehicle = profile.resolveQrResponse?.vehicle;
+    final emergencyContacts = vehicle?.emergencyContacts ?? const [];
+
     return BaseLayout(
       showBgImage: false,
-      // appBar: BrandAppBar(title: context.loc.report_accedent),
-      appBar: BrandAppBar(title: "Report Accident"),
+      appBar: const BrandAppBar(title: 'Report Accident'),
+      floatingActionButton: BrandIconButton.next(
+        width: 58,
+        height: 58,
+        onTap: () => Navigator.of(context).maybePop(),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       child: Expanded(
         child: SingleChildScrollView(
+          padding: const EdgeInsets.only(bottom: 96),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InsurenceCard(
-                title: "Policies",
-                insuranceName:
-                    profile
-                        .resolveQrResponse
-                        ?.vehicle
-                        ?.insurance
-                        ?.companyName ??
-                    "",
-                policyNumber:
-                    profile.resolveQrResponse?.vehicle?.insurance?.policyNo ??
-                    "",
+                title: 'Policies',
+                insuranceName: vehicle?.insurance?.companyName ?? '',
+                policyNumber: vehicle?.insurance?.policyNo ?? '',
               ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: BrandText.white(data: "Contacts"),
-              ),
-              SosItemWidget(
-                title: "Emergency contact",
-                onTap: handleEmergencyCall,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: BrandText.white(data: "Sos Contacts"),
-              ),
+              _sectionTitle('Contacts'),
+              if (emergencyContacts.isEmpty)
+                _emptyContacts()
+              else
+                ...emergencyContacts.asMap().entries.map((entry) {
+                  final contact = entry.value;
+                  final contactKey = contact.id ?? entry.key.toString();
+
+                  return SosItemWidget(
+                    imageUrl: Assets.user,
+                    imageSize: 28,
+                    title: contact.name,
+                    subTitle: _maskedMobile(contact.mobile),
+                    isLoading: _callingContactKey == contactKey,
+                    onTap: () => _handleEmergencyCall(contactKey),
+                  );
+                }),
+              _sectionTitle('Sos'),
               ListView.builder(
                 primary: false,
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: provider.sosList.length,
                 itemBuilder: (context, index) {
-                  var item = provider.sosList[index];
+                  final item = provider.sosList[index];
                   return SosItemWidget(
                     imageUrl: item.icon,
                     title: item.title,
-                    subTitle: item.number,
-                    onTap: () {
-                      onTap(item.number!);
-                    },
+                    onTap: item.number == null
+                        ? null
+                        : () => _makeSosCall(item.number!),
                   );
                 },
               ),

@@ -211,7 +211,9 @@ _$VehicleImpl _$$VehicleImplFromJson(Map<String, dynamic> json) =>
           ? null
           : Puc.fromJson(json['puc'] as Map<String, dynamic>),
       isManualEntry: json['isManualEntry'] as bool?,
-      emergencyContacts: json['emergencyContacts'] as List<dynamic>?,
+      emergencyContacts: (json['emergencyContacts'] as List<dynamic>?)
+          ?.map((e) => EmergencyContact.fromJson(e as Map<String, dynamic>))
+          .toList(),
       challanDetails: json['challanDetails'] as List<dynamic>?,
       createdAt: json['createdAt'] == null
           ? null
@@ -254,6 +256,22 @@ Map<String, dynamic> _$$VehicleImplToJson(_$VehicleImpl instance) =>
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'qrId': instance.qrId,
     };
+
+_$EmergencyContactImpl _$$EmergencyContactImplFromJson(
+  Map<String, dynamic> json,
+) => _$EmergencyContactImpl(
+  id: json['_id'] as String?,
+  name: json['name'] as String?,
+  mobile: json['mobile'] as String?,
+);
+
+Map<String, dynamic> _$$EmergencyContactImplToJson(
+  _$EmergencyContactImpl instance,
+) => <String, dynamic>{
+  '_id': instance.id,
+  'name': instance.name,
+  'mobile': instance.mobile,
+};
 
 _$UnderTheHoodImpl _$$UnderTheHoodImplFromJson(Map<String, dynamic> json) =>
     _$UnderTheHoodImpl(

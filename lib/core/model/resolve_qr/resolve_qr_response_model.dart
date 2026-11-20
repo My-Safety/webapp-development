@@ -136,7 +136,7 @@ class Vehicle with _$Vehicle {
     Insurance? insurance,
     Puc? puc,
     bool? isManualEntry,
-    List<dynamic>? emergencyContacts,
+    List<EmergencyContact>? emergencyContacts,
     List<dynamic>? challanDetails,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -145,6 +145,18 @@ class Vehicle with _$Vehicle {
 
   factory Vehicle.fromJson(Map<String, dynamic> json) =>
       _$VehicleFromJson(json);
+}
+
+@freezed
+class EmergencyContact with _$EmergencyContact {
+  const factory EmergencyContact({
+    @JsonKey(name: '_id') String? id,
+    String? name,
+    String? mobile,
+  }) = _EmergencyContact;
+
+  factory EmergencyContact.fromJson(Map<String, dynamic> json) =>
+      _$EmergencyContactFromJson(json);
 }
 
 @freezed

@@ -3,61 +3,85 @@ import 'package:mysafety_design_system/design_system/design_system.dart';
 
 class SosItemWidget extends StatelessWidget {
   final String? imageUrl, title, subTitle;
-  final Function? onTap;
+  final VoidCallback? onTap;
+  final bool isLoading;
+  final double imageSize;
+
   const SosItemWidget({
     super.key,
     this.imageUrl,
     this.title,
     this.onTap,
     this.subTitle,
+    this.isLoading = false,
+    this.imageSize = 28,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          BrandRoundedContainer(
-            borderColor: AppColors.white.withAlpha(40),
-            borderRadius: 8,
-            color: AppColors.primary,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              child: Row(
-                children: [
-                  imageUrl?.isNotEmpty == true
-                      ? Image.asset(imageUrl!, width: 45, height: 45)
-                      : SizedBox(),
-                  BrandHSpace.gap14(),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        BrandText.white(data: title ?? "--"),
-                        BrandVSpace.gap14(),
-                        BrandText.white(data: subTitle ?? "--"),
-                      ],
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+      child: BrandRoundedContainer(
+        borderColor: AppColors.white.withAlpha(38),
+        borderRadius: 8,
+        color: AppColors.darkBlue,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 7, 7, 7),
+          child: Row(
+            children: [
+              if (imageUrl?.isNotEmpty == true) ...[
+                Image.asset(imageUrl!, width: imageSize, height: imageSize),
+                const SizedBox(width: 12),
+              ],
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BrandText.white(
+                      data: title?.trim().isNotEmpty == true ? title! : '--',
+                      fontWeight: FontWeight.w500,
                     ),
-                  ),
-                  BrandInkWell(
-                    onTap: () {
-                      onTap?.call();
-                    },
-                    child: BrandRoundedContainer(
-                      width: 50,
-                      height: 50,
-                      color: AppColors.blue46,
-                      child: Icon(Icons.call, color: AppColors.white),
-                    ),
-                  ),
-                ],
+                    if (subTitle?.trim().isNotEmpty == true) ...[
+                      const SizedBox(height: 3),
+                      BrandText.grey(
+                        data: subTitle!,
+                        fontColor: AppColors.greyB5,
+                        fontSize: 12,
+                      ),
+                    ],
+                  ],
+                ),
               ),
-            ),
+              const SizedBox(width: 10),
+              BrandInkWell(
+                onTap: isLoading ? null : onTap,
+                child: BrandRoundedContainer(
+                  width: 40,
+                  height: 40,
+                  borderRadius: 3,
+                  color: AppColors.blue97,
+                  child: Center(
+                    child: isLoading
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: AppColors.white,
+                            ),
+                          )
+                        : const Icon(
+                            Icons.phone_outlined,
+                            size: 18,
+                            color: AppColors.white,
+                          ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          BrandVSpace.gap18(),
-        ],
+        ),
       ),
     );
   }

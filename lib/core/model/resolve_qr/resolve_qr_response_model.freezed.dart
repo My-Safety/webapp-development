@@ -2085,7 +2085,8 @@ mixin _$Vehicle {
   Insurance? get insurance => throw _privateConstructorUsedError;
   Puc? get puc => throw _privateConstructorUsedError;
   bool? get isManualEntry => throw _privateConstructorUsedError;
-  List<dynamic>? get emergencyContacts => throw _privateConstructorUsedError;
+  List<EmergencyContact>? get emergencyContacts =>
+      throw _privateConstructorUsedError;
   List<dynamic>? get challanDetails => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
@@ -2130,7 +2131,7 @@ abstract class $VehicleCopyWith<$Res> {
     Insurance? insurance,
     Puc? puc,
     bool? isManualEntry,
-    List<dynamic>? emergencyContacts,
+    List<EmergencyContact>? emergencyContacts,
     List<dynamic>? challanDetails,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -2288,7 +2289,7 @@ class _$VehicleCopyWithImpl<$Res, $Val extends Vehicle>
             emergencyContacts: freezed == emergencyContacts
                 ? _value.emergencyContacts
                 : emergencyContacts // ignore: cast_nullable_to_non_nullable
-                      as List<dynamic>?,
+                      as List<EmergencyContact>?,
             challanDetails: freezed == challanDetails
                 ? _value.challanDetails
                 : challanDetails // ignore: cast_nullable_to_non_nullable
@@ -2386,7 +2387,7 @@ abstract class _$$VehicleImplCopyWith<$Res> implements $VehicleCopyWith<$Res> {
     Insurance? insurance,
     Puc? puc,
     bool? isManualEntry,
-    List<dynamic>? emergencyContacts,
+    List<EmergencyContact>? emergencyContacts,
     List<dynamic>? challanDetails,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -2546,7 +2547,7 @@ class __$$VehicleImplCopyWithImpl<$Res>
         emergencyContacts: freezed == emergencyContacts
             ? _value._emergencyContacts
             : emergencyContacts // ignore: cast_nullable_to_non_nullable
-                  as List<dynamic>?,
+                  as List<EmergencyContact>?,
         challanDetails: freezed == challanDetails
             ? _value._challanDetails
             : challanDetails // ignore: cast_nullable_to_non_nullable
@@ -2596,7 +2597,7 @@ class _$VehicleImpl implements _Vehicle {
     this.insurance,
     this.puc,
     this.isManualEntry,
-    final List<dynamic>? emergencyContacts,
+    final List<EmergencyContact>? emergencyContacts,
     final List<dynamic>? challanDetails,
     this.createdAt,
     this.updatedAt,
@@ -2656,9 +2657,9 @@ class _$VehicleImpl implements _Vehicle {
   final Puc? puc;
   @override
   final bool? isManualEntry;
-  final List<dynamic>? _emergencyContacts;
+  final List<EmergencyContact>? _emergencyContacts;
   @override
-  List<dynamic>? get emergencyContacts {
+  List<EmergencyContact>? get emergencyContacts {
     final value = _emergencyContacts;
     if (value == null) return null;
     if (_emergencyContacts is EqualUnmodifiableListView)
@@ -2823,7 +2824,7 @@ abstract class _Vehicle implements Vehicle {
     final Insurance? insurance,
     final Puc? puc,
     final bool? isManualEntry,
-    final List<dynamic>? emergencyContacts,
+    final List<EmergencyContact>? emergencyContacts,
     final List<dynamic>? challanDetails,
     final DateTime? createdAt,
     final DateTime? updatedAt,
@@ -2882,7 +2883,7 @@ abstract class _Vehicle implements Vehicle {
   @override
   bool? get isManualEntry;
   @override
-  List<dynamic>? get emergencyContacts;
+  List<EmergencyContact>? get emergencyContacts;
   @override
   List<dynamic>? get challanDetails;
   @override
@@ -2897,6 +2898,207 @@ abstract class _Vehicle implements Vehicle {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$VehicleImplCopyWith<_$VehicleImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+EmergencyContact _$EmergencyContactFromJson(Map<String, dynamic> json) {
+  return _EmergencyContact.fromJson(json);
+}
+
+/// @nodoc
+mixin _$EmergencyContact {
+  @JsonKey(name: '_id')
+  String? get id => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
+  String? get mobile => throw _privateConstructorUsedError;
+
+  /// Serializes this EmergencyContact to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of EmergencyContact
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $EmergencyContactCopyWith<EmergencyContact> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $EmergencyContactCopyWith<$Res> {
+  factory $EmergencyContactCopyWith(
+    EmergencyContact value,
+    $Res Function(EmergencyContact) then,
+  ) = _$EmergencyContactCopyWithImpl<$Res, EmergencyContact>;
+  @useResult
+  $Res call({@JsonKey(name: '_id') String? id, String? name, String? mobile});
+}
+
+/// @nodoc
+class _$EmergencyContactCopyWithImpl<$Res, $Val extends EmergencyContact>
+    implements $EmergencyContactCopyWith<$Res> {
+  _$EmergencyContactCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of EmergencyContact
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? name = freezed,
+    Object? mobile = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            id: freezed == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            name: freezed == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            mobile: freezed == mobile
+                ? _value.mobile
+                : mobile // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$EmergencyContactImplCopyWith<$Res>
+    implements $EmergencyContactCopyWith<$Res> {
+  factory _$$EmergencyContactImplCopyWith(
+    _$EmergencyContactImpl value,
+    $Res Function(_$EmergencyContactImpl) then,
+  ) = __$$EmergencyContactImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({@JsonKey(name: '_id') String? id, String? name, String? mobile});
+}
+
+/// @nodoc
+class __$$EmergencyContactImplCopyWithImpl<$Res>
+    extends _$EmergencyContactCopyWithImpl<$Res, _$EmergencyContactImpl>
+    implements _$$EmergencyContactImplCopyWith<$Res> {
+  __$$EmergencyContactImplCopyWithImpl(
+    _$EmergencyContactImpl _value,
+    $Res Function(_$EmergencyContactImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of EmergencyContact
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? name = freezed,
+    Object? mobile = freezed,
+  }) {
+    return _then(
+      _$EmergencyContactImpl(
+        id: freezed == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        name: freezed == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        mobile: freezed == mobile
+            ? _value.mobile
+            : mobile // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$EmergencyContactImpl implements _EmergencyContact {
+  const _$EmergencyContactImpl({
+    @JsonKey(name: '_id') this.id,
+    this.name,
+    this.mobile,
+  });
+
+  factory _$EmergencyContactImpl.fromJson(Map<String, dynamic> json) =>
+      _$$EmergencyContactImplFromJson(json);
+
+  @override
+  @JsonKey(name: '_id')
+  final String? id;
+  @override
+  final String? name;
+  @override
+  final String? mobile;
+
+  @override
+  String toString() {
+    return 'EmergencyContact(id: $id, name: $name, mobile: $mobile)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$EmergencyContactImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.mobile, mobile) || other.mobile == mobile));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, name, mobile);
+
+  /// Create a copy of EmergencyContact
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$EmergencyContactImplCopyWith<_$EmergencyContactImpl> get copyWith =>
+      __$$EmergencyContactImplCopyWithImpl<_$EmergencyContactImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$EmergencyContactImplToJson(this);
+  }
+}
+
+abstract class _EmergencyContact implements EmergencyContact {
+  const factory _EmergencyContact({
+    @JsonKey(name: '_id') final String? id,
+    final String? name,
+    final String? mobile,
+  }) = _$EmergencyContactImpl;
+
+  factory _EmergencyContact.fromJson(Map<String, dynamic> json) =
+      _$EmergencyContactImpl.fromJson;
+
+  @override
+  @JsonKey(name: '_id')
+  String? get id;
+  @override
+  String? get name;
+  @override
+  String? get mobile;
+
+  /// Create a copy of EmergencyContact
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$EmergencyContactImplCopyWith<_$EmergencyContactImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
